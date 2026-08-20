@@ -1,0 +1,554 @@
+{{ 'section-hero-kanbae.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign has_video = false
+  for block in section.blocks
+    if block.type == 'slide' and block.settings.video != blank and block.settings.layout != 'split'
+      assign has_video = true
+    endif
+  endfor
+-%}
+{%- if has_video -%}
+  <script src="{{ 'hero-kanbae.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  assign height_map_full = 100
+  assign height_map_large = 85
+  assign height_map_medium = 70
+
+  case section.settings.desktop_height
+    when 'large'
+      assign desktop_height_vh = height_map_large
+    when 'medium'
+      assign desktop_height_vh = height_map_medium
+    else
+      assign desktop_height_vh = height_map_full
+  endcase
+
+  case section.settings.mobile_height
+    when 'large'
+      assign mobile_height_vh = height_map_large
+    when 'medium'
+      assign mobile_height_vh = height_map_medium
+    else
+      assign mobile_height_vh = height_map_full
+  endcase
+
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+
+  assign slide_count = 0
+  assign has_badges = false
+  for block in section.blocks
+    case block.type
+      when 'slide'
+        assign slide_count = slide_count | plus: 1
+      when 'badge'
+        assign has_badges = true
+    endcase
+  endfor
+-%}
+
+{%- style -%}
+  #HeroKanbae-{{ section.id }} {
+    --kb-hero-height-vh: {{ mobile_height_vh }};
+  }
+
+  @media screen and (min-width: 750px) {
+    #HeroKanbae-{{ section.id }} {
+      --kb-hero-height-vh: {{ desktop_height_vh }};
+    }
+  }
+{%- endstyle -%}
+
+<slideshow-component
+  id="HeroKanbae-{{ section.id }}"
+  class="kb-hero{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  role="region"
+  aria-roledescription="{{ 'sections.slideshow.carousel' | t }}"
+  aria-label="{{ section.settings.accessibility_info | escape }}"
+>
+  <div
+    id="Slider-{{ section.id }}"
+    class="kb-hero__slider slider slider--everywhere"
+    aria-live="polite"
+    aria-atomic="true"
+    data-autoplay="{{ section.settings.auto_rotate }}"
+    data-speed="{{ section.settings.change_slides_speed }}"
+  >
+    {%- assign slide_index = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'slide' -%}
+        {%- assign slide_index = slide_index | plus: 1 -%}
+        {%- assign is_split = false -%}
+        {%- if block.settings.layout == 'split' -%}
+          {%- assign is_split = true -%}
+        {%- endif -%}
+        <div
+          id="Slide-{{ section.id }}-{{ slide_index }}"
+          class="kb-hero__slide slideshow__slide slider__slide{% if is_split %} kb-hero__slide--split color-{{ block.settings.color_scheme }}{% endif %}"
+          {{ block.shopify_attributes }}
+          role="group"
+          aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+          aria-label="{{ slide_index }} {{ 'general.slider.of' | t }} {{ slide_count }}"
+          tabindex="-1"
+        >
+          <div class="kb-hero__slide-media">
+            {%- liquid
+              assign fetch_priority = 'auto'
+              assign loading = 'lazy'
+              assign media_sizes = '100vw'
+              if slide_index == 1 and section.index == 1
+                assign fetch_priority = 'high'
+              endif
+              if slide_index == 1
+                assign loading = 'eager'
+              endif
+              if is_split
+                assign media_sizes = '(min-width: 1025px) 45vw, 100vw'
+              endif
+            -%}
+            {%- if is_split == false and block.settings.video != blank -%}
+              <kb-hero-video class="kb-hero__video-wrapper">
+                {{
+                  block.settings.video
+                  | video_tag:
+                    image_size: '1920x',
+                    autoplay: false,
+                    loop: true,
+                    muted: true,
+                    controls: false,
+                    preload: 'none',
+                    class: 'kb-hero__video'
+                }}
+              </kb-hero-video>
+            {%- elsif block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 3840
+                | image_tag:
+                  width: block.settings.image.width,
+                  height: block.settings.image.height,
+                  class: 'kb-hero__image',
+                  sizes: media_sizes,
+                  widths: widths,
+                  fetchpriority: fetch_priority,
+                  loading: loading,
+                  alt: block.settings.image.alt
+              }}
+            {%- else -%}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'kb-hero__image placeholder' }}
+            {%- endif -%}
+            {%- unless is_split -%}
+              <div class="kb-hero__scrim" aria-hidden="true"></div>
+            {%- endunless -%}
+          </div>
+          <div class="kb-hero__slide-inner page-width">
+            <div class="kb-hero__slide-content">
+              {%- if block.settings.rating_text != blank -%}
+                <div class="kb-hero__rating">
+                  <span class="kb-hero__rating-stars" aria-hidden="true">
+                    {%- for i in (1..5) -%}
+                      <span class="svg-wrapper">{{- 'icon-star.svg' | inline_asset_content -}}</span>
+                    {%- endfor -%}
+                  </span>
+                  <span>{{ block.settings.rating_text | escape }}</span>
+                </div>
+              {%- endif -%}
+              {%- if block.settings.eyebrow != blank -%}
+                <p class="kb-hero__eyebrow caption-with-letter-spacing">{{ block.settings.eyebrow | escape }}</p>
+              {%- endif -%}
+              {%- if block.settings.heading != blank -%}
+                <h2 class="kb-hero__heading inline-richtext {{ block.settings.heading_size }}">
+                  {{ block.settings.heading }}
+                </h2>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="kb-hero__text rte">
+                  {{ block.settings.text }}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.button_label != blank or block.settings.button_label_2 != blank -%}
+                <div class="kb-hero__ctas">
+                  {%- if block.settings.button_label != blank -%}
+                    <a
+                      {% if block.settings.button_link == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link }}"
+                      {% endif %}
+                      class="button kb-hero__cta kb-hero__cta--primary"
+                    >
+                      <span>{{- block.settings.button_label | escape -}}</span>
+                      <span class="svg-wrapper kb-hero__cta-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                    </a>
+                  {%- endif -%}
+                  {%- if block.settings.button_label_2 != blank -%}
+                    <a
+                      {% if block.settings.button_link_2 == blank %}
+                        role="link" aria-disabled="true"
+                      {% else %}
+                        href="{{ block.settings.button_link_2 }}"
+                      {% endif %}
+                      class="button kb-hero__cta kb-hero__cta--secondary"
+                    >
+                      <span>{{- block.settings.button_label_2 | escape -}}</span>
+                    </a>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if block.settings.quote_text != blank -%}
+            <blockquote class="kb-hero__quote">
+              <p class="kb-hero__quote-text">{{ block.settings.quote_text }}</p>
+              {%- if block.settings.quote_author != blank -%}
+                <cite class="kb-hero__quote-author caption-with-letter-spacing">{{ block.settings.quote_author | escape }}</cite>
+              {%- endif -%}
+            </blockquote>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+    <button
+      type="button"
+      class="kb-hero__arrow kb-hero__arrow--prev"
+      name="previous"
+      aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}"
+      aria-controls="Slider-{{ section.id }}"
+    >
+      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+    </button>
+    <button
+      type="button"
+      class="kb-hero__arrow kb-hero__arrow--next"
+      name="next"
+      aria-label="{{ 'sections.slideshow.next_slideshow' | t }}"
+      aria-controls="Slider-{{ section.id }}"
+    >
+      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+    </button>
+  {%- endif -%}
+
+  {%- if has_badges or slide_count > 1 -%}
+    <div class="kb-hero__footer">
+      {%- if has_badges -%}
+        <ul class="kb-hero__badges" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'badge' -%}
+              <li class="kb-hero__badge" {{ block.shopify_attributes }}>
+                <span class="svg-wrapper">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
+                <span>{{ block.settings.text | escape }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if slide_count > 1 -%}
+        <div class="slider-buttons kb-hero__dots">
+          {%- for i in (1..slide_count) -%}
+            <button
+              type="button"
+              class="slider-counter__link kb-hero__dot link"
+              aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ i }} {{ 'general.slider.of' | t }} {{ slide_count }}"
+              aria-controls="Slider-{{ section.id }}"
+            >
+              <span class="dot"></span>
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</slideshow-component>
+
+{% schema %}
+{
+  "name": "Hero Kanbae",
+  "tag": "section",
+  "class": "section section-hero-kanbae",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slides"
+    },
+    {
+      "type": "select",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "options": [
+        { "value": "full_screen", "label": "Full screen" },
+        { "value": "large", "label": "Large" },
+        { "value": "medium", "label": "Medium" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "options": [
+        { "value": "full_screen", "label": "Full screen" },
+        { "value": "large", "label": "Large" },
+        { "value": "medium", "label": "Medium" }
+      ],
+      "default": "full_screen"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "label": "Change slides every",
+      "min": 3,
+      "max": 9,
+      "step": 2,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Accessibility"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_info",
+      "label": "Carousel description",
+      "info": "Used by screen readers, not visible in the storefront.",
+      "default": "Kanbae product showcase"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Background video",
+          "info": "Optional, Full-bleed layout only. Replaces the image, autoplays muted and loops. Loads after the page finishes rendering so it never slows down the first paint."
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            { "value": "full_bleed", "label": "Full-bleed (image or video fills the slide)" },
+            { "value": "split", "label": "Split (fixed image beside content)" }
+          ],
+          "default": "full_bleed"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Background color",
+          "info": "Only used in the Split layout.",
+          "default": "scheme-2"
+        },
+        {
+          "type": "header",
+          "content": "Rating"
+        },
+        {
+          "type": "text",
+          "id": "rating_text",
+          "label": "Rating text",
+          "info": "Shown with 5 stars above the eyebrow text. Leave blank to hide."
+        },
+        {
+          "type": "header",
+          "content": "Text"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow text",
+          "default": "NEW AT KANBAE"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Everything your body needs."
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            { "value": "h1", "label": "Normal" },
+            { "value": "h0", "label": "Large" },
+            { "value": "hxl", "label": "Extra large" },
+            { "value": "hxxl", "label": "Maximum" }
+          ],
+          "default": "hxl"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "Daily essential nutrition, formulated with clinical rigor and built for your real routine."
+        },
+        {
+          "type": "header",
+          "content": "Primary button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "header",
+          "content": "Secondary button"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "label": "Button label",
+          "info": "Rendered as a transparent, outlined button."
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "Button link"
+        },
+        {
+          "type": "header",
+          "content": "Testimonial card"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "quote_text",
+          "label": "Quote",
+          "info": "Optional floating testimonial card. Leave blank to hide."
+        },
+        {
+          "type": "text",
+          "id": "quote_author",
+          "label": "Attribution"
+        }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "icon-check-mark", "label": "Check" },
+            { "value": "icon-leaf", "label": "Leaf" },
+            { "value": "icon-heart", "label": "Heart" },
+            { "value": "icon-lock", "label": "Lock" },
+            { "value": "icon-star", "label": "Star" },
+            { "value": "icon-recycle", "label": "Recycle" },
+            { "value": "icon-fire", "label": "Fire" },
+            { "value": "icon-truck", "label": "Shipping" }
+          ],
+          "default": "icon-check-mark"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Validated by independent labs"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Kanbae",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "layout": "split",
+            "color_scheme": "scheme-2",
+            "eyebrow": "NEW AT KANBAE",
+            "heading": "Everything your body needs.",
+            "text": "Daily essential nutrition, formulated with clinical rigor and built for your real routine.",
+            "button_label": "Shop now",
+            "button_label_2": "Learn more"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "PERFORMANCE & LONGEVITY",
+            "heading": "Real science. Real results.",
+            "text": "Clinically-backed formulas, built for your daily performance.",
+            "button_label": "Learn more"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "rating_text": "60,000+ verified 5-star reviews",
+            "eyebrow": "TRUSTED EVERY DAY",
+            "heading": "Real people. Real routines.",
+            "text": "Join thousands who made Kanbae part of their daily ritual.",
+            "button_label": "Get started",
+            "quote_text": "It’s the simplest, most straightforward way for me to get my daily essentials.",
+            "quote_author": "Kanbae customer"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "icon-check-mark",
+            "text": "Validated by independent labs"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "icon-leaf",
+            "text": "Backed by scientific research"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "icon-star",
+            "text": "Trusted by experts and athletes"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
