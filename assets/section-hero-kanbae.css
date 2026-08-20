@@ -151,6 +151,10 @@
   min-height: 28rem;
 }
 
+.kb-hero__slide--split .kb-hero__image {
+  object-fit: contain;
+}
+
 .kb-hero__slide--split .kb-hero__slide-inner {
   order: 2;
   min-height: auto;
