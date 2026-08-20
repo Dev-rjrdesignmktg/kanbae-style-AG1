@@ -35,6 +35,80 @@
         "enable_language_selector": false
       }
     },
+    "kanbae_marquee_VpGhpP": {
+      "type": "kanbae-marquee",
+      "blocks": {
+        "marquee_item_wMwbRY": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "",
+            "icon": "image",
+            "icon_class": ""
+          }
+        },
+        "marquee_item_TgxyRX": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "2M+ Doses sold",
+            "icon": "icon-check-mark",
+            "icon_class": ""
+          }
+        },
+        "marquee_item_6kEtBk": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "40K+ Happy Customers",
+            "icon": "icon-heart",
+            "icon_class": ""
+          }
+        },
+        "marquee_item_yBThWD": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "2 Pildors.  Ready and go",
+            "icon": "icon-lightning-bolt",
+            "icon_class": ""
+          }
+        },
+        "marquee_item_NT9Gmp": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "10K+ 5-STAR REVIEWS",
+            "icon": "icon-star",
+            "icon_image": "shopify://shop_images/Asset_42_ca6256a0-c655-42ff-abaa-2e14276238f7.png",
+            "icon_class": ""
+          }
+        },
+        "marquee_item_jcbkDi": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Natural Ingredients",
+            "icon": "icon-leaf",
+            "icon_class": ""
+          }
+        }
+      },
+      "block_order": [
+        "marquee_item_wMwbRY",
+        "marquee_item_TgxyRX",
+        "marquee_item_6kEtBk",
+        "marquee_item_yBThWD",
+        "marquee_item_NT9Gmp",
+        "marquee_item_jcbkDi"
+      ],
+      "name": "Kanbae marquee",
+      "settings": {
+        "fixed_text": "Kanbae alcohol recovery",
+        "duration": 25,
+        "reverse_direction": "false",
+        "pause_on_hover": true,
+        "bg_color": "#0F3B2E",
+        "text_color": "#F5F5F0",
+        "fixed_bg_color": "#9CFF1B",
+        "fixed_text_color": "#111111",
+        "icon_color": ""
+      }
+    },
     "header": {
       "type": "header",
       "settings": {
@@ -56,6 +130,7 @@
   },
   "order": [
     "announcement-bar",
+    "kanbae_marquee_VpGhpP",
     "header"
   ]
 }
