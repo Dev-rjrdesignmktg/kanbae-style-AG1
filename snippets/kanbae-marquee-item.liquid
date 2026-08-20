@@ -1,0 +1,19 @@
+{%- liquid
+  assign show_attributes = show_attributes | default: false
+-%}
+<li class="kb-marquee__item"{% if show_attributes %} {{ block.shopify_attributes }}{% endif %}>
+  {%- if block.settings.icon == 'image' and block.settings.icon_image != blank -%}
+    <span class="kb-marquee__icon">
+      {{
+        block.settings.icon_image
+        | image_url: width: 88
+        | image_tag: width: 44, height: 44, loading: 'lazy', alt: '', class: 'kb-marquee__icon-image'
+      }}
+    </span>
+  {%- elsif block.settings.icon == 'custom' and block.settings.icon_class != blank -%}
+    <i class="kb-marquee__icon kb-marquee__icon--fa {{ block.settings.icon_class }}" aria-hidden="true"></i>
+  {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
+    <span class="kb-marquee__icon">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
+  {%- endif -%}
+  <span>{{ block.settings.text | escape }}</span>
+</li>

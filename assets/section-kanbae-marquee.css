@@ -105,6 +105,14 @@
 .kb-marquee__icon svg {
   width: 100%;
   height: 100%;
+  fill: currentColor;
+}
+
+.kb-marquee__icon-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .kb-marquee__icon--fa {

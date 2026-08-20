@@ -43,28 +43,14 @@
         <ul class="kb-marquee__list" aria-hidden="false">
           {%- for block in section.blocks -%}
             {%- if block.type == 'marquee_item' -%}
-              <li class="kb-marquee__item" {{ block.shopify_attributes }}>
-                {%- if block.settings.icon == 'custom' and block.settings.icon_class != blank -%}
-                  <i class="kb-marquee__icon kb-marquee__icon--fa {{ block.settings.icon_class }}" aria-hidden="true"></i>
-                {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
-                  <span class="kb-marquee__icon">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
-                {%- endif -%}
-                <span>{{ block.settings.text | escape }}</span>
-              </li>
+              {%- render 'kanbae-marquee-item', block: block, show_attributes: true -%}
             {%- endif -%}
           {%- endfor -%}
         </ul>
         <ul class="kb-marquee__list" aria-hidden="true">
           {%- for block in section.blocks -%}
             {%- if block.type == 'marquee_item' -%}
-              <li class="kb-marquee__item">
-                {%- if block.settings.icon == 'custom' and block.settings.icon_class != blank -%}
-                  <i class="kb-marquee__icon kb-marquee__icon--fa {{ block.settings.icon_class }}" aria-hidden="true"></i>
-                {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
-                  <span class="kb-marquee__icon">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
-                {%- endif -%}
-                <span>{{ block.settings.text | escape }}</span>
-              </li>
+              {%- render 'kanbae-marquee-item', block: block -%}
             {%- endif -%}
           {%- endfor -%}
         </ul>
@@ -182,9 +168,17 @@
             { "value": "icon-lock", "label": "Lock" },
             { "value": "icon-recycle", "label": "Recycle" },
             { "value": "icon-truck", "label": "Shipping" },
-            { "value": "custom", "label": "Custom (Font Awesome / CSS class)" }
+            { "value": "image", "label": "Upload custom icon" },
+            { "value": "custom", "label": "Custom (Font Awesome / CSS class) — advanced" }
           ],
           "default": "icon-check-mark"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image",
+          "info": "Upload a small square SVG or PNG (transparent background works best). Shown at 22x22px.",
+          "visible_if": "{{ block.settings.icon == 'image' }}"
         },
         {
           "type": "text",
