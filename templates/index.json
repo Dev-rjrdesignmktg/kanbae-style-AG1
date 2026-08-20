@@ -35,7 +35,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Kanbae-4.png",
-            "layout": "full_bleed",
+            "layout": "split",
             "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
             "rating_text": "",
             "eyebrow": "Complete alcohol recovery",
@@ -54,7 +54,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/6.png",
-            "layout": "full_bleed",
+            "layout": "split",
             "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
             "rating_text": "10,000+ verified 5-star reviews",
             "eyebrow": "TRUSTED EVERY DAY",
