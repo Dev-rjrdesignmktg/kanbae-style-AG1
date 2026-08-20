@@ -1,0 +1,213 @@
+{{ 'section-kanbae-marquee.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign duration = section.settings.duration | append: 's'
+  assign direction = 'normal'
+  if section.settings.reverse_direction == 'true'
+    assign direction = 'reverse'
+  endif
+
+  assign item_count = 0
+  for block in section.blocks
+    if block.type == 'marquee_item'
+      assign item_count = item_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- style -%}
+  #KanbaeMarquee-{{ section.id }} {
+    --kb-marquee-bg: {{ section.settings.bg_color }};
+    --kb-marquee-color: {{ section.settings.text_color }};
+    --kb-marquee-fixed-bg: {{ section.settings.fixed_bg_color }};
+    --kb-marquee-fixed-color: {{ section.settings.fixed_text_color }};
+    --kb-marquee-icon-color: {{ section.settings.icon_color | default: section.settings.text_color }};
+    --kb-marquee-duration: {{ duration }};
+    --kb-marquee-direction: {{ direction }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeMarquee-{{ section.id }}"
+  class="kb-marquee{% if section.settings.pause_on_hover %} kb-marquee--pause-hover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  role="region"
+  aria-label="{{ section.settings.fixed_text | escape }}"
+>
+  {%- if section.settings.fixed_text != blank -%}
+    <div class="kb-marquee__fixed">{{ section.settings.fixed_text | escape }}</div>
+  {%- endif -%}
+
+  {%- if item_count > 0 -%}
+    <div class="kb-marquee__track-wrapper">
+      <div class="kb-marquee__track" data-marquee-track>
+        <ul class="kb-marquee__list" aria-hidden="false">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'marquee_item' -%}
+              <li class="kb-marquee__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon == 'custom' and block.settings.icon_class != blank -%}
+                  <i class="kb-marquee__icon kb-marquee__icon--fa {{ block.settings.icon_class }}" aria-hidden="true"></i>
+                {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
+                  <span class="kb-marquee__icon">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
+                <span>{{ block.settings.text | escape }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <ul class="kb-marquee__list" aria-hidden="true">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'marquee_item' -%}
+              <li class="kb-marquee__item">
+                {%- if block.settings.icon == 'custom' and block.settings.icon_class != blank -%}
+                  <i class="kb-marquee__icon kb-marquee__icon--fa {{ block.settings.icon_class }}" aria-hidden="true"></i>
+                {%- elsif block.settings.icon != blank and block.settings.icon != 'none' -%}
+                  <span class="kb-marquee__icon">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
+                <span>{{ block.settings.text | escape }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae marquee",
+  "tag": "section",
+  "class": "section section-kanbae-marquee",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Fixed block"
+    },
+    {
+      "type": "text",
+      "id": "fixed_text",
+      "label": "Fixed text",
+      "default": "INTRODUCING"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "Duration",
+      "info": "Lower is faster. Time in seconds for the ticker to complete one full loop.",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 25
+    },
+    {
+      "type": "select",
+      "id": "reverse_direction",
+      "label": "Direction",
+      "options": [
+        { "value": "false", "label": "Right to left" },
+        { "value": "true", "label": "Left to right" }
+      ],
+      "default": "false"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "info": "Recommended for accessibility, so the text can be read on demand.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Ticker background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Ticker text",
+      "default": "#F5F5F0"
+    },
+    {
+      "type": "color",
+      "id": "fixed_bg_color",
+      "label": "Fixed block background",
+      "default": "#F5F5F0"
+    },
+    {
+      "type": "color",
+      "id": "fixed_text_color",
+      "label": "Fixed block text",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "info": "Leave blank to match the ticker text color."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "marquee_item",
+      "name": "Marquee item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "AG1 PRO ADVANCED"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "icon-check-mark", "label": "Check" },
+            { "value": "icon-leaf", "label": "Leaf" },
+            { "value": "icon-heart", "label": "Heart" },
+            { "value": "icon-star", "label": "Star" },
+            { "value": "icon-lightning-bolt", "label": "Lightning bolt" },
+            { "value": "icon-fire", "label": "Fire" },
+            { "value": "icon-lock", "label": "Lock" },
+            { "value": "icon-recycle", "label": "Recycle" },
+            { "value": "icon-truck", "label": "Shipping" },
+            { "value": "custom", "label": "Custom (Font Awesome / CSS class)" }
+          ],
+          "default": "icon-check-mark"
+        },
+        {
+          "type": "text",
+          "id": "icon_class",
+          "label": "Custom icon class",
+          "info": "e.g. fa-solid fa-check. Requires Font Awesome to be loaded separately in theme.liquid — not included by default to keep this section lightweight.",
+          "visible_if": "{{ block.settings.icon == 'custom' }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae marquee",
+      "blocks": [
+        { "type": "marquee_item", "settings": { "text": "AG1 PRO ADVANCED", "icon": "icon-check-mark" } },
+        { "type": "marquee_item", "settings": { "text": "75+ VITAMINS, MINERALS & WHOLE-FOOD SOURCED NUTRIENTS", "icon": "icon-leaf" } },
+        { "type": "marquee_item", "settings": { "text": "NSF CERTIFIED FOR SPORT", "icon": "icon-lock" } },
+        { "type": "marquee_item", "settings": { "text": "1 SCOOP. 1 ROUTINE.", "icon": "icon-lightning-bolt" } },
+        { "type": "marquee_item", "settings": { "text": "60,000+ 5-STAR REVIEWS", "icon": "icon-star" } },
+        { "type": "marquee_item", "settings": { "text": "FREE SHIPPING ON SUBSCRIPTIONS", "icon": "icon-truck" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
