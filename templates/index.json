@@ -154,10 +154,101 @@
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "kanbae_vs_competitors_dTmwdc": {
+      "type": "kanbae-vs-competitors",
+      "blocks": {
+        "comparison_row_3hJWd8": {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Active Dosage",
+            "kanbae_icon": "none",
+            "kanbae_text": "1160mg",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "1000-1200mg",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
+          }
+        },
+        "comparison_row_ykKAyz": {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Hero Ingredients",
+            "kanbae_icon": "none",
+            "kanbae_text": "DMH, S-Acetyl Glutathione, Pyroglutamic Acid, Succinic Acid",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "DHM",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
+          }
+        },
+        "comparison_row_haxcka": {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Clinically Tested Formula",
+            "kanbae_icon": "check",
+            "kanbae_text": "",
+            "competitor_a_icon": "cross",
+            "competitor_a_text": "",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
+          }
+        },
+        "comparison_row_zb8jGn": {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Developed In-House (no OEM)",
+            "kanbae_icon": "check",
+            "kanbae_text": "",
+            "competitor_a_icon": "cross",
+            "competitor_a_text": "",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
+          }
+        },
+        "comparison_row_crRiMV": {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Daily Routine",
+            "kanbae_icon": "check",
+            "kanbae_text": "",
+            "competitor_a_icon": "check",
+            "competitor_a_text": "",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "comparison_row_3hJWd8",
+        "comparison_row_ykKAyz",
+        "comparison_row_haxcka",
+        "comparison_row_zb8jGn",
+        "comparison_row_crRiMV"
+      ],
+      "name": "Kanbae vs competitors",
+      "settings": {
+        "eyebrow": "THE KANBAE DIFFERENCE",
+        "title": "Not just different. Better.",
+        "heading_size": "h0",
+        "subtitle": "<p>See how Kanbae compares to the generic multivitamins and traditional powders sitting in your cabinet.</p>",
+        "kanbae_label": "Kanbae",
+        "kanbae_image": "shopify://shop_images/Kanbae_ColorBG_DSC05352_25MP.jpg",
+        "show_star_badge": true,
+        "competitor_a_label": "Other supplements",
+        "show_competitor_b": false,
+        "competitor_b_label": "Generic multivitamins",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "hero_kanbae",
-    "featured_collection"
+    "featured_collection",
+    "kanbae_vs_competitors_dTmwdc"
   ]
 }
