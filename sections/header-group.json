@@ -90,20 +90,49 @@
         "duration": 25,
         "reverse_direction": "false",
         "pause_on_hover": true,
-        "bg_color": "#0F3B2E",
-        "text_color": "#F5F5F0",
-        "fixed_bg_color": "#9CFF1B",
+        "bg_color": "#0f3b2e",
+        "text_color": "#f5f5f0",
+        "fixed_bg_color": "#9cff1b",
         "fixed_text_color": "#111111",
         "icon_color": ""
       }
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "mega_menu_aqxwa9": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_handle": "Shop",
+            "item_1_image": "shopify://shop_images/Kanbae_ColorBG_DSC05352_25MP.jpg",
+            "item_1_title": "Kanbae Complete Alcohol Defense",
+            "item_1_description": "",
+            "item_1_link": "",
+            "item_2_title": "",
+            "item_2_description": "",
+            "item_2_link": "",
+            "item_3_title": "",
+            "item_3_description": "",
+            "item_3_link": "",
+            "item_4_title": "",
+            "item_4_description": "",
+            "item_4_link": "",
+            "panel_link_1": "",
+            "panel_link_2": "",
+            "panel_link_3": "",
+            "panel_link_4": ""
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_aqxwa9"
+      ],
       "settings": {
         "logo_position": "middle-left",
         "mobile_logo_position": "center",
-        "menu": "main-menu",
+        "menu": "menu-header",
         "menu_type_desktop": "mega",
+        "mega_menu_open_on_hover": true,
         "sticky_header_type": "on-scroll-up",
         "show_line_separator": true,
         "color_scheme": "scheme-1",
