@@ -124,6 +124,12 @@
         "mobile_height": "full_screen",
         "auto_rotate": true,
         "change_slides_speed": 5,
+        "accent_color_scheme": "",
+        "cta_hover_background": "#CBFFDA",
+        "cta_hover_text_color": "#082310",
+        "arrow_background": "#cbffda",
+        "arrow_icon_color": "#082310",
+        "arrow_hover_background": "#a3ff16",
         "accessibility_info": "Kanbae product showcase"
       }
     },
@@ -217,6 +223,102 @@
         "padding_bottom": 96
       }
     },
+    "kanbae_value_slider_P69b9z": {
+      "type": "kanbae-value-slider",
+      "blocks": {
+        "check_item_BNfMLh": {
+          "type": "check_item",
+          "settings": {
+            "text": "Clinically-studied ingredients that support liver function"
+          }
+        },
+        "check_item_mCxyAB": {
+          "type": "check_item",
+          "settings": {
+            "text": "Take before your first drink, not the morning after"
+          }
+        },
+        "check_item_RffJKF": {
+          "type": "check_item",
+          "settings": {
+            "text": "No added sugar, no artificial fillers"
+          }
+        },
+        "check_item_Nkt8qq": {
+          "type": "check_item",
+          "settings": {
+            "text": "One shot, no hangover regret"
+          }
+        },
+        "slider_item_46y8Hi": {
+          "type": "slider_item",
+          "settings": {
+            "image": "shopify://shop_images/4.png",
+            "badge_text": "Pre-game ritual",
+            "title": "Protect before you pour",
+            "text": "One shot before drinking, done in seconds."
+          }
+        },
+        "slider_item_RTkWcq": {
+          "type": "slider_item",
+          "settings": {
+            "image": "shopify://shop_images/10.png",
+            "badge_text": "Night out ready",
+            "title": "Built for the whole night",
+            "text": "Made for happy hours, dinners, and everything after."
+          }
+        },
+        "slider_item_rgA4DB": {
+          "type": "slider_item",
+          "settings": {
+            "image": "shopify://shop_images/As_seen_in_press1.png",
+            "badge_text": "Science-backed",
+            "title": "Ingredients that work",
+            "text": "A formula studied for real liver support, not hype."
+          }
+        },
+        "slider_item_wrmdeP": {
+          "type": "slider_item",
+          "settings": {
+            "image": "shopify://shop_images/69.jpg",
+            "badge_text": "Wake up right",
+            "title": "Mornings you don't dread",
+            "text": "Thousands trust it before the first round."
+          }
+        }
+      },
+      "block_order": [
+        "check_item_BNfMLh",
+        "check_item_mCxyAB",
+        "check_item_RffJKF",
+        "check_item_Nkt8qq",
+        "slider_item_46y8Hi",
+        "slider_item_RTkWcq",
+        "slider_item_rgA4DB",
+        "slider_item_wrmdeP"
+      ],
+      "name": "Kanbae value slider",
+      "settings": {
+        "eyebrow": "WHY KANBAE",
+        "title": "Drink smarter. Wake up better.",
+        "heading_size": "h0",
+        "paragraph": "<p>A pre-drink shot built to protect your liver and support your body through alcohol, backed by clinical research, so tomorrow doesn't wreck your plans.</p>",
+        "button_label": "Shop now",
+        "cta_hover_background": "#CBFFDA",
+        "cta_hover_text_color": "#0F3B2E",
+        "button_link": "shopify://products/complete-alcohol-defense",
+        "layout": "content_first",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "accessibility_info": "Kanbae hangover protection lifestyle showcase",
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "arrow_background": "#cbffda",
+        "arrow_icon_color": "#082310",
+        "arrow_hover_background": "#a3ff16",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -249,6 +351,7 @@
   "order": [
     "hero_kanbae",
     "kanbae_vs_competitors_dTmwdc",
+    "kanbae_value_slider_P69b9z",
     "featured_collection"
   ]
 }
