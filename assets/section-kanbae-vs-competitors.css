@@ -1,0 +1,388 @@
+.kb-vs {
+  --kb-green-forest: rgba(8, 35, 16, 1);
+  --kb-green-lime: rgba(163, 255, 22, 1);
+  --kb-white-cream: rgba(247, 246, 242, 1);
+  --kb-black-carbon: rgba(10, 25, 21, 1);
+  position: relative;
+  width: 100%;
+}
+
+.kb-vs__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Layout: intro (heading) + matrix (labels + card columns) */
+
+.kb-vs__layout {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.kb-vs__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  max-width: 62rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kb-vs__eyebrow {
+  margin: 0;
+  color: var(--kb-green-forest);
+  font-size: 1.5rem;
+  letter-spacing: 0.18rem;
+  opacity: 0.75;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-vs__eyebrow {
+    font-size: 1.7rem;
+  }
+}
+
+.kb-vs__title {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.kb-vs__subtitle {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.kb-vs__subtitle > * {
+  margin: 0;
+}
+
+/* Matrix wrapper + mobile scroll */
+
+.kb-vs__matrix-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--color-foreground), 0.3) transparent;
+  padding-top: 2rem;
+}
+
+.kb-vs__matrix-wrapper::-webkit-scrollbar {
+  height: 0.6rem;
+}
+
+.kb-vs__matrix-wrapper::-webkit-scrollbar-track {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.kb-vs__matrix-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background-color: rgba(var(--color-foreground), 0.3);
+}
+
+.kb-vs__matrix {
+  display: grid;
+  grid-template-columns: minmax(13rem, 1.1fr) repeat(2, minmax(15rem, 1fr));
+  column-gap: 1.6rem;
+  row-gap: 0;
+  min-width: 50rem;
+}
+
+.kb-vs--three-col .kb-vs__matrix {
+  grid-template-columns: minmax(13rem, 1.1fr) repeat(3, minmax(15rem, 1fr));
+  min-width: 66rem;
+}
+
+/* Cells */
+
+.kb-vs__cell {
+  padding: 1.6rem;
+  vertical-align: top;
+}
+
+.kb-vs__cell--label {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding-left: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-background));
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  box-shadow: 0.6rem 0 0.8rem -0.6rem rgba(0, 0, 0, 0.15);
+}
+
+.kb-vs__cell--label.kb-vs__cell--row-head {
+  border-bottom: none;
+}
+
+.kb-vs__cell--label.kb-vs__cell--row-last {
+  border-bottom: none;
+}
+
+.kb-vs__cell--card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Kanbae card (highlighted) */
+
+.kb-vs__cell--kanbae {
+  background: var(--kb-green-forest);
+  color: var(--kb-white-cream);
+  border-bottom: 0.1rem solid rgba(247, 246, 242, 0.12);
+}
+
+.kb-vs__cell--kanbae.kb-vs__cell--row-head {
+  padding-top: 2.4rem;
+  border-top-left-radius: 1.6rem;
+  border-top-right-radius: 1.6rem;
+}
+
+.kb-vs__cell--kanbae.kb-vs__cell--row-last {
+  border-bottom: none;
+  border-bottom-left-radius: 1.6rem;
+  border-bottom-right-radius: 1.6rem;
+}
+
+/* Competitor card */
+
+.kb-vs__cell--competitor {
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.1);
+}
+
+.kb-vs__cell--competitor.kb-vs__cell--row-head {
+  padding-top: 2.4rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
+  border-top-left-radius: 1.6rem;
+  border-top-right-radius: 1.6rem;
+}
+
+.kb-vs__cell--competitor.kb-vs__cell--row-last {
+  border-bottom-left-radius: 1.6rem;
+  border-bottom-right-radius: 1.6rem;
+}
+
+/* Star badge (winner) */
+
+.kb-vs__star-badge {
+  position: absolute;
+  top: -1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: var(--kb-black-carbon);
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.25);
+}
+
+.kb-vs__star-badge svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  fill: var(--kb-white-cream);
+}
+
+/* Card image + name (header row) */
+
+.kb-vs__card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 16rem;
+  margin-bottom: 1.6rem;
+  overflow: hidden;
+  border-radius: 1.2rem;
+}
+
+.kb-vs__cell--kanbae .kb-vs__card-image {
+  background: rgba(163, 255, 22, 0.14);
+}
+
+.kb-vs__cell--competitor .kb-vs__card-image {
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.kb-vs__card-image-tag {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1.6rem;
+}
+
+.kb-vs__placeholder-icon {
+  width: 60%;
+  height: 60%;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.kb-vs__cell--kanbae .kb-vs__placeholder-icon {
+  color: var(--kb-white-cream);
+}
+
+.kb-vs__card-name {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01rem;
+}
+
+.kb-vs__card-name--muted {
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+/* Value cells (data rows) */
+
+.kb-vs__value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.kb-vs__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+}
+
+.kb-vs__icon svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.kb-vs__icon--check {
+  background: rgba(163, 255, 22, 0.18);
+  color: var(--kb-green-lime);
+}
+
+.kb-vs__cell--competitor .kb-vs__icon--check {
+  background: rgba(var(--color-foreground), 0.08);
+  color: rgb(var(--color-foreground));
+}
+
+.kb-vs__icon--cross {
+  background: rgba(var(--color-foreground), 0.06);
+  color: rgba(var(--color-foreground), 0.4);
+}
+
+.kb-vs__cell--kanbae .kb-vs__icon--cross {
+  background: rgba(247, 246, 242, 0.12);
+  color: rgba(247, 246, 242, 0.6);
+}
+
+.kb-vs__icon--cross svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.kb-vs__value-attribute {
+  display: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.03rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.kb-vs__value-text {
+  font-size: 1.3rem;
+  line-height: 1.35;
+}
+
+.kb-vs__cell--kanbae .kb-vs__value-text {
+  color: var(--kb-white-cream);
+  font-weight: 600;
+}
+
+.kb-vs__cell--competitor .kb-vs__value-text {
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+/* CTA */
+
+.kb-vs__cta {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.kb-vs__cta-button {
+  margin: 0;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 749px) {
+  .kb-vs__intro {
+    gap: 1rem;
+  }
+
+  .kb-vs__matrix-wrapper {
+    padding-top: 1.6rem;
+    overflow-x: visible;
+  }
+
+  /* Drop the dedicated label column and the second competitor on mobile:
+     the attribute name moves inside each value cell instead. */
+  .kb-vs__matrix {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    min-width: 0 !important;
+    column-gap: 1.2rem;
+  }
+
+  .kb-vs__cell--label {
+    display: none;
+  }
+
+  .kb-vs__cell--competitor-b {
+    display: none;
+  }
+
+  .kb-vs__cell--kanbae {
+    grid-column: 1 !important;
+  }
+
+  .kb-vs__cell--competitor-a {
+    grid-column: 2 !important;
+  }
+
+  .kb-vs__value-attribute {
+    display: block;
+  }
+
+  .kb-vs__cell {
+    padding: 1.2rem;
+  }
+
+  .kb-vs__card-image {
+    max-height: 12rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .kb-vs__card-name {
+    font-size: 1.5rem;
+  }
+}

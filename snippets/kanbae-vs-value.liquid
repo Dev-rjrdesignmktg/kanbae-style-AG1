@@ -1,0 +1,35 @@
+{%- doc -%}
+  Renders one comparison-table cell value: an icon (check/cross/none) with optional text.
+
+  @param icon {string} - 'check', 'cross', or 'none'
+  @param text {string} - Optional caption shown next to (or instead of) the icon
+  @param attribute {string} - Optional row attribute name, shown above the value on mobile only
+{%- enddoc -%}
+
+<div class="kb-vs__value kb-vs__value--{{ icon }}">
+  {%- if attribute != blank -%}
+    <span class="kb-vs__value-attribute">{{ attribute | escape }}</span>
+  {%- endif -%}
+  {%- case icon -%}
+    {%- when 'check' -%}
+      <span class="kb-vs__icon kb-vs__icon--check svg-wrapper" aria-hidden="true">
+        {{- 'icon-checkmark.svg' | inline_asset_content -}}
+      </span>
+    {%- when 'cross' -%}
+      <span class="kb-vs__icon kb-vs__icon--cross svg-wrapper" aria-hidden="true">
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+  {%- endcase -%}
+  {%- if text != blank -%}
+    <span class="kb-vs__value-text">{{ text | escape }}</span>
+  {%- endif -%}
+  {%- if icon != 'none' and text == blank -%}
+    <span class="visually-hidden">
+      {%- if icon == 'check' -%}
+        Included
+      {%- else -%}
+        Not included
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</div>

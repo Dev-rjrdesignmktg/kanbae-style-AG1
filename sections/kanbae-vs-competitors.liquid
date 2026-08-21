@@ -1,0 +1,477 @@
+{{ 'section-kanbae-vs-competitors.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign show_competitor_b = section.settings.show_competitor_b
+  assign row_count = 0
+  for block in section.blocks
+    if block.type == 'comparison_row'
+      assign row_count = row_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeVsCompetitors-{{ section.id }}"
+  class="kb-vs color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if show_competitor_b %} kb-vs--three-col{% endif %}"
+>
+  <div class="kb-vs__inner page-width">
+    <div class="kb-vs__layout">
+      <div class="kb-vs__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-vs__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-vs__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <div class="kb-vs__subtitle rte">{{ section.settings.subtitle }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- if row_count > 0 -%}
+        <div class="kb-vs__matrix-wrapper{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          <div class="kb-vs__matrix" role="table">
+            <div
+              class="kb-vs__cell kb-vs__cell--label kb-vs__cell--row-head"
+              role="presentation"
+              style="grid-column: 1; grid-row: 1;"
+            ></div>
+
+            <div
+              class="kb-vs__cell kb-vs__cell--card kb-vs__cell--kanbae kb-vs__cell--row-head"
+              role="columnheader"
+              style="grid-column: 2; grid-row: 1;"
+            >
+              {%- if section.settings.show_star_badge -%}
+                <span class="kb-vs__star-badge" aria-hidden="true">
+                  <span class="svg-wrapper">{{- 'icon-star.svg' | inline_asset_content -}}</span>
+                </span>
+                <span class="visually-hidden">Recommended</span>
+              {%- endif -%}
+              <div class="kb-vs__card-image">
+                {%- if section.settings.kanbae_image != blank -%}
+                  {{
+                    section.settings.kanbae_image
+                    | image_url: width: 400
+                    | image_tag: class: 'kb-vs__card-image-tag', alt: section.settings.kanbae_label, loading: 'lazy'
+                  }}
+                {%- else -%}
+                  {{ 'product-apparel-1' | placeholder_svg_tag: 'kb-vs__card-image-tag placeholder' }}
+                {%- endif -%}
+              </div>
+              <p class="kb-vs__card-name">{{ section.settings.kanbae_label | escape }}</p>
+            </div>
+
+            <div
+              class="kb-vs__cell kb-vs__cell--card kb-vs__cell--competitor kb-vs__cell--competitor-a kb-vs__cell--row-head"
+              role="columnheader"
+              style="grid-column: 3; grid-row: 1;"
+            >
+              <div class="kb-vs__card-image">
+                {%- if section.settings.competitor_a_image != blank -%}
+                  {{
+                    section.settings.competitor_a_image
+                    | image_url: width: 400
+                    | image_tag: class: 'kb-vs__card-image-tag', alt: section.settings.competitor_a_label, loading: 'lazy'
+                  }}
+                {%- else -%}
+                  {%- render 'kanbae-vs-placeholder' -%}
+                {%- endif -%}
+              </div>
+              <p class="kb-vs__card-name kb-vs__card-name--muted">{{ section.settings.competitor_a_label | escape }}</p>
+            </div>
+
+            {%- if show_competitor_b -%}
+              <div
+                class="kb-vs__cell kb-vs__cell--card kb-vs__cell--competitor kb-vs__cell--competitor-b kb-vs__cell--row-head"
+                role="columnheader"
+                style="grid-column: 4; grid-row: 1;"
+              >
+                <div class="kb-vs__card-image">
+                  {%- if section.settings.competitor_b_image != blank -%}
+                    {{
+                      section.settings.competitor_b_image
+                      | image_url: width: 400
+                      | image_tag: class: 'kb-vs__card-image-tag', alt: section.settings.competitor_b_label, loading: 'lazy'
+                    }}
+                  {%- else -%}
+                    {%- render 'kanbae-vs-placeholder' -%}
+                  {%- endif -%}
+                </div>
+                <p class="kb-vs__card-name kb-vs__card-name--muted">{{ section.settings.competitor_b_label | escape }}</p>
+              </div>
+            {%- endif -%}
+
+            {%- assign row_index = 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'comparison_row' -%}
+                {%- assign row_index = row_index | plus: 1 -%}
+                {%- assign grid_row = row_index | plus: 1 -%}
+                {%- assign row_last = false -%}
+                {%- if row_index == row_count -%}
+                  {%- assign row_last = true -%}
+                {%- endif -%}
+
+                <div
+                  class="kb-vs__cell kb-vs__cell--label{% if row_last %} kb-vs__cell--row-last{% endif %}"
+                  role="rowheader"
+                  style="grid-column: 1; grid-row: {{ grid_row }};"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.attribute | escape }}
+                </div>
+                <div
+                  class="kb-vs__cell kb-vs__cell--card kb-vs__cell--kanbae{% if row_last %} kb-vs__cell--row-last{% endif %}"
+                  role="cell"
+                  style="grid-column: 2; grid-row: {{ grid_row }};"
+                >
+                  {%- render 'kanbae-vs-value',
+                    icon: block.settings.kanbae_icon,
+                    text: block.settings.kanbae_text,
+                    attribute: block.settings.attribute
+                  -%}
+                </div>
+                <div
+                  class="kb-vs__cell kb-vs__cell--card kb-vs__cell--competitor kb-vs__cell--competitor-a{% if row_last %} kb-vs__cell--row-last{% endif %}"
+                  role="cell"
+                  style="grid-column: 3; grid-row: {{ grid_row }};"
+                >
+                  {%- render 'kanbae-vs-value',
+                    icon: block.settings.competitor_a_icon,
+                    text: block.settings.competitor_a_text,
+                    attribute: block.settings.attribute
+                  -%}
+                </div>
+                {%- if show_competitor_b -%}
+                  <div
+                    class="kb-vs__cell kb-vs__cell--card kb-vs__cell--competitor kb-vs__cell--competitor-b{% if row_last %} kb-vs__cell--row-last{% endif %}"
+                    role="cell"
+                    style="grid-column: 4; grid-row: {{ grid_row }};"
+                  >
+                    {%- render 'kanbae-vs-value',
+                      icon: block.settings.competitor_b_icon,
+                      text: block.settings.competitor_b_text,
+                      attribute: block.settings.attribute
+                    -%}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="kb-vs__cta">
+        <a
+          {% if section.settings.button_link == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.button_link }}"
+          {% endif %}
+          class="button kb-vs__cta-button"
+        >
+          {{- section.settings.button_label | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae vs competitors",
+  "tag": "section",
+  "class": "section section-kanbae-vs-competitors",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE KANBAE DIFFERENCE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Not just different. Better."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>See how Kanbae compares to the generic multivitamins and traditional powders sitting in your cabinet.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Kanbae column"
+    },
+    {
+      "type": "text",
+      "id": "kanbae_label",
+      "label": "Column name",
+      "default": "Kanbae"
+    },
+    {
+      "type": "image_picker",
+      "id": "kanbae_image",
+      "label": "Product image",
+      "info": "Shown at the top of the Kanbae card."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_star_badge",
+      "label": "Show \"Recommended\" star badge",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Competitor columns"
+    },
+    {
+      "type": "text",
+      "id": "competitor_a_label",
+      "label": "Competitor A name",
+      "default": "Other supplements"
+    },
+    {
+      "type": "image_picker",
+      "id": "competitor_a_image",
+      "label": "Competitor A image",
+      "info": "Leave blank to show a generic placeholder graphic."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_competitor_b",
+      "label": "Show a second competitor column",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "competitor_b_label",
+      "label": "Competitor B name",
+      "default": "Generic multivitamins",
+      "visible_if": "{{ section.settings.show_competitor_b }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "competitor_b_image",
+      "label": "Competitor B image",
+      "info": "Leave blank to show a generic placeholder graphic.",
+      "visible_if": "{{ section.settings.show_competitor_b }}"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "Leave blank to hide the button."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "comparison_row",
+      "name": "Comparison row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "attribute",
+          "label": "Attribute / Benefit",
+          "default": "Active ingredients"
+        },
+        {
+          "type": "header",
+          "content": "Kanbae"
+        },
+        {
+          "type": "select",
+          "id": "kanbae_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "check", "label": "Check" },
+            { "value": "cross", "label": "Cross" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "kanbae_text",
+          "label": "Text (optional)",
+          "info": "Shown next to the icon, or on its own if no icon fits."
+        },
+        {
+          "type": "header",
+          "content": "Competitor A"
+        },
+        {
+          "type": "select",
+          "id": "competitor_a_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "check", "label": "Check" },
+            { "value": "cross", "label": "Cross" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "cross"
+        },
+        {
+          "type": "text",
+          "id": "competitor_a_text",
+          "label": "Text (optional)"
+        },
+        {
+          "type": "header",
+          "content": "Competitor B"
+        },
+        {
+          "type": "select",
+          "id": "competitor_b_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "check", "label": "Check" },
+            { "value": "cross", "label": "Cross" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "cross"
+        },
+        {
+          "type": "text",
+          "id": "competitor_b_text",
+          "label": "Text (optional)",
+          "info": "Only shown when the second competitor column is enabled."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae vs competitors",
+      "blocks": [
+        {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Active Dosage",
+            "kanbae_icon": "none",
+            "kanbae_text": "1160mg",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "1000-1200mg"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Hero Ingredients",
+            "kanbae_icon": "none",
+            "kanbae_text": "75+ whole-food sourced nutrients",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "Synthetic isolates"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Clinically Tested Formula",
+            "kanbae_icon": "check",
+            "competitor_a_icon": "cross"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Added Sugar",
+            "kanbae_icon": "cross",
+            "kanbae_text": "None",
+            "competitor_a_icon": "check",
+            "competitor_a_text": "Often included"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "attribute": "Daily Routine",
+            "kanbae_icon": "none",
+            "kanbae_text": "1 scoop, done",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "Multiple pills & powders"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
