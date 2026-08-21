@@ -1,5 +1,4 @@
 .kb-hero {
-  --kb-green-forest: rgba(8, 35, 16, 1);
   --kb-green-lime: rgba(163, 255, 22, 1);
   --kb-white-cream: rgba(247, 246, 242, 1);
   --kb-black-carbon: rgba(10, 25, 21, 1);
@@ -299,8 +298,8 @@
 }
 
 .kb-hero__cta--primary {
-  background-color: var(--kb-green-forest);
-  color: var(--kb-white-cream);
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
   transition: color 0.3s ease;
 }
 
@@ -310,14 +309,14 @@
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  background-color: var(--kb-green-lime);
+  background-color: var(--kb-cta-hover-background);
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.45s ease;
 }
 
 .kb-hero__cta--primary:hover,
 .kb-hero__cta--primary:focus-visible {
-  color: var(--kb-green-forest);
+  color: var(--kb-cta-hover-color);
 }
 
 .kb-hero__cta--primary:hover::before,
@@ -366,14 +365,14 @@
   transform: translateY(-50%);
   border: none;
   border-radius: 50%;
-  background: #cbffda;
-  color: var(--kb-green-forest);
+  background: var(--kb-arrow-background);
+  color: var(--kb-arrow-color);
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .kb-hero__arrow:hover {
-  background: var(--kb-green-lime);
+  background: var(--kb-arrow-hover-background);
 }
 
 .kb-hero__arrow .icon {

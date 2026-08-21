@@ -53,6 +53,11 @@
 {%- style -%}
   #HeroKanbae-{{ section.id }} {
     --kb-hero-height-vh: {{ mobile_height_vh }};
+    --kb-arrow-background: {{ section.settings.arrow_background }};
+    --kb-arrow-color: {{ section.settings.arrow_icon_color }};
+    --kb-arrow-hover-background: {{ section.settings.arrow_hover_background }};
+    --kb-cta-hover-background: {{ section.settings.cta_hover_background }};
+    --kb-cta-hover-color: {{ section.settings.cta_hover_text_color }};
   }
 
   @media screen and (min-width: 750px) {
@@ -64,7 +69,7 @@
 
 <slideshow-component
   id="HeroKanbae-{{ section.id }}"
-  class="kb-hero{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  class="kb-hero color-{{ section.settings.accent_color_scheme }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
   role="region"
   aria-roledescription="{{ 'sections.slideshow.carousel' | t }}"
   aria-label="{{ section.settings.accessibility_info | escape }}"
@@ -317,6 +322,51 @@
       "step": 2,
       "unit": "s",
       "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "accent_color_scheme",
+      "label": "Primary button color",
+      "info": "Controls each slide's primary button. Independent from the Split layout's background color, set per slide below.",
+      "default": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "Primary button hover color",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Primary button hover text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Arrows"
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Background color",
+      "default": "#cbffda"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Icon color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_background",
+      "label": "Hover background color",
+      "default": "#a3ff16"
     },
     {
       "type": "header",
