@@ -1,0 +1,463 @@
+{{ 'component-modal-video.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{{ 'section-kanbae-trust-section.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign testimonials = section.blocks | where: 'type', 'video_testimonial'
+  assign testimonial_count = testimonials.size
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeTrust-{{ section.id }} {
+    --kb-trust-star-color: {{ section.settings.star_color }};
+    --kb-trust-cta-hover-background: {{ section.settings.cta_hover_background }};
+    --kb-trust-cta-hover-color: {{ section.settings.cta_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeTrust-{{ section.id }}"
+  class="kb-trust color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.layout == 'cards_first' %} kb-trust--reverse{% endif %}"
+>
+  <div class="kb-trust__inner page-width">
+    <div class="kb-trust__grid">
+      <div class="kb-trust__content{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.show_rating -%}
+          <div class="kb-trust__rating">
+            <span class="kb-trust__stars" role="img" aria-label="{{ section.settings.rating_text | escape }}">
+              {%- for i in (1..5) -%}
+                <span class="svg-wrapper kb-trust__star">{{- 'icon-star-filled.svg' | inline_asset_content -}}</span>
+              {%- endfor -%}
+            </span>
+            {%- if section.settings.rating_text != blank -%}
+              <p class="kb-trust__rating-text">{{ section.settings.rating_text | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-trust__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subtitle != blank -%}
+          <div class="kb-trust__subtitle rte">
+            {{ section.settings.subtitle }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="button button--secondary kb-trust__cta"
+          >
+            {{- section.settings.button_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if testimonial_count > 0 -%}
+        <div class="kb-trust__cards-wrap{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          <ul class="kb-trust__cards" role="list" data-kb-trust-cards>
+            {%- for block in testimonials -%}
+              {%- liquid
+                assign video_id = block.settings.video.id | default: block.settings.video_url.id
+                assign card_alt = block.settings.review_title | default: block.settings.customer_name
+
+                assign poster_image = block.settings.cover_image | default: block.settings.video.preview_image
+                assign youtube_poster_url = blank
+                if poster_image == blank and block.settings.video == null and block.settings.video_url.type == 'youtube'
+                  assign youtube_poster_url = 'https://img.youtube.com/vi/' | append: block.settings.video_url.id | append: '/maxresdefault.jpg'
+                endif
+
+                assign modal_ratio = 1.7778
+                if block.settings.video.aspect_ratio > 0
+                  assign modal_ratio = block.settings.video.aspect_ratio
+                endif
+              -%}
+              {%- capture thumb_image -%}
+                {%- if poster_image != blank -%}
+                  {{
+                    poster_image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'kb-trust__thumb-image',
+                      sizes: '(min-width: 990px) 320px, (min-width: 750px) 45vw, 78vw',
+                      widths: '320, 480, 640, 800, 1200',
+                      loading: 'lazy',
+                      alt: poster_image.alt | default: card_alt
+                  }}
+                {%- elsif youtube_poster_url != blank -%}
+                  <img
+                    class="kb-trust__thumb-image"
+                    src="{{ youtube_poster_url }}"
+                    srcset="
+                      https://img.youtube.com/vi/{{ block.settings.video_url.id }}/mqdefault.jpg 320w,
+                      https://img.youtube.com/vi/{{ block.settings.video_url.id }}/hqdefault.jpg 480w,
+                      https://img.youtube.com/vi/{{ block.settings.video_url.id }}/sddefault.jpg 640w,
+                      {{ youtube_poster_url }} 1280w
+                    "
+                    sizes="(min-width: 990px) 320px, (min-width: 750px) 45vw, 78vw"
+                    loading="lazy"
+                    width="1280"
+                    height="720"
+                    alt="{{ card_alt | escape }}"
+                  >
+                {%- else -%}
+                  {{ 'lifestyle-2' | placeholder_svg_tag: 'kb-trust__thumb-image placeholder' }}
+                {%- endif -%}
+              {%- endcapture -%}
+              <li class="kb-trust__card" {{ block.shopify_attributes }}>
+                <div class="kb-trust__media">
+                  {%- if video_id != blank -%}
+                    <modal-opener data-modal="#KbTrustModal-{{ block.id }}">
+                      <button
+                        type="button"
+                        class="kb-trust__thumb"
+                        aria-haspopup="dialog"
+                        aria-label="{{ 'sections.video.load_video' | t: description: card_alt | escape }}"
+                      >
+                        {{ thumb_image }}
+                        <span class="kb-trust__play" aria-hidden="true">
+                          <span class="svg-wrapper">{{- 'icon-play.svg' | inline_asset_content -}}</span>
+                        </span>
+                        {%- if block.settings.badge_text != blank -%}
+                          <span class="kb-trust__thumb-badge">{{ block.settings.badge_text | escape }}</span>
+                        {%- endif -%}
+                      </button>
+                    </modal-opener>
+
+                    <modal-dialog
+                      id="KbTrustModal-{{ block.id }}"
+                      class="modal-video media-modal kb-trust-modal color-{{ section.settings.color_scheme }} gradient"
+                      style="--kb-trust-modal-ratio: {{ modal_ratio }};"
+                    >
+                      <div
+                        class="modal-video__content"
+                        role="dialog"
+                        aria-label="{{ card_alt | escape }}"
+                        aria-modal="true"
+                        tabindex="-1"
+                      >
+                        <button
+                          id="ModalClose-{{ block.id }}"
+                          type="button"
+                          class="modal-video__toggle"
+                          aria-label="{{ 'accessibility.close' | t }}"
+                        >
+                          <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+                        </button>
+                        <div class="modal-video__content-info">
+                          <deferred-media class="modal-video__video template-popup" data-media-id="{{ video_id }}">
+                            <template>
+                              {%- if block.settings.video == null and block.settings.video_url != null -%}
+                                {%- if block.settings.video_url.type == 'youtube' -%}
+                                  <iframe
+                                    src="https://www.youtube.com/embed/{{ video_id }}?enablejsapi=1&autoplay=1"
+                                    class="js-youtube"
+                                    allow="autoplay; encrypted-media"
+                                    allowfullscreen
+                                    title="{{ card_alt | escape }}"
+                                  ></iframe>
+                                {%- else -%}
+                                  <iframe
+                                    src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1"
+                                    class="js-vimeo"
+                                    allow="autoplay; encrypted-media"
+                                    allowfullscreen
+                                    title="{{ card_alt | escape }}"
+                                  ></iframe>
+                                {%- endif -%}
+                              {%- else -%}
+                                {{
+                                  block.settings.video
+                                  | video_tag:
+                                    image_size: '1100x',
+                                    autoplay: true,
+                                    loop: false,
+                                    controls: true,
+                                    muted: false
+                                }}
+                              {%- endif -%}
+                            </template>
+                          </deferred-media>
+                        </div>
+                      </div>
+                    </modal-dialog>
+                  {%- else -%}
+                    <div class="kb-trust__thumb kb-trust__thumb--static">
+                      {{ thumb_image }}
+                      {%- if block.settings.badge_text != blank -%}
+                        <span class="kb-trust__thumb-badge">{{ block.settings.badge_text | escape }}</span>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                {%- if block.settings.category_label != blank -%}
+                  <p class="kb-trust__category">{{ block.settings.category_label | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.review_title != blank -%}
+                  <p class="kb-trust__review-title">{{ block.settings.review_title | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.customer_name != blank -%}
+                  <p class="kb-trust__customer">{{ block.settings.customer_name | escape }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        {%- if section.settings.disclaimer_text != blank -%}
+          <p class="kb-trust__disclaimer">{{ section.settings.disclaimer_text | escape }}</p>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae trust section",
+  "tag": "section",
+  "class": "section section-kanbae-trust-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Rating badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show star rating badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "60,000+ verified 5-star reviews"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#3ecf5b"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Over 60,000 Satisfied Customers and Counting"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "See All Reviews"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "Button hover background",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "content_first", "label": "Content left, videos right" },
+        { "value": "cards_first", "label": "Videos left, content right" }
+      ],
+      "default": "content_first"
+    },
+    {
+      "type": "header",
+      "content": "Disclaimer"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "info": "Shown below the video grid, e.g. formulation update notice."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_testimonial",
+      "name": "Video testimonial",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video",
+          "info": "Recommended: uploading the file here plays reliably inside the on-page modal and auto-generates the thumbnail. Takes priority over the video URL below."
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "label": "Video URL",
+          "info": "Used only if no file is uploaded above. If this specific video has embedding disabled by its owner, the player will show a \"Watch on YouTube/Vimeo\" link that opens a new tab — upload the file instead to guarantee in-modal playback."
+        },
+        {
+          "type": "image_picker",
+          "id": "cover_image",
+          "label": "Custom thumbnail (optional)",
+          "info": "Leave blank to auto-use the video's own thumbnail (Shopify-hosted video or YouTube). Set an image here only to override it completely. Required for Vimeo, which has no automatic thumbnail."
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Thumbnail badge text",
+          "info": "Small label over the thumbnail, e.g. \"Verified customer\". Leave blank to hide.",
+          "default": "Verified customer"
+        },
+        {
+          "type": "text",
+          "id": "category_label",
+          "label": "Category label",
+          "info": "Small label above the review title, e.g. \"Foundational Nutrition\"."
+        },
+        {
+          "type": "text",
+          "id": "review_title",
+          "label": "Review title",
+          "default": "Easy & convenient"
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer name",
+          "default": "STEPHANIE C."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae trust section",
+      "blocks": [
+        {
+          "type": "video_testimonial",
+          "settings": {
+            "badge_text": "Verified customer",
+            "category_label": "Foundational Nutrition",
+            "review_title": "Easy & convenient",
+            "customer_name": "STEPHANIE C."
+          }
+        },
+        {
+          "type": "video_testimonial",
+          "settings": {
+            "badge_text": "Verified customer",
+            "category_label": "Travel Packs",
+            "review_title": "A huge difference",
+            "customer_name": "RYAN P."
+          }
+        },
+        {
+          "type": "video_testimonial",
+          "settings": {
+            "badge_text": "Verified customer",
+            "category_label": "Vegan Athlete",
+            "review_title": "I feel great",
+            "customer_name": "ERIC B."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
