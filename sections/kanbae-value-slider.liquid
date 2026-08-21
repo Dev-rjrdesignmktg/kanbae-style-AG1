@@ -1,0 +1,463 @@
+{{ 'section-kanbae-value-slider.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign check_items = section.blocks | where: 'type', 'check_item'
+  assign slider_items = section.blocks | where: 'type', 'slider_item'
+  assign slide_count = slider_items.size
+-%}
+
+{%- if slide_count > 1 -%}
+  <script src="{{ 'kanbae-value-slider.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeValueSlider-{{ section.id }} {
+    --kb-arrow-background: {{ section.settings.arrow_background }};
+    --kb-arrow-color: {{ section.settings.arrow_icon_color }};
+    --kb-arrow-hover-background: {{ section.settings.arrow_hover_background }};
+    --kb-cta-hover-background: {{ section.settings.cta_hover_background }};
+    --kb-cta-hover-color: {{ section.settings.cta_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeValueSlider-{{ section.id }}"
+  class="kb-split color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.layout == 'slider_first' %} kb-split--reverse{% endif %}"
+>
+  <div class="kb-split__inner page-width">
+    <div class="kb-split__grid">
+      <div class="kb-split__content{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-split__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-split__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <div class="kb-split__paragraph rte">
+            {{ section.settings.paragraph }}
+          </div>
+        {%- endif -%}
+
+        {%- if check_items.size > 0 -%}
+          <ul class="kb-split__checklist" role="list">
+            {%- for block in check_items -%}
+              <li class="kb-split__check-item" {{ block.shopify_attributes }}>
+                <span class="kb-split__check-icon" aria-hidden="true">
+                  <span class="svg-wrapper">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                </span>
+                <span class="kb-split__check-text">{{ block.settings.text | escape }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="button kb-split__cta"
+          >
+            <span>{{- section.settings.button_label | escape -}}</span>
+            <span class="svg-wrapper kb-split__cta-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if slide_count > 0 -%}
+        <div class="kb-split__media{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          <slideshow-component
+            class="kb-split__slideshow"
+            role="region"
+            aria-roledescription="{{ 'sections.slideshow.carousel' | t }}"
+            aria-label="{{ section.settings.accessibility_info | escape }}"
+          >
+            <div
+              id="Slider-{{ section.id }}"
+              class="kb-split__slider slider slider--everywhere"
+              data-kb-split-slider
+              aria-live="polite"
+              aria-atomic="true"
+              data-autoplay="{{ section.settings.auto_rotate }}"
+              data-speed="{{ section.settings.change_slides_speed }}"
+            >
+              {%- assign slide_index = 0 -%}
+              {%- for block in slider_items -%}
+                {%- assign slide_index = slide_index | plus: 1 -%}
+                <div
+                  id="Slide-{{ section.id }}-{{ slide_index }}"
+                  class="kb-split__slide slideshow__slide slider__slide{% if slide_index == 1 %} is-active{% endif %}"
+                  {{ block.shopify_attributes }}
+                  role="group"
+                  aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+                  aria-label="{{ slide_index }} {{ 'general.slider.of' | t }} {{ slide_count }}"
+                  tabindex="-1"
+                >
+                  <div class="kb-split__slide-media">
+                    {%- liquid
+                      assign fetch_priority = 'auto'
+                      assign loading = 'lazy'
+                      if slide_index == 1 and section.index == 1
+                        assign fetch_priority = 'high'
+                        assign loading = 'eager'
+                      endif
+                    -%}
+                    {%- if block.settings.image != blank -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 1500
+                        | image_tag:
+                          class: 'kb-split__slide-image',
+                          sizes: '(min-width: 1025px) 45vw, 80vw',
+                          widths: '400, 600, 800, 1000, 1500',
+                          fetchpriority: fetch_priority,
+                          loading: loading,
+                          alt: block.settings.image.alt | default: block.settings.title
+                      }}
+                    {%- else -%}
+                      {{ 'hero-apparel-2' | placeholder_svg_tag: 'kb-split__slide-image placeholder' }}
+                    {%- endif -%}
+                    <div class="kb-split__slide-scrim" aria-hidden="true"></div>
+                  </div>
+
+                  {%- if block.settings.badge_text != blank -%}
+                    <span class="kb-split__badge">{{ block.settings.badge_text | escape }}</span>
+                  {%- endif -%}
+
+                  {%- if block.settings.title != blank or block.settings.text != blank -%}
+                    <div class="kb-split__slide-caption">
+                      {%- if block.settings.title != blank -%}
+                        <p class="kb-split__slide-title">{{ block.settings.title | escape }}</p>
+                      {%- endif -%}
+                      {%- if block.settings.text != blank -%}
+                        <p class="kb-split__slide-text">{{ block.settings.text | escape }}</p>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+
+            {%- if slide_count > 1 -%}
+              <button
+                type="button"
+                class="kb-split__arrow kb-split__arrow--prev"
+                name="previous"
+                aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}"
+                aria-controls="Slider-{{ section.id }}"
+              >
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </button>
+              <button
+                type="button"
+                class="kb-split__arrow kb-split__arrow--next"
+                name="next"
+                aria-label="{{ 'sections.slideshow.next_slideshow' | t }}"
+                aria-controls="Slider-{{ section.id }}"
+              >
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </button>
+
+              <div class="kb-split__footer">
+                <div class="slider-buttons kb-split__dots">
+                  {%- for i in (1..slide_count) -%}
+                    <button
+                      type="button"
+                      class="slider-counter__link kb-split__dot link{% if i == 1 %} slider-counter__link--active{% endif %}"
+                      aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ i }} {{ 'general.slider.of' | t }} {{ slide_count }}"
+                      aria-controls="Slider-{{ section.id }}"
+                    >
+                      <span class="dot"></span>
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          </slideshow-component>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae value slider",
+  "tag": "section",
+  "class": "section section-kanbae-value-slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHY KANBAE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Drink smarter. Wake up better."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "<p>A pre-drink shot built to protect your liver and support your body through alcohol, backed by clinical research, so tomorrow doesn't wreck your plans.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "Button hover color",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#082310"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "content_first", "label": "Content left, carousel right" },
+        { "value": "slider_first", "label": "Carousel left, content right" }
+      ],
+      "default": "content_first"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate slides",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "label": "Change slides every",
+      "min": 3,
+      "max": 9,
+      "step": 2,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Accessibility"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_info",
+      "label": "Carousel description",
+      "info": "Used by screen readers, not visible in the storefront.",
+      "default": "Kanbae hangover protection lifestyle showcase"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Arrows"
+    },
+    {
+      "type": "color",
+      "id": "arrow_background",
+      "label": "Background color",
+      "default": "#cbffda"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Icon color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_background",
+      "label": "Hover background color",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "check_item",
+      "name": "Check item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Clinically-studied liver protection"
+        }
+      ]
+    },
+    {
+      "type": "slider_item",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: high-resolution lifestyle or product photo, portrait orientation."
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "info": "Small context label shown over the image, e.g. category or tag. Leave blank to hide."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Slide title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Slide description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae value slider",
+      "blocks": [
+        {
+          "type": "check_item",
+          "settings": { "text": "Clinically-studied ingredients that support liver function" }
+        },
+        {
+          "type": "check_item",
+          "settings": { "text": "Take before your first drink, not the morning after" }
+        },
+        {
+          "type": "check_item",
+          "settings": { "text": "No added sugar, no artificial fillers" }
+        },
+        {
+          "type": "check_item",
+          "settings": { "text": "One shot, no hangover regret" }
+        },
+        {
+          "type": "slider_item",
+          "settings": {
+            "badge_text": "Pre-game ritual",
+            "title": "Protect before you pour",
+            "text": "One shot before drinking, done in seconds."
+          }
+        },
+        {
+          "type": "slider_item",
+          "settings": {
+            "badge_text": "Night out ready",
+            "title": "Built for the whole night",
+            "text": "Made for happy hours, dinners, and everything after."
+          }
+        },
+        {
+          "type": "slider_item",
+          "settings": {
+            "badge_text": "Science-backed",
+            "title": "Ingredients that work",
+            "text": "A formula studied for real liver support, not hype."
+          }
+        },
+        {
+          "type": "slider_item",
+          "settings": {
+            "badge_text": "Wake up right",
+            "title": "Mornings you don't dread",
+            "text": "Thousands trust it before the first round."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
