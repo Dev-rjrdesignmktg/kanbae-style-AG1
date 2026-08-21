@@ -14,6 +14,8 @@
 
 {%- if section.settings.menu_type_desktop == 'mega' -%}
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'component-mega-menu-rich.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'mega-menu-rich.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 <style>
@@ -430,7 +432,7 @@
     }
 
     closeMenuDisclosure() {
-      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
+      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu, mega-menu-rich');
       this.disclosures.forEach((disclosure) => disclosure.close());
     }
 
@@ -502,7 +504,7 @@
 {
   "name": "t:sections.header.name",
   "class": "section-header",
-  "max_blocks": 3,
+  "max_blocks": 20,
   "settings": [
     {
       "type": "select",
@@ -570,6 +572,13 @@
       ],
       "default": "dropdown",
       "label": "t:sections.header.settings.menu_type_desktop.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "mega_menu_open_on_hover",
+      "default": true,
+      "label": "Abrir mega menú enriquecido al pasar el cursor (escritorio)",
+      "info": "Si se desactiva, el mega menú enriquecido solo se abre con clic o teclado."
     },
     {
       "type": "select",
@@ -681,6 +690,150 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "mega_menu",
+      "name": "Mega menú enriquecido",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Vincula este bloque a un enlace de primer nivel del menú de navegación del header. El texto debe coincidir EXACTAMENTE (incluidas mayúsculas) con el título de ese enlace, por ejemplo: Science"
+        },
+        {
+          "type": "text",
+          "id": "nav_handle",
+          "label": "Enlace del menú a extender",
+          "info": "Debe coincidir exactamente con el texto del enlace de primer nivel."
+        },
+        {
+          "type": "header",
+          "content": "Columna izquierda — Sub-elementos"
+        },
+        {
+          "type": "image_picker",
+          "id": "item_1_image",
+          "label": "Sub-elemento 1 — Imagen"
+        },
+        {
+          "type": "text",
+          "id": "item_1_title",
+          "label": "Sub-elemento 1 — Título"
+        },
+        {
+          "type": "textarea",
+          "id": "item_1_description",
+          "label": "Sub-elemento 1 — Descripción"
+        },
+        {
+          "type": "url",
+          "id": "item_1_link",
+          "label": "Sub-elemento 1 — Enlace"
+        },
+        {
+          "type": "image_picker",
+          "id": "item_2_image",
+          "label": "Sub-elemento 2 — Imagen"
+        },
+        {
+          "type": "text",
+          "id": "item_2_title",
+          "label": "Sub-elemento 2 — Título"
+        },
+        {
+          "type": "textarea",
+          "id": "item_2_description",
+          "label": "Sub-elemento 2 — Descripción"
+        },
+        {
+          "type": "url",
+          "id": "item_2_link",
+          "label": "Sub-elemento 2 — Enlace"
+        },
+        {
+          "type": "image_picker",
+          "id": "item_3_image",
+          "label": "Sub-elemento 3 — Imagen"
+        },
+        {
+          "type": "text",
+          "id": "item_3_title",
+          "label": "Sub-elemento 3 — Título"
+        },
+        {
+          "type": "textarea",
+          "id": "item_3_description",
+          "label": "Sub-elemento 3 — Descripción"
+        },
+        {
+          "type": "url",
+          "id": "item_3_link",
+          "label": "Sub-elemento 3 — Enlace"
+        },
+        {
+          "type": "image_picker",
+          "id": "item_4_image",
+          "label": "Sub-elemento 4 — Imagen"
+        },
+        {
+          "type": "text",
+          "id": "item_4_title",
+          "label": "Sub-elemento 4 — Título"
+        },
+        {
+          "type": "textarea",
+          "id": "item_4_description",
+          "label": "Sub-elemento 4 — Descripción"
+        },
+        {
+          "type": "url",
+          "id": "item_4_link",
+          "label": "Sub-elemento 4 — Enlace"
+        },
+        {
+          "type": "header",
+          "content": "Columna derecha — Panel visual"
+        },
+        {
+          "type": "image_picker",
+          "id": "panel_image_1",
+          "label": "Imagen 1"
+        },
+        {
+          "type": "url",
+          "id": "panel_link_1",
+          "label": "Imagen 1 — Enlace (opcional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "panel_image_2",
+          "label": "Imagen 2"
+        },
+        {
+          "type": "url",
+          "id": "panel_link_2",
+          "label": "Imagen 2 — Enlace (opcional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "panel_image_3",
+          "label": "Imagen 3"
+        },
+        {
+          "type": "url",
+          "id": "panel_link_3",
+          "label": "Imagen 3 — Enlace (opcional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "panel_image_4",
+          "label": "Imagen 4"
+        },
+        {
+          "type": "url",
+          "id": "panel_link_4",
+          "label": "Imagen 4 — Enlace (opcional)"
+        }
+      ]
     }
   ]
 }

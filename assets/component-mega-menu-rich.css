@@ -1,0 +1,264 @@
+/* Rich mega menu — enriched left column (image + title + description) and right visual grid.
+   Layers on top of component-mega-menu.css: reuses .mega-menu / .mega-menu__content positioning
+   and only adds the enriched two-column layout plus its own open/close transition. */
+
+/* Top-level navbar items: replace Dawn's plain text-decoration underline with the same
+   lime animated underline used inside the rich mega menu panel. */
+.header__menu-item span {
+  --mega-menu-rich-accent: #7cb518;
+
+  position: relative;
+  display: inline-block;
+}
+
+.header__menu-item span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.3rem;
+  width: 100%;
+  height: 0.2rem;
+  background-color: var(--mega-menu-rich-accent);
+  border-radius: 0.1rem;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header__menu-item:hover span,
+details[open] > .header__menu-item,
+.header__active-menu-item {
+  text-decoration: none;
+}
+
+.header__menu-item:hover span::after,
+details[open] > .header__menu-item span::after,
+.header__menu-item .header__active-menu-item::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__menu-item span::after {
+    transition: none !important;
+  }
+}
+
+/* Anchor the floating panel to the trigger itself instead of the full header width. */
+mega-menu-rich .mega-menu {
+  position: relative;
+}
+
+mega-menu-rich .mega-menu__content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: auto;
+  width: max-content;
+  max-width: min(56rem, calc(100vw - 4rem));
+  margin-top: 1rem;
+  padding: 2.4rem;
+  border-radius: 1.6rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.06);
+  box-shadow: 0 1.6rem 3.2rem rgba(0, 0, 0, 0.12), 0 0.2rem 0.6rem rgba(0, 0, 0, 0.06);
+}
+
+.mega-menu-rich__content {
+  /* Override the native <details> UA display:none while closed so opacity/transform can animate. */
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-0.8rem);
+  transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
+}
+
+.mega-menu[open] > .mega-menu-rich__content {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 0s;
+}
+
+.mega-menu-rich__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .mega-menu-rich__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2.8rem;
+  }
+}
+
+.mega-menu-rich__col-left {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+@media screen and (min-width: 990px) {
+  .mega-menu-rich__col-left {
+    width: 22rem;
+  }
+
+  .mega-menu-rich__col-left:has(+ .mega-menu-rich__col-right) {
+    padding-right: 2rem;
+    border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  }
+}
+
+.mega-menu-rich__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mega-menu-rich__item-link,
+.mega-menu-rich__item-link:hover {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.6rem;
+  padding: 1rem;
+  margin: 0 -1rem;
+  border-radius: var(--popup-corner-radius, 0.8rem);
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.mega-menu-rich__item-link:hover,
+.mega-menu-rich__item-link:focus-visible {
+  background-color: rgba(var(--color-foreground), 0.04);
+  transform: translateX(0.2rem);
+}
+
+.mega-menu-rich__item-link:focus-visible {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: 0.2rem;
+}
+
+.mega-menu-rich__item-media {
+  flex-shrink: 0;
+  display: block;
+  width: 5.2rem;
+  height: 5.2rem;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.mega-menu-rich__item-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mega-menu-rich__item-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-top: 0.2rem;
+}
+
+.mega-menu-rich__item-title {
+  --mega-menu-rich-accent: #7cb518;
+
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  line-height: calc(1 + 0.3 / var(--font-body-scale));
+}
+
+.mega-menu-rich__item-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.2rem;
+  width: 100%;
+  height: 0.2rem;
+  background-color: var(--mega-menu-rich-accent);
+  border-radius: 0.1rem;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mega-menu-rich__item-link:hover .mega-menu-rich__item-title::after,
+.mega-menu-rich__item-link:focus-visible .mega-menu-rich__item-title::after {
+  transform: scaleX(1);
+}
+
+.mega-menu-rich__item-description {
+  font-size: 1.3rem;
+  line-height: calc(1 + 0.4 / var(--font-body-scale));
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+.mega-menu-rich__col-right {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+.mega-menu-rich__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  width: 24rem;
+}
+
+.mega-menu-rich__grid--count-1 {
+  grid-template-columns: 1fr;
+}
+
+.mega-menu-rich__grid--count-3 .mega-menu-rich__grid-item:first-child {
+  grid-column: span 2;
+}
+
+.mega-menu-rich__grid-item {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.mega-menu-rich__grid--count-1 .mega-menu-rich__grid-item,
+.mega-menu-rich__grid--count-3 .mega-menu-rich__grid-item:first-child {
+  aspect-ratio: 16 / 8;
+}
+
+.mega-menu-rich__grid-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+a.mega-menu-rich__grid-item:hover img,
+a.mega-menu-rich__grid-item:focus-visible img {
+  transform: scale(1.04);
+}
+
+a.mega-menu-rich__grid-item:focus-visible {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: 0.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-menu-rich__content,
+  .mega-menu-rich__item-link,
+  .mega-menu-rich__item-title::after,
+  .mega-menu-rich__grid-item img {
+    transition: none !important;
+  }
+}

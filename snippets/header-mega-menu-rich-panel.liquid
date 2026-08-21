@@ -1,0 +1,111 @@
+{% comment %}
+  Renders the rich mega menu panel content (left: enriched sub-items, right: visual image grid).
+
+  Accepts:
+  - block: {Object} the 'mega_menu' section block providing the content
+  - link: {Object} the top-level navigation link this panel is attached to
+
+  Usage:
+  {% render 'header-mega-menu-rich-panel', block: block, link: link %}
+{% endcomment %}
+
+{%- liquid
+  assign panel_image_count = 0
+  for i in (1..4)
+    assign key = 'panel_image_' | append: i
+    if block.settings[key] != blank
+      assign panel_image_count = panel_image_count | plus: 1
+    endif
+  endfor
+-%}
+
+<div class="mega-menu-rich__inner">
+  <div class="mega-menu-rich__col-left">
+    <ul class="mega-menu-rich__list" role="list">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          assign title_key = 'item_' | append: i | append: '_title'
+          assign desc_key = 'item_' | append: i | append: '_description'
+          assign image_key = 'item_' | append: i | append: '_image'
+          assign link_key = 'item_' | append: i | append: '_link'
+
+          assign item_title = block.settings[title_key]
+          assign item_description = block.settings[desc_key]
+          assign item_image = block.settings[image_key]
+          assign item_url = block.settings[link_key]
+        -%}
+        {%- if item_title != blank -%}
+          <li class="mega-menu-rich__item">
+            <a
+              id="HeaderMenu-{{ link.handle }}-item-{{ i }}"
+              href="{{ item_url | default: '#' }}"
+              class="mega-menu-rich__item-link link"
+            >
+              {%- if item_image != blank -%}
+                <span class="mega-menu-rich__item-media">
+                  {{
+                    item_image
+                    | image_url: width: 160
+                    | image_tag:
+                      loading: 'lazy',
+                      width: 80,
+                      height: 80,
+                      alt: item_image.alt | default: item_title
+                  }}
+                </span>
+              {%- endif -%}
+              <span class="mega-menu-rich__item-copy">
+                <span class="mega-menu-rich__item-title">{{ item_title | escape }}</span>
+                {%- if item_description != blank -%}
+                  <span class="mega-menu-rich__item-description">{{ item_description | escape }}</span>
+                {%- endif -%}
+              </span>
+            </a>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  {%- if panel_image_count > 0 -%}
+    <div class="mega-menu-rich__col-right">
+      <div class="mega-menu-rich__grid mega-menu-rich__grid--count-{{ panel_image_count }}">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            assign image_key = 'panel_image_' | append: i
+            assign link_key = 'panel_link_' | append: i
+            assign panel_image = block.settings[image_key]
+            assign panel_url = block.settings[link_key]
+          -%}
+          {%- if panel_image != blank -%}
+            {%- if panel_url != blank -%}
+              <a
+                href="{{ panel_url }}"
+                class="mega-menu-rich__grid-item"
+                id="HeaderMenu-{{ link.handle }}-panel-{{ i }}"
+              >
+            {%- else -%}
+              <span class="mega-menu-rich__grid-item">
+            {%- endif -%}
+
+            {{
+              panel_image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 990px) 20vw, 50vw',
+                widths: '400, 600, 800',
+                alt: panel_image.alt | default: ''
+            }}
+
+            {%- if panel_url != blank -%}
+              </a>
+            {%- else -%}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
