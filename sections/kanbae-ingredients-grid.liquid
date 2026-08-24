@@ -1,0 +1,495 @@
+{{ 'section-kanbae-ingredients-grid.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cards = section.blocks | where: 'type', 'ingredient_card'
+  assign card_count = cards.size
+  assign facts_panels = section.blocks | where: 'type', 'facts_panel'
+  assign facts_count = facts_panels.size
+-%}
+
+{%- if card_count > 1 or facts_count > 1 -%}
+  <script src="{{ 'kanbae-ingredients-grid.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeIngredients-{{ section.id }} {
+    --kb-ing-panel-start: {{ section.settings.card_gradient_start }};
+    --kb-ing-panel-end: {{ section.settings.card_gradient_end }};
+    --kb-ing-title-color: {{ section.settings.card_title_color }};
+    --kb-ing-text-color: {{ section.settings.card_text_color }};
+    --kb-ing-cta-hover-background: {{ section.settings.cta_hover_background }};
+    --kb-ing-cta-hover-color: {{ section.settings.cta_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeIngredients-{{ section.id }}"
+  class="kb-ing color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-ing__inner page-width">
+    <div class="kb-ing__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      <div class="kb-ing__header-text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-ing__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-ing__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <div class="kb-ing__paragraph rte">
+            {{ section.settings.paragraph }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.view_all_label != blank or section.settings.supplement_facts_label != blank -%}
+        <div class="kb-ing__actions">
+          {%- if section.settings.view_all_label != blank -%}
+            <a
+              {% if section.settings.view_all_link == blank %}
+                role="link" aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.view_all_link }}"
+              {% endif %}
+              class="button kb-ing__cta"
+            >
+              <span>{{- section.settings.view_all_label | escape -}}</span>
+              <span class="svg-wrapper kb-ing__cta-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.supplement_facts_label != blank -%}
+            <modal-opener data-modal="#KbIngFactsModal-{{ section.id }}">
+              <button type="button" class="button button--secondary kb-ing__cta kb-ing__cta--secondary">
+                <span class="svg-wrapper kb-ing__cta-icon kb-ing__cta-icon--leading">{{- 'icon-clipboard.svg' | inline_asset_content -}}</span>
+                <span>{{- section.settings.supplement_facts_label | escape -}}</span>
+              </button>
+            </modal-opener>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.supplement_facts_label != blank -%}
+      <modal-dialog id="KbIngFactsModal-{{ section.id }}" class="kb-ing-facts-modal">
+        <div class="kb-ing-facts-modal__content" role="dialog" aria-label="{{ section.settings.facts_modal_title | default: 'Supplement Facts' | escape }}" aria-modal="true" tabindex="-1">
+          <div class="kb-ing-facts-modal__header">
+            <h3 class="kb-ing-facts-modal__title">{{ section.settings.facts_modal_title | default: 'Supplement Facts' | escape }}</h3>
+            <button id="ModalClose-{{ section.id }}" type="button" class="kb-ing-facts-modal__close" aria-label="{{ 'accessibility.close' | t }}">
+              <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+            </button>
+          </div>
+
+          {%- if facts_count > 1 -%}
+            <div class="kb-ing-facts-modal__switcher" role="tablist">
+              {%- for panel in facts_panels -%}
+                <button
+                  type="button"
+                  class="kb-ing-facts-modal__tab{% if forloop.first %} is-active{% endif %}"
+                  role="tab"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-controls="KbIngFactsPanel-{{ section.id }}-{{ forloop.index0 }}"
+                  data-kb-ing-facts-tab
+                  data-target="KbIngFactsPanel-{{ section.id }}-{{ forloop.index0 }}"
+                >
+                  <span class="kb-ing-facts-modal__tab-image">
+                    {%- if panel.settings.product_image != blank -%}
+                      {{ panel.settings.product_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: panel.settings.product_label }}
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+                    {%- endif -%}
+                  </span>
+                  {%- if panel.settings.product_label != blank -%}
+                    <span class="kb-ing-facts-modal__tab-label">{{ panel.settings.product_label | escape }}</span>
+                  {%- endif -%}
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="kb-ing-facts-modal__panels">
+            {%- if facts_count > 0 -%}
+              {%- for panel in facts_panels -%}
+                {%- liquid
+                  assign facts_alt = panel.settings.product_label | append: ' supplement facts'
+                -%}
+                <div
+                  id="KbIngFactsPanel-{{ section.id }}-{{ forloop.index0 }}"
+                  class="kb-ing-facts-modal__panel{% if forloop.first %} is-active{% endif %}"
+                  role="tabpanel"
+                  data-kb-ing-facts-panel
+                >
+                  {%- if facts_count == 1 and panel.settings.product_image != blank -%}
+                    <div class="kb-ing-facts-modal__product">
+                      {{ panel.settings.product_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: panel.settings.product_label }}
+                    </div>
+                  {%- endif -%}
+                  {%- if panel.settings.facts_image != blank -%}
+                    {{
+                      panel.settings.facts_image
+                      | image_url: width: 1200
+                      | image_tag:
+                        class: 'kb-ing-facts-modal__table-image',
+                        loading: 'lazy',
+                        alt: facts_alt
+                    }}
+                  {%- else -%}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-ing-facts-modal__table-image placeholder' }}
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="kb-ing-facts-modal__panel is-active" role="tabpanel">
+                <p class="kb-ing-facts-modal__empty">Add a "Supplement facts panel" block in the theme editor to show a product image and facts image here.</p>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </modal-dialog>
+    {%- endif -%}
+
+    {%- if card_count > 0 -%}
+      <div
+        class="kb-ing__marquee{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+        data-kb-ing-marquee
+        data-speed="{{ section.settings.autoplay_speed }}"
+      >
+        <ul class="kb-ing__cards" role="list" data-kb-ing-track>
+          {%- for block in cards -%}
+            {%- liquid
+              assign has_link = false
+              if block.settings.card_link != blank
+                assign has_link = true
+              endif
+              assign card_image_alt = block.settings.image.alt | default: block.settings.title
+            -%}
+            <li class="kb-ing__card" {{ block.shopify_attributes }}>
+              {%- if has_link -%}
+                <a href="{{ block.settings.card_link }}" class="kb-ing__card-link" aria-label="{{ block.settings.title | escape }}">
+              {%- endif -%}
+              <div class="kb-ing__card-inner">
+                <div class="kb-ing__card-media">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 900
+                      | image_tag:
+                        class: 'kb-ing__card-image',
+                        sizes: '(min-width: 750px) 32vw, 78vw',
+                        widths: '360, 480, 640, 720, 900',
+                        loading: 'eager',
+                        alt: card_image_alt
+                    }}
+                  {%- else -%}
+                    {{ 'product-3' | placeholder_svg_tag: 'kb-ing__card-image placeholder' }}
+                  {%- endif -%}
+                </div>
+                {%- if block.settings.badge_text != blank -%}
+                  <span class="kb-ing__card-badge">{{ block.settings.badge_text | escape }}</span>
+                {%- endif -%}
+                <div class="kb-ing__card-panel">
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="kb-ing__card-title">{{ block.settings.title | escape }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <p class="kb-ing__card-description">{{ block.settings.description | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- if has_link -%}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae ingredients grid",
+  "tag": "section",
+  "class": "section section-kanbae-ingredients-grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE SCIENCE INSIDE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Ingredients Engineered for Recovery"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "info": "Optional. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Action buttons"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Primary button label",
+      "default": "View All Ingredients",
+      "info": "Leave blank to hide both buttons' row entirely if this and the button below are empty."
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "supplement_facts_label",
+      "label": "Secondary button label",
+      "info": "Always opens the supplement facts modal below (not a link). Leave blank to hide this button.",
+      "default": "Supplement Facts"
+    },
+    {
+      "type": "text",
+      "id": "facts_modal_title",
+      "label": "Supplement facts modal heading",
+      "default": "Supplement Facts"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "Primary button hover background",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Primary button hover text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Auto-scroll speed (px per second)",
+      "info": "0 disables auto-scroll; the carousel is still draggable. Pauses automatically on hover, focus, and while dragging.",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Card appearance"
+    },
+    {
+      "type": "color",
+      "id": "card_gradient_start",
+      "label": "Glass panel tint (top)",
+      "info": "Use a translucent color (lower the alpha in the picker) so the blurred photo reads through the glass.",
+      "default": "rgba(6, 20, 13, 0.45)"
+    },
+    {
+      "type": "color",
+      "id": "card_gradient_end",
+      "label": "Glass panel tint (bottom)",
+      "info": "Use a translucent color (lower the alpha in the picker) so the blurred photo reads through the glass.",
+      "default": "rgba(4, 12, 8, 0.78)"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card title color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card description color",
+      "default": "#c3d3c8"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient_card",
+      "name": "Ingredient card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image",
+          "info": "Recommended: overhead (top-down) photo of the natural ingredients, portrait crop (about 5:7). The image fills the whole card; the bottom third sits under a frosted glass text panel."
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "info": "Small label shown over the top of the image, e.g. a number or tag. Leave blank to hide.",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category title",
+          "default": "Cellular & Liver Defense"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Short description",
+          "default": "DHM and botanical extracts working to shield liver function and support cellular resilience."
+        },
+        {
+          "type": "url",
+          "id": "card_link",
+          "label": "Card link",
+          "info": "Optional. Makes the entire card clickable, e.g. link to a full ingredient detail page."
+        }
+      ]
+    },
+    {
+      "type": "facts_panel",
+      "name": "Supplement facts panel",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Powers the \"Supplement Facts\" button's modal. Add one panel for a single product, or several for a switcher between products (like a travel pack vs. a tub)."
+        },
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product image"
+        },
+        {
+          "type": "text",
+          "id": "product_label",
+          "label": "Product name",
+          "default": "Kanbae Pre-Game"
+        },
+        {
+          "type": "image_picker",
+          "id": "facts_image",
+          "label": "Supplement facts image",
+          "info": "A photo or screenshot of the nutrition facts panel."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae ingredients grid",
+      "blocks": [
+        {
+          "type": "ingredient_card",
+          "settings": {
+            "badge_text": "01",
+            "title": "Cellular & Liver Defense",
+            "description": "DHM and botanical extracts working to shield liver function and support cellular resilience."
+          }
+        },
+        {
+          "type": "ingredient_card",
+          "settings": {
+            "badge_text": "02",
+            "title": "Cellular Energy",
+            "description": "Organic acids that fuel mitochondrial energy production, without the crash."
+          }
+        },
+        {
+          "type": "ingredient_card",
+          "settings": {
+            "badge_text": "03",
+            "title": "Vitamins & Recovery",
+            "description": "A B-complex and Vitamin C blend built to restore what a night out depletes."
+          }
+        },
+        {
+          "type": "ingredient_card",
+          "settings": {
+            "badge_text": "04",
+            "title": "Advanced Absorption",
+            "description": "Ginger and black pepper working together to maximize how much your body actually uses."
+          }
+        },
+        {
+          "type": "facts_panel",
+          "settings": {
+            "product_label": "Kanbae Pre-Game"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

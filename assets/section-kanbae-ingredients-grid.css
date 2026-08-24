@@ -1,0 +1,548 @@
+.kb-ing {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+/* Header */
+
+.kb-ing__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+  margin-bottom: 3.2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .kb-ing__header {
+    gap: 2.4rem;
+    margin-bottom: 4.8rem;
+  }
+}
+
+.kb-ing__header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+.kb-ing__eyebrow {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-ing__eyebrow {
+    font-size: 1.7rem;
+  }
+}
+
+.kb-ing__title {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.kb-ing__paragraph {
+  margin: 0 auto;
+  max-width: 46rem;
+  opacity: 0.8;
+}
+
+.kb-ing__paragraph > * {
+  margin: 0;
+}
+
+.kb-ing__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* Buttons */
+
+.kb-ing__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.kb-ing__cta:not(.kb-ing__cta--secondary) {
+  border: 0.1rem solid transparent;
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.kb-ing__cta:not(.kb-ing__cta--secondary):before,
+.kb-ing__cta:not(.kb-ing__cta--secondary):after {
+  content: none;
+}
+
+.kb-ing__cta:not(.kb-ing__cta--secondary)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background-color: var(--kb-ing-cta-hover-background);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.45s ease;
+}
+
+.kb-ing__cta:not(.kb-ing__cta--secondary):hover,
+.kb-ing__cta:not(.kb-ing__cta--secondary):focus-visible {
+  color: var(--kb-ing-cta-hover-color);
+}
+
+.kb-ing__cta:not(.kb-ing__cta--secondary):hover::before,
+.kb-ing__cta:not(.kb-ing__cta--secondary):focus-visible::before {
+  clip-path: inset(0 0 0 0);
+}
+
+.kb-ing__cta--secondary {
+  border-radius: 999px;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.35);
+  background-color: transparent;
+  color: rgb(var(--color-foreground));
+}
+
+/* Dawn's .button normally draws its shadow/border via ::before/::after using
+   the theme's own --buttons-radius(-outset), not this pill radius — that
+   mismatch let a square corner peek out from behind the rounded button.
+   Suppress those pseudo-elements; the real border above replaces them. */
+.kb-ing__cta--secondary:before,
+.kb-ing__cta--secondary:after {
+  content: none;
+}
+
+.kb-ing__cta--secondary:hover,
+.kb-ing__cta--secondary:focus-visible {
+  background-color: rgba(var(--color-foreground), 0.06);
+}
+
+.kb-ing__cta span,
+.kb-ing__cta-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.kb-ing__cta-icon {
+  display: inline-flex;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.kb-ing__cta-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.kb-ing__cta-icon--leading {
+  order: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-ing__cta::before {
+    transition: none;
+  }
+}
+
+/* Carousel: no-JS fallback is a native swipeable scroll-snap row;
+   JS (kanbae-ingredients-grid.js) upgrades it into a draggable, infinitely
+   looping marquee by duplicating the track and animating a transform. */
+
+.kb-ing__marquee {
+  /* full-bleed: break out of .page-width so the row runs edge-to-edge,
+     independent of the centered header above it */
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.kb-ing__marquee::-webkit-scrollbar {
+  height: 0.6rem;
+}
+
+.kb-ing__marquee::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-foreground), 0.2);
+  border-radius: 1rem;
+}
+
+.kb-ing__marquee:not(.kb-ing__marquee--active) {
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0.2rem;
+}
+
+.kb-ing__marquee--active {
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  scrollbar-width: none;
+}
+
+.kb-ing__marquee--active::-webkit-scrollbar {
+  display: none;
+}
+
+.kb-ing__marquee--dragging {
+  cursor: grabbing;
+}
+
+.kb-ing__cards {
+  display: flex;
+  gap: 1.6rem;
+  margin: 0;
+  padding: 0 0 0.6rem;
+  list-style: none;
+  will-change: transform;
+}
+
+.kb-ing__marquee--active .kb-ing__cards {
+  padding-bottom: 0;
+}
+
+.kb-ing__card {
+  flex: 0 0 auto;
+  width: clamp(28rem, 36vw, 42rem);
+  min-width: 0;
+  user-select: none;
+}
+
+.kb-ing__marquee:not(.kb-ing__marquee--active) .kb-ing__card {
+  scroll-snap-align: start;
+}
+
+.kb-ing__card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  -webkit-user-drag: none;
+}
+
+.kb-ing__card-inner {
+  position: relative;
+  display: block;
+  aspect-ratio: 5 / 7;
+  overflow: hidden;
+  border-radius: 1.8rem;
+  background-color: var(--kb-ing-panel-end, #04100a);
+  transform: translateZ(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (hover: hover) {
+  .kb-ing__card:hover .kb-ing__card-inner,
+  .kb-ing__card:focus-within .kb-ing__card-inner {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 1.6rem 3.2rem rgba(0, 0, 0, 0.3);
+  }
+
+  .kb-ing__card:hover .kb-ing__card-image,
+  .kb-ing__card:focus-within .kb-ing__card-image {
+    transform: scale(1.06);
+  }
+}
+
+.kb-ing__card-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: rgba(var(--color-foreground), 0.05);
+}
+
+.kb-ing__card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.kb-ing__card-badge {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.6rem;
+  z-index: 1;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  border: 0.1rem solid rgba(255, 255, 255, 0.22);
+  background-color: rgba(4, 12, 8, 0.4);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  color: var(--kb-ing-title-color, #f7f6f2);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* Glassmorphism panel: a frosted, tinted overlay sitting on top of the
+   image itself (not a separate block) so the blurred photo reads through. */
+.kb-ing__card-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 3.4rem 2.2rem 2.4rem;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 12, 8, 0) 0%,
+    var(--kb-ing-panel-start, rgba(6, 20, 13, 0.45)) 34%,
+    var(--kb-ing-panel-end, rgba(4, 12, 8, 0.78)) 100%
+  );
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-top: 0.1rem solid rgba(255, 255, 255, 0.14);
+}
+
+.kb-ing__card-title {
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.01rem;
+  color: var(--kb-ing-title-color, #f7f6f2);
+}
+
+.kb-ing__card-description {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: var(--kb-ing-text-color, #c3d3c8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-ing__card-inner,
+  .kb-ing__card-image {
+    transition: none;
+  }
+}
+
+/* Supplement facts modal: a light, contained popup (not the dark video-style
+   modal used elsewhere), showing an uploaded product shot + facts-panel image. */
+
+.kb-ing-facts-modal {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  opacity: 0;
+  visibility: hidden;
+  background: rgba(6, 16, 11, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.kb-ing-facts-modal[open] {
+  z-index: 100;
+  opacity: 1;
+  visibility: visible;
+}
+
+.kb-ing-facts-modal__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(94vw, 64rem);
+  max-height: 88vh;
+  padding: 3.2rem 3.2rem 2.4rem;
+  overflow: hidden;
+  border-radius: 1.6rem;
+  background-color: #ffffff;
+  color: #14261c;
+  box-shadow: 0 3rem 8rem rgba(0, 0, 0, 0.35);
+  transform: scale(0.96) translateY(1rem);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kb-ing-facts-modal[open] .kb-ing-facts-modal__content {
+  transform: scale(1) translateY(0);
+}
+
+.kb-ing-facts-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin: 0 0 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.1rem solid rgba(20, 38, 28, 0.12);
+}
+
+.kb-ing-facts-modal__title {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: #14261c;
+}
+
+.kb-ing-facts-modal__close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #0d1f15;
+  color: #ffffff;
+}
+
+.kb-ing-facts-modal__close .svg-wrapper {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.kb-ing-facts-modal__close .svg-wrapper svg,
+.kb-ing-facts-modal__close .svg-wrapper svg path {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.kb-ing-facts-modal__switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  margin: 0 0 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 0.1rem solid rgba(20, 38, 28, 0.12);
+}
+
+.kb-ing-facts-modal__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: inherit;
+  color: rgba(20, 38, 28, 0.55);
+  cursor: pointer;
+}
+
+.kb-ing-facts-modal__tab-image {
+  display: block;
+  width: 8rem;
+  height: 8rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 0.15rem solid transparent;
+  background-color: #f4f2ec;
+  transition: border-color 0.2s ease;
+}
+
+.kb-ing-facts-modal__tab-image img,
+.kb-ing-facts-modal__tab-image svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.kb-ing-facts-modal__tab.is-active {
+  color: #14261c;
+  font-weight: 600;
+}
+
+.kb-ing-facts-modal__tab.is-active .kb-ing-facts-modal__tab-image {
+  border-color: #14261c;
+}
+
+.kb-ing-facts-modal__tab-label {
+  font-size: 1.3rem;
+}
+
+.kb-ing-facts-modal__panels {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.kb-ing-facts-modal__panel {
+  display: none;
+}
+
+.kb-ing-facts-modal__panel.is-active {
+  display: block;
+}
+
+.kb-ing-facts-modal__product {
+  max-width: 16rem;
+  margin: 0 auto 2rem;
+}
+
+.kb-ing-facts-modal__product img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kb-ing-facts-modal__table-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.8rem;
+}
+
+.kb-ing-facts-modal__empty {
+  margin: 0;
+  padding: 3.2rem 1rem;
+  text-align: center;
+  color: rgba(20, 38, 28, 0.6);
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+@media screen and (max-width: 480px) {
+  .kb-ing-facts-modal {
+    padding: 1.2rem;
+  }
+
+  .kb-ing-facts-modal__content {
+    padding: 2.4rem 2rem 2rem;
+    border-radius: 1.2rem;
+  }
+
+  .kb-ing-facts-modal__title {
+    font-size: 2.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-ing-facts-modal,
+  .kb-ing-facts-modal__content {
+    transition: none;
+  }
+}
