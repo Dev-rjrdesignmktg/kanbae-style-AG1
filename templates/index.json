@@ -326,6 +326,7 @@
           "type": "video_testimonial",
           "settings": {
             "video": "shopify://files/videos/McKinsey.mp4",
+            "video_url": "",
             "badge_text": "Verified customer",
             "category_label": "No headache, no Hangover",
             "review_title": "Easy & convenient",
@@ -336,6 +337,7 @@
           "type": "video_testimonial",
           "settings": {
             "video": "shopify://files/videos/Mikay.mov",
+            "video_url": "",
             "badge_text": "Verified customer",
             "category_label": "Hangovers gone",
             "review_title": "A huge difference",
@@ -346,6 +348,7 @@
           "type": "video_testimonial",
           "settings": {
             "video": "shopify://files/videos/Joya - Feb.mp4",
+            "video_url": "",
             "badge_text": "Verified customer",
             "category_label": "Woke up fresh, no hangovers",
             "review_title": "I feel great",
@@ -376,12 +379,94 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_ingredients_grid_gzzHVC": {
+      "type": "kanbae-ingredients-grid",
+      "blocks": {
+        "facts_panel_rAHNK8": {
+          "type": "facts_panel",
+          "settings": {
+            "product_image": "shopify://shop_images/Kanbae_ColorBG_DSC05352_25MP.jpg",
+            "product_label": "Kanbae Total Alcohol Defense",
+            "facts_image": "shopify://shop_images/Supplement_facts.png"
+          }
+        },
+        "ingredient_card_EMn7Lj": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/lemon_botanical_flat_lay.png",
+            "badge_text": "01",
+            "title": "Cellular & Liver Defense",
+            "description": "DHM and botanical extracts working to shield liver function and support cellular resilience.",
+            "card_link": ""
+          }
+        },
+        "ingredient_card_4GpkVh": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/nuts_seeds_roots_wellness.png",
+            "badge_text": "02",
+            "title": "Cellular Energy",
+            "description": "Organic acids that fuel mitochondrial energy production, without the crash.",
+            "card_link": ""
+          }
+        },
+        "ingredient_card_MWDYdz": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg",
+            "badge_text": "03",
+            "title": "Vitamins & Recovery",
+            "description": "A B-complex and Vitamin C blend built to restore what a night out depletes.",
+            "card_link": ""
+          }
+        },
+        "ingredient_card_wzqbTg": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg",
+            "badge_text": "04",
+            "title": "Advanced Absorption",
+            "description": "Ginger and black pepper working together to maximize how much your body actually uses.",
+            "card_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "facts_panel_rAHNK8",
+        "ingredient_card_EMn7Lj",
+        "ingredient_card_4GpkVh",
+        "ingredient_card_MWDYdz",
+        "ingredient_card_wzqbTg"
+      ],
+      "name": "Kanbae ingredients grid",
+      "settings": {
+        "eyebrow": "THE SCIENCE INSIDE",
+        "title": "Ingredients Engineered for Recovery",
+        "heading_size": "h0",
+        "paragraph": "",
+        "view_all_label": "View All Ingredients",
+        "view_all_link": "",
+        "supplement_facts_label": "Supplement Facts",
+        "facts_modal_title": "Supplement Facts",
+        "cta_hover_background": "#a3ff16",
+        "cta_hover_text_color": "#082310",
+        "autoplay_speed": 22,
+        "card_gradient_start": "rgba(6, 20, 13, 0.45)",
+        "card_gradient_end": "rgba(4, 12, 8, 0.78)",
+        "card_title_color": "#f7f6f2",
+        "card_text_color": "#c3d3c8",
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "hero_kanbae",
     "kanbae_vs_competitors_dTmwdc",
     "kanbae_value_slider_P69b9z",
-    "kanbae_trust_section_YW3tTp"
+    "kanbae_trust_section_YW3tTp",
+    "kanbae_ingredients_grid_gzzHVC"
   ]
 }
