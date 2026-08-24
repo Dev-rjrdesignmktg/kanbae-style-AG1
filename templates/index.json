@@ -452,11 +452,35 @@
         "cta_hover_background": "#a3ff16",
         "cta_hover_text_color": "#082310",
         "autoplay_speed": 22,
-        "card_gradient_start": "rgba(6, 20, 13, 0.45)",
-        "card_gradient_end": "rgba(4, 12, 8, 0.78)",
+        "card_gradient_start": "#06140d73",
+        "card_gradient_end": "#040c08c7",
         "card_title_color": "#f7f6f2",
         "card_text_color": "#c3d3c8",
         "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "kanbae_quality_standard_FgaCzX": {
+      "type": "kanbae-quality-standard",
+      "name": "Kanbae quality standard",
+      "settings": {
+        "image": "shopify://shop_images/Easy_mode_homepage_1_1.webp",
+        "image_position": "left",
+        "badge_text": "Certified Quality",
+        "badge_position": "bottom-left",
+        "badge_text_color": "#082310",
+        "eyebrow": "LAB TESTED STANDARDS",
+        "heading": "Pure Science, Uncompromising Quality.",
+        "heading_size": "h0",
+        "body": "<p>Every batch of Kanbae is formulated with clinical rigor and third-party tested for purity, potency, and consistency — so what's on the label is exactly what's in the pouch.</p>",
+        "button_label": "Explore our standards",
+        "button_link": "",
+        "button_background": "#082310",
+        "button_text_color": "#f7f6f2",
+        "button_hover_background": "#a3ff16",
+        "button_hover_text_color": "#082310",
+        "color_scheme": "",
         "padding_top": 96,
         "padding_bottom": 96
       }
@@ -467,6 +491,7 @@
     "kanbae_vs_competitors_dTmwdc",
     "kanbae_value_slider_P69b9z",
     "kanbae_trust_section_YW3tTp",
-    "kanbae_ingredients_grid_gzzHVC"
+    "kanbae_ingredients_grid_gzzHVC",
+    "kanbae_quality_standard_FgaCzX"
   ]
 }
