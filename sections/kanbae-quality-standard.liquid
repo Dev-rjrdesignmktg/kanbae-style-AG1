@@ -1,0 +1,278 @@
+{{ 'section-kanbae-quality-standard.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeQuality-{{ section.id }} {
+    --kb-quality-cta-background: {{ section.settings.button_background }};
+    --kb-quality-cta-text: {{ section.settings.button_text_color }};
+    --kb-quality-cta-hover-background: {{ section.settings.button_hover_background }};
+    --kb-quality-cta-hover-text: {{ section.settings.button_hover_text_color }};
+    --kb-quality-badge-text: {{ section.settings.badge_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeQuality-{{ section.id }}"
+  class="kb-quality color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if section.settings.image_position == 'right' %} kb-quality--reverse{% endif %}"
+>
+  <div class="kb-quality__inner page-width">
+    <div class="kb-quality__grid">
+      <div class="kb-quality__media{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        <div class="kb-quality__image-wrap">
+          {%- if section.settings.image != blank -%}
+            {{
+              section.settings.image
+              | image_url: width: 1600
+              | image_tag:
+                width: section.settings.image.width,
+                height: section.settings.image.height,
+                class: 'kb-quality__image',
+                sizes: '(min-width: 990px) 46vw, 100vw',
+                widths: '375, 550, 750, 1100, 1500, 1780',
+                fetchpriority: 'high',
+                loading: 'eager',
+                alt: section.settings.image.alt | default: section.settings.heading
+            }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-quality__image placeholder' }}
+          {%- endif -%}
+
+          {%- if section.settings.badge_text != blank -%}
+            <div class="kb-quality__badge kb-quality__badge--{{ section.settings.badge_position }}">
+              {%- if section.settings.badge_icon != blank -%}
+                <span class="kb-quality__badge-icon">
+                  {{
+                    section.settings.badge_icon
+                    | image_url: width: 80
+                    | image_tag: width: 40, height: 40, loading: 'lazy', alt: ''
+                  }}
+                </span>
+              {%- else -%}
+                <span class="kb-quality__badge-icon svg-wrapper">{{- 'icon-check-mark.svg' | inline_asset_content -}}</span>
+              {%- endif -%}
+              <span class="kb-quality__badge-text">{{ section.settings.badge_text | escape }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="kb-quality__content{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-quality__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-quality__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.body != blank -%}
+          <div class="kb-quality__body rte">
+            {{ section.settings.body }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="button kb-quality__cta"
+          >
+            <span>{{- section.settings.button_label | escape -}}</span>
+            <span class="svg-wrapper kb-quality__cta-icon" aria-hidden="true">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae quality standard",
+  "tag": "section",
+  "class": "section section-kanbae-quality-standard",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Floating certification badge"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "info": "Leave blank to hide the floating badge.",
+      "default": "Certified Quality"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_icon",
+      "label": "Badge icon (optional)",
+      "info": "Small square icon or logo. Leave blank to use the default checkmark icon."
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "Badge position",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "LAB TESTED STANDARDS"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Pure Science, Uncompromising Quality."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Description",
+      "default": "<p>Every batch of Kanbae is formulated with clinical rigor and third-party tested for purity, potency, and consistency — so what's on the label is exactly what's in the pouch.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore our standards"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae quality standard"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,227 @@
+.kb-quality {
+  position: relative;
+  width: 100%;
+}
+
+.kb-quality__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media screen and (min-width: 990px) {
+  .kb-quality__grid {
+    grid-template-columns: minmax(0, 48%) 1fr;
+    gap: 6.4rem;
+    align-items: center;
+  }
+
+  .kb-quality--reverse .kb-quality__grid {
+    grid-template-columns: 1fr minmax(0, 48%);
+  }
+
+  .kb-quality--reverse .kb-quality__media {
+    order: 1;
+  }
+
+  .kb-quality--reverse .kb-quality__content {
+    order: 0;
+  }
+}
+
+/* Media column */
+
+.kb-quality__media {
+  min-width: 0;
+}
+
+.kb-quality__image-wrap {
+  position: relative;
+  isolation: isolate;
+}
+
+.kb-quality__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+  border-radius: 4rem 1.6rem 4rem 1.6rem;
+}
+
+@media screen and (min-width: 990px) {
+  .kb-quality__image {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+.kb-quality__image.placeholder {
+  background-color: rgba(var(--color-foreground), 0.04);
+  color: rgba(var(--color-foreground), 0.3);
+}
+
+/* Floating certification badge — glassmorphism */
+
+.kb-quality__badge {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: calc(100% - 3.2rem);
+  padding: 1.2rem 1.8rem;
+  border-radius: 10rem;
+  background: rgba(255, 255, 255, 0.16);
+  border: 0.1rem solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1.6rem 3.2rem rgba(8, 35, 16, 0.18);
+  backdrop-filter: blur(1.6rem) saturate(160%);
+  -webkit-backdrop-filter: blur(1.6rem) saturate(160%);
+  color: var(--kb-quality-badge-text, #082310);
+  transition: transform 0.3s ease;
+}
+
+.kb-quality__badge--top-left {
+  top: 2rem;
+  left: 2rem;
+}
+
+.kb-quality__badge--top-right {
+  top: 2rem;
+  right: 2rem;
+}
+
+.kb-quality__badge--bottom-left {
+  bottom: 2rem;
+  left: 2rem;
+}
+
+.kb-quality__badge--bottom-right {
+  bottom: 2rem;
+  right: 2rem;
+}
+
+@media (hover: hover) {
+  .kb-quality__image-wrap:hover .kb-quality__badge {
+    transform: translateY(-0.3rem);
+  }
+}
+
+.kb-quality__badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex-shrink: 0;
+}
+
+.kb-quality__badge-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.kb-quality__badge-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.kb-quality__badge-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.02rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Content column */
+
+.kb-quality__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.8rem;
+}
+
+.kb-quality__eyebrow {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.18rem;
+  opacity: 0.75;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-quality__eyebrow {
+    font-size: 1.7rem;
+  }
+}
+
+.kb-quality__heading {
+  margin: 0;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.kb-quality__body {
+  margin: 0;
+  max-width: 50rem;
+  opacity: 0.82;
+  line-height: 1.6;
+}
+
+.kb-quality__body > * {
+  margin: 0;
+}
+
+.kb-quality__body > * + * {
+  margin-top: 1.2rem;
+}
+
+.kb-quality__cta {
+  --buttons-radius: 3rem;
+  --buttons-radius-outset: 3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+  background-color: var(--kb-quality-cta-background) !important;
+  color: var(--kb-quality-cta-text) !important;
+  border-color: var(--kb-quality-cta-background) !important;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.kb-quality__cta-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  transition: transform 0.25s ease;
+}
+
+.kb-quality__cta-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (hover: hover) {
+  .kb-quality__cta:hover {
+    background-color: var(--kb-quality-cta-hover-background) !important;
+    color: var(--kb-quality-cta-hover-text) !important;
+    border-color: var(--kb-quality-cta-hover-background) !important;
+  }
+
+  .kb-quality__cta:hover .kb-quality__cta-icon {
+    transform: translateX(0.4rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-quality__badge,
+  .kb-quality__cta,
+  .kb-quality__cta-icon {
+    transition: none;
+  }
+}
