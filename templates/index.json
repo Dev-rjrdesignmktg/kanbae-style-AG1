@@ -651,10 +651,32 @@
         "overlay_opacity": 60,
         "button_background": "#a3ff16",
         "button_text_color": "#082310",
-        "button_hover_background": "#CBFFDA",
+        "button_hover_background": "#cbffda",
         "button_hover_text_color": "#082310",
         "padding_top": 112,
         "padding_bottom": 112
+      }
+    },
+    "kanbae_blog_grid_RTHqcM": {
+      "type": "kanbae-blog-grid",
+      "name": "Kanbae blog grid",
+      "settings": {
+        "blog": "",
+        "articles_to_show": 3,
+        "show_category": true,
+        "eyebrow": "THE SCIENCE",
+        "heading": "Explore Our Research",
+        "heading_size": "h0",
+        "button_label": "View All Articles",
+        "button_link": "",
+        "read_label": "Read Article",
+        "color_scheme": "",
+        "accent_color": "#a3ff16",
+        "card_text_color": "#f7f6f2",
+        "overlay_color": "#0b1f14",
+        "card_radius": 24,
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     }
   },
@@ -668,6 +690,7 @@
     "kanbae_featured_products_JfHUAw",
     "kanbae_faq_L7i6XF",
     "kanbae_newsletter_RFLb9V",
-    "kanbae_final_cta_Ck73zP"
+    "kanbae_final_cta_Ck73zP",
+    "kanbae_blog_grid_RTHqcM"
   ]
 }
