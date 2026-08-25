@@ -229,9 +229,10 @@
                     </details>
                   </div>
                 {%- when 'quantity_selector' -%}
+                  {{ 'component-kanbae-buy-box.css' | asset_url | stylesheet_tag }}
                   <div
                     id="Quantity-Form-{{ section.id }}"
-                    class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
+                    class="product-form__input product-form__quantity kb-buybox{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
                     {{ block.shopify_attributes }}
                   >
                     {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
@@ -263,7 +264,7 @@
                       </span>
                     </label>
                     <div class="price-per-item__container">
-                      <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
+                      <quantity-input class="quantity kb-quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
                         <button class="quantity__button" name="minus" type="button">
                           <span class="visually-hidden">
                             {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
@@ -688,6 +689,12 @@
                   </product-recommendations>
                 {%- when 'icon-with-text' -%}
                   {% render 'icon-with-text', block: block %}
+                {%- when 'glass_badge' -%}
+                  {% render 'kanbae-glass-badges', block: block %}
+                {%- when 'kanbae_star_rating' -%}
+                  {% render 'kanbae-star-rating', block: block %}
+                {%- when 'kanbae_trust_bar' -%}
+                  {% render 'kanbae-frictionless-trust', block: block %}
               {%- endcase -%}
             {%- endfor -%}
             <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -919,6 +926,12 @@
             }
           ],
           "default": "circle"
+        },
+        {
+          "type": "text",
+          "id": "kanbae_best_seller_value",
+          "label": "Best seller pack (pill value)",
+          "info": "Type an option value exactly as it appears below (e.g. \"3 Boxes\") to show a \"Best Seller\" badge on that pill. Leave blank to hide."
         }
       ]
     },
@@ -2142,6 +2155,313 @@
           "default": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.default",
           "label": "t:sections.main-product.blocks.icon_with_text.settings.heading_3.label",
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
+        }
+      ]
+    },
+    {
+      "type": "glass_badge",
+      "name": "Glass badge pill",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "A single floating glassmorphism pill. Add several of these blocks back-to-back — e.g. below the description or above the variant picker — and they'll flow together into a wrapping row."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "check_mark", "label": "Check" },
+            { "value": "account", "label": "Face / customer" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "lock", "label": "Shield / lock" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "price_tag", "label": "Price tag" },
+            { "value": "chat_bubble", "label": "Chat bubble" }
+          ],
+          "default": "check_mark"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Metric or benefit text",
+          "default": "40,000+ happy customers"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "#0F2B1D"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#14251A"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Glass background color",
+          "info": "Supports transparency — lower the opacity to keep the frosted-glass look.",
+          "default": "#FFFFFF",
+          "alpha": true
+        }
+      ]
+    },
+    {
+      "type": "kanbae_star_rating",
+      "name": "Star rating & reviews",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Editorial-style star rating strip with trust copy. Place it right below the title block for the AG1-style layout."
+        },
+        {
+          "type": "text",
+          "id": "review_count",
+          "label": "Review count",
+          "default": "500+"
+        },
+        {
+          "type": "text",
+          "id": "review_text",
+          "label": "Trust text",
+          "default": "verified 5-star reviews"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Container style",
+          "options": [
+            { "value": "pill", "label": "Floating glass pill" },
+            { "value": "plain", "label": "Plain (no background)" }
+          ],
+          "default": "pill"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_link",
+          "label": "Link to reviews section",
+          "info": "Smooth-scrolls to the element ID below when clicked.",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "link_target_id",
+          "label": "Reviews section element ID",
+          "info": "The HTML id of the section to scroll to, without the #.",
+          "default": "reviews"
+        },
+        {
+          "type": "header",
+          "content": "Colors & sizing"
+        },
+        {
+          "type": "color",
+          "id": "star_color",
+          "label": "Star color",
+          "default": "#C9A24B"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#14251A"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Pill background color",
+          "info": "Only used with the floating glass pill style. Supports transparency.",
+          "default": "#FFFFFF",
+          "alpha": true
+        },
+        {
+          "type": "range",
+          "id": "star_size",
+          "label": "Star size",
+          "min": 12,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "item_spacing",
+          "label": "Spacing between stars",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "unit": "px",
+          "default": 3
+        }
+      ]
+    },
+    {
+      "type": "kanbae_trust_bar",
+      "name": "Trust & friction reducer bar",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "3-pillar trust strip (shipping / guarantee / secure checkout). Place it right below the Buy buttons block to dissolve last-minute objections at checkout."
+        },
+        {
+          "type": "header",
+          "content": "Pillar 1"
+        },
+        {
+          "type": "select",
+          "id": "pillar_1_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck" },
+            { "value": "return", "label": "Return arrow" },
+            { "value": "lock", "label": "Lock / secure" },
+            { "value": "chat_bubble", "label": "Chat bubble" },
+            { "value": "check_mark", "label": "Check mark" },
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star" },
+            { "value": "box", "label": "Box" },
+            { "value": "clipboard", "label": "Clipboard" },
+            { "value": "map_pin", "label": "Map pin" },
+            { "value": "price_tag", "label": "Price tag" },
+            { "value": "question_mark", "label": "Question mark" },
+            { "value": "recycle", "label": "Recycle" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "pillar_1_title",
+          "label": "Title",
+          "default": "Fast & Free Delivery"
+        },
+        {
+          "type": "text",
+          "id": "pillar_1_subtitle",
+          "label": "Subtitle",
+          "default": "Free shipping on subscription orders"
+        },
+        {
+          "type": "header",
+          "content": "Pillar 2"
+        },
+        {
+          "type": "select",
+          "id": "pillar_2_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck" },
+            { "value": "return", "label": "Return arrow" },
+            { "value": "lock", "label": "Lock / secure" },
+            { "value": "chat_bubble", "label": "Chat bubble" },
+            { "value": "check_mark", "label": "Check mark" },
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star" },
+            { "value": "box", "label": "Box" },
+            { "value": "clipboard", "label": "Clipboard" },
+            { "value": "map_pin", "label": "Map pin" },
+            { "value": "price_tag", "label": "Price tag" },
+            { "value": "question_mark", "label": "Question mark" },
+            { "value": "recycle", "label": "Recycle" }
+          ],
+          "default": "return"
+        },
+        {
+          "type": "text",
+          "id": "pillar_2_title",
+          "label": "Title",
+          "default": "45-Day Money-Back Guarantee"
+        },
+        {
+          "type": "text",
+          "id": "pillar_2_subtitle",
+          "label": "Subtitle",
+          "default": "Try it risk-free, no questions asked"
+        },
+        {
+          "type": "header",
+          "content": "Pillar 3"
+        },
+        {
+          "type": "select",
+          "id": "pillar_3_icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck" },
+            { "value": "return", "label": "Return arrow" },
+            { "value": "lock", "label": "Lock / secure" },
+            { "value": "chat_bubble", "label": "Chat bubble" },
+            { "value": "check_mark", "label": "Check mark" },
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star" },
+            { "value": "box", "label": "Box" },
+            { "value": "clipboard", "label": "Clipboard" },
+            { "value": "map_pin", "label": "Map pin" },
+            { "value": "price_tag", "label": "Price tag" },
+            { "value": "question_mark", "label": "Question mark" },
+            { "value": "recycle", "label": "Recycle" }
+          ],
+          "default": "lock"
+        },
+        {
+          "type": "text",
+          "id": "pillar_3_title",
+          "label": "Title",
+          "default": "Secure Checkout"
+        },
+        {
+          "type": "text",
+          "id": "pillar_3_subtitle",
+          "label": "Subtitle",
+          "default": "Encrypted payments & 24/7 support"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dividers",
+          "label": "Show dividers between pillars",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "#0F2B1D"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title color",
+          "default": "#14251A"
+        },
+        {
+          "type": "color",
+          "id": "subtitle_color",
+          "label": "Subtitle color",
+          "default": "#4A5C52"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Glass background color",
+          "info": "Supports transparency — lower the opacity to keep the frosted-glass look.",
+          "default": "#FFFFFF",
+          "alpha": true
         }
       ]
     }
