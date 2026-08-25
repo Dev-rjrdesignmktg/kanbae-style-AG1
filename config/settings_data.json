@@ -9,7 +9,9 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/KANBAE-DarkGreen_Highlight_f562790c-bab8-4ffb-800d-8d9f4230aaa3.png",
     "logo_width": 90,
+    "favicon": "shopify://shop_images/KANBAE-DarkGreen_Highlight_f562790c-bab8-4ffb-800d-8d9f4230aaa3.png",
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
     "type_body_font": "assistant_n4",
@@ -203,8 +205,8 @@
           "background": "#0f3b2e",
           "background_gradient": "",
           "text": "#fafafa",
-          "button": "#9CFF1B",
-          "button_label": "#0F3B2E",
+          "button": "#9cff1b",
+          "button_label": "#0f3b2e",
           "secondary_button_label": "#fffafa",
           "shadow": "#121212"
         }
