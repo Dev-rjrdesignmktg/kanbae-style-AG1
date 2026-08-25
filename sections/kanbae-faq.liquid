@@ -1,0 +1,273 @@
+{{ 'section-kanbae-faq.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign faq_count = 0
+  for block in section.blocks
+    if block.type == 'faq_item'
+      assign faq_count = faq_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- if faq_count > 0 -%}
+  <script src="{{ 'kanbae-faq.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeFaq-{{ section.id }} {
+    --kb-faq-icon-background: {{ section.settings.icon_background }};
+    --kb-faq-icon-color: {{ section.settings.icon_color }};
+    --kb-faq-accent: {{ section.settings.accent_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeFaq-{{ section.id }}"
+  class="kb-faq color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-faq__inner page-width">
+    <div class="kb-faq__grid">
+      <div class="kb-faq__aside{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-faq__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-faq__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subtitle != blank -%}
+          <div class="kb-faq__subtitle rte">
+            {{ section.settings.subtitle }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if faq_count > 0 -%}
+        <kanbae-faq-accordion
+          class="kb-faq__accordion{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          data-exclusive="{{ section.settings.exclusive_accordion }}"
+        >
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'faq_item' -%}
+              <details
+                class="kb-faq__item"
+                {% if block.settings.open_by_default %}
+                  open
+                {% endif %}
+                {{ block.shopify_attributes }}
+              >
+                <summary class="kb-faq__summary">
+                  <span class="kb-faq__question">{{ block.settings.question | escape }}</span>
+                  <span class="kb-faq__icon" aria-hidden="true"></span>
+                </summary>
+                <div class="kb-faq__content">
+                  <div class="kb-faq__answer rte">
+                    {{ block.settings.answer }}
+                  </div>
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </kanbae-faq-accordion>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae FAQ",
+  "tag": "section",
+  "class": "section section-kanbae-faq",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "SUPPORT"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Accordion behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "exclusive_accordion",
+      "label": "Only allow one question open at a time",
+      "info": "When enabled, opening a question closes any other open question.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for the open question's border and icon background.",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "icon_background",
+      "label": "Icon badge background",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is this question about?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Add the answer to this question here.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae FAQ",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is Kanbae Pre-Game and when should I take it?",
+            "answer": "<p>Kanbae Pre-Game is formulated with DHM and liver-supporting botanicals designed to be taken before you start drinking. Take one serving with water about 30–60 minutes before your first drink to help your body process alcohol more efficiently.</p>",
+            "open_by_default": true
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How is Kanbae different from a multivitamin?",
+            "answer": "<p>Kanbae isn't a daily multivitamin — it's a targeted hangover-prevention and recovery system built specifically to support liver function, hydration, and electrolyte balance around drinking, not general everyday nutrition.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "When should I take Kanbae Recovery?",
+            "answer": "<p>Take Kanbae Recovery before bed or first thing the next morning. It's formulated with electrolytes and rehydration support to help you bounce back after a night out.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is DHM and why is it in Kanbae?",
+            "answer": "<p>DHM (Dihydromyricetin) is a botanical extract studied for its ability to support liver enzyme activity and help the body clear acetaldehyde, a byproduct of alcohol metabolism linked to hangover symptoms.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is Kanbae third-party tested?",
+            "answer": "<p>Yes. Every batch of Kanbae is independently lab tested for purity and potency, so you know exactly what you're putting in your body before and after a night out.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I take Kanbae if I don't drink alcohol every day?",
+            "answer": "<p>Absolutely — Kanbae is designed for occasional and social drinkers. Keep Pre-Game and Recovery on hand for whenever you plan on having a few drinks.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
