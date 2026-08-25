@@ -1,0 +1,264 @@
+{{ 'section-kanbae-newsletter.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeNewsletter-{{ section.id }} {
+    --kb-nl-card-background: {{ section.settings.card_background }};
+    --kb-nl-card-radius: {{ section.settings.card_radius }}px;
+    --kb-nl-accent: {{ section.settings.accent_color }};
+    --kb-nl-button-text: {{ section.settings.button_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeNewsletter-{{ section.id }}"
+  class="kb-nl color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding"
+>
+  <div class="kb-nl__page page-width">
+    <div class="kb-nl__card kb-nl__card--{{ section.settings.layout }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      <div class="kb-nl__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-nl__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-nl__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="kb-nl__description rte">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="kb-nl__form-col">
+        {%- assign kb_nl_form_id = 'KbNewsletterForm-' | append: section.id -%}
+        {% form 'customer', id: kb_nl_form_id, class: 'kb-nl__form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          <div class="kb-nl__field-row">
+            <div class="kb-nl__field">
+              <input
+                id="KbNewsletterEmail-{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                class="kb-nl__input"
+                value="{{ form.email }}"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                placeholder="{{ section.settings.input_placeholder | escape }}"
+                aria-label="{{ section.settings.input_placeholder | escape }}"
+                {% if form.errors %}
+                  autofocus
+                  aria-invalid="true"
+                  aria-describedby="KbNewsletterError-{{ section.id }}"
+                {% elsif form.posted_successfully? %}
+                  aria-describedby="KbNewsletterSuccess-{{ section.id }}"
+                {% endif %}
+                required
+              >
+            </div>
+            <button type="submit" class="kb-nl__button" name="commit">
+              {{ section.settings.button_label | escape }}
+            </button>
+          </div>
+
+          {%- if form.errors -%}
+            <p class="kb-nl__message kb-nl__message--error form__message" id="KbNewsletterError-{{ section.id }}">
+              <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+              {{- form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email -}}
+            </p>
+          {%- endif -%}
+
+          {%- if form.posted_successfully? -%}
+            <p
+              class="kb-nl__message kb-nl__message--success form__message"
+              id="KbNewsletterSuccess-{{ section.id }}"
+              tabindex="-1"
+              autofocus
+            >
+              <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
+              {{- section.settings.success_message | escape -}}
+            </p>
+          {%- endif -%}
+
+          {%- if section.settings.privacy_text != blank -%}
+            <p class="kb-nl__privacy">{{ section.settings.privacy_text }}</p>
+          {%- endif -%}
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae newsletter",
+  "tag": "section",
+  "class": "section section-kanbae-newsletter",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "JOIN THE CREW"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Unlock 10% off your first Pre-Game"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Get hangover science, early access to new drops, and morning-after tips. No spam, just what actually works before and after a night out.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Email input placeholder",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Submit button label",
+      "default": "Join"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for subscribing!"
+    },
+    {
+      "type": "richtext",
+      "id": "privacy_text",
+      "label": "Privacy / incentive note",
+      "default": "<p>By subscribing you agree to our privacy policy. Unsubscribe anytime.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Card layout",
+      "options": [
+        { "value": "columns", "label": "Two columns" },
+        { "value": "centered", "label": "Centered, stacked" }
+      ],
+      "default": "columns"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background color",
+      "info": "A soft, organic tone works best (warm cream, sage, etc.).",
+      "default": "#f3efe6"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Button background color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae newsletter"
+    }
+  ]
+}
+{% endschema %}
