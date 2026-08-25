@@ -1,0 +1,67 @@
+{% comment %}
+  Renders an inline, editorial-style star-rating / social-proof strip
+  (SVG stars + trust copy), with an optional smooth-scroll link to the
+  on-page reviews block.
+
+  Accepts:
+  - block: {Object} the `kanbae_star_rating` block; settings: review_count,
+    review_text, star_color, text_color, background_color, star_size,
+    item_spacing, enable_link, link_target_id, style (pill or plain).
+
+  Usage:
+  {% render 'kanbae-star-rating', block: block %}
+{% endcomment %}
+{{ 'component-star-rating.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign review_count = block.settings.review_count | default: '500+'
+  assign review_text = block.settings.review_text | default: 'verified 5-star reviews'
+  assign full_label = review_count | append: ' ' | append: review_text
+  assign wrapper_tag = 'div'
+  assign link_target = block.settings.link_target_id | strip
+  if block.settings.enable_link and link_target != blank
+    assign wrapper_tag = 'a'
+  endif
+-%}
+
+{%- style -%}
+  #KanbaeStarRating-{{ block.id }} {
+    --kb-star-color: {{ block.settings.star_color }};
+    --kb-star-text-color: {{ block.settings.text_color }};
+    --kb-star-bg: {{ block.settings.background_color }};
+    --kb-star-size: {{ block.settings.star_size | default: 18 }}px;
+    --kb-star-gap: {{ block.settings.item_spacing | default: 3 }}px;
+  }
+{%- endstyle -%}
+
+<{{ wrapper_tag }}
+  id="KanbaeStarRating-{{ block.id }}"
+  class="kb-star-rating kb-star-rating--{{ block.settings.style | default: 'pill' }}"
+  {% if wrapper_tag == 'a' %}
+    href="#{{ link_target }}"
+    data-kanbae-star-rating-link
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  <span class="kb-star-rating__stars" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: 5, rating_max: 5 }}">
+    {%- for i in (1..5) -%}
+      <span class="kb-star-rating__star svg-wrapper">{{- 'icon-star-filled.svg' | inline_asset_content -}}</span>
+    {%- endfor -%}
+  </span>
+  <span class="kb-star-rating__text">{{ full_label | escape }}</span>
+</{{ wrapper_tag }}>
+
+{%- if wrapper_tag == 'a' -%}
+  <script>
+    (function () {
+      var link = document.currentScript.previousElementSibling;
+      if (!link || !link.matches('[data-kanbae-star-rating-link]')) return;
+      link.addEventListener('click', function (event) {
+        var target = document.getElementById(link.getAttribute('href').slice(1));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
+  </script>
+{%- endif -%}
