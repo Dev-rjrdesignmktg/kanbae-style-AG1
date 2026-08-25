@@ -609,6 +609,28 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_newsletter_RFLb9V": {
+      "type": "kanbae-newsletter",
+      "name": "Kanbae newsletter",
+      "settings": {
+        "eyebrow": "JOIN THE CREW",
+        "heading": "Enjoy Tonight, Wake up Ready Tomorrow",
+        "heading_size": "h1",
+        "description": "<p>Get hangover science, early access to new drops, and morning-after tips. No spam, just what actually works before and after a night out.</p>",
+        "input_placeholder": "Your email",
+        "button_label": "Join",
+        "success_message": "Thanks for subscribing!",
+        "privacy_text": "<p>By subscribing you agree to our privacy policy. Unsubscribe anytime.</p>",
+        "layout": "columns",
+        "card_radius": 24,
+        "color_scheme": "",
+        "card_background": "#CBFFDA",
+        "accent_color": "#082310",
+        "button_text_color": "#f7f6f2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
@@ -619,6 +641,7 @@
     "kanbae_ingredients_grid_gzzHVC",
     "kanbae_quality_standard_FgaCzX",
     "kanbae_featured_products_JfHUAw",
-    "kanbae_faq_L7i6XF"
+    "kanbae_faq_L7i6XF",
+    "kanbae_newsletter_RFLb9V"
   ]
 }
