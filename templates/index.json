@@ -625,11 +625,36 @@
         "layout": "columns",
         "card_radius": 24,
         "color_scheme": "",
-        "card_background": "#CBFFDA",
+        "card_background": "#cbffda",
         "accent_color": "#082310",
         "button_text_color": "#f7f6f2",
         "padding_top": 96,
         "padding_bottom": 96
+      }
+    },
+    "kanbae_final_cta_Ck73zP": {
+      "type": "kanbae-final-cta",
+      "name": "Kanbae final CTA",
+      "settings": {
+        "icon": "shield-check",
+        "eyebrow": "TRY KANBAE RISK-FREE FOR THE NEXT 30 DAYS",
+        "heading": "Feel the Difference the Morning After, or It's On Us",
+        "heading_size": "h0",
+        "description": "<p>We’re confident that KANBAE is one of the most effective products in the market, but we also recognise that everyone’s body is different. If KANBAE isn’t right for you, we’ve got you covered.</p><p>Try Kanbae risk-free for 45 days. Take it before your next night out. Feel the difference the morning after. If it's not for you, contact our support team and we'll make it right — no questions asked.</p>",
+        "button_label": "Try It Risk Free",
+        "button_link": "shopify://products/complete-alcohol-defense",
+        "footnote": "45-day money-back guarantee · No questions asked · Cancel anytime",
+        "background_color": "#0b1f14",
+        "background_color_alt": "#132e1f",
+        "text_color": "#f7f6f2",
+        "eyebrow_color": "#a3ff9c",
+        "overlay_opacity": 60,
+        "button_background": "#a3ff16",
+        "button_text_color": "#082310",
+        "button_hover_background": "#CBFFDA",
+        "button_hover_text_color": "#082310",
+        "padding_top": 112,
+        "padding_bottom": 112
       }
     }
   },
@@ -642,6 +667,7 @@
     "kanbae_quality_standard_FgaCzX",
     "kanbae_featured_products_JfHUAw",
     "kanbae_faq_L7i6XF",
-    "kanbae_newsletter_RFLb9V"
+    "kanbae_newsletter_RFLb9V",
+    "kanbae_final_cta_Ck73zP"
   ]
 }
