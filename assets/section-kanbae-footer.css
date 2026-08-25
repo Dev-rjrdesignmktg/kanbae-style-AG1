@@ -16,6 +16,38 @@
   }
 }
 
+/* ---------- Logo ---------- */
+
+.kb-ftr__logo {
+  padding-top: 2.4rem;
+  margin-bottom: 3.6rem;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-ftr__logo {
+    margin-bottom: 4.8rem;
+  }
+}
+
+.kb-ftr__logo a {
+  display: inline-block;
+  line-height: 0;
+}
+
+.kb-ftr__logo img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+.kb-ftr__logo-text {
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: currentColor;
+}
+
 /* ---------- Top: menu columns + connect column ---------- */
 
 .kb-ftr__top {
@@ -41,6 +73,7 @@
   flex-direction: column;
   gap: 0;
   width: 100%;
+  order: 2;
 }
 
 @media screen and (min-width: 750px) {
@@ -152,10 +185,6 @@
     display: none;
   }
 
-  .kb-ftr__accordion > *:not(summary) {
-    display: flex !important;
-  }
-
   .kb-ftr__menu-list {
     padding: 0;
   }
@@ -166,6 +195,7 @@
 .kb-ftr__connect {
   width: 100%;
   max-width: 38rem;
+  order: 1;
 }
 
 @media screen and (min-width: 750px) {
@@ -317,6 +347,14 @@
   margin: 0;
 }
 
+.kb-ftr__payment {
+  padding: 1.6rem 0 0;
+}
+
+.kb-ftr__payment .list-payment {
+  opacity: 0.85;
+}
+
 .kb-ftr__bar {
   display: flex;
   flex-direction: column;
@@ -340,6 +378,11 @@
   gap: 0.4rem 1.6rem;
   font-size: 1.2rem;
   opacity: 0.7;
+}
+
+.kb-ftr__bar-left a {
+  color: currentColor;
+  text-decoration: none;
 }
 
 .kb-ftr__policies {

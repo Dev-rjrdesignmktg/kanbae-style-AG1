@@ -1,5 +1,7 @@
 {{ 'section-kanbae-footer.css' | asset_url | stylesheet_tag }}
 {{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kanbae-footer.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -22,6 +24,8 @@
 {%- endstyle -%}
 
 {%- liquid
+  assign footer_logo = section.settings.logo | default: settings.logo
+
   assign social_instagram = section.settings.social_instagram_link | default: settings.social_instagram_link
   assign social_tiktok = section.settings.social_tiktok_link | default: settings.social_tiktok_link
   assign social_youtube = section.settings.social_youtube_link | default: settings.social_youtube_link
@@ -40,6 +44,26 @@
   class="kb-ftr color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
 >
   <div class="kb-ftr__page">
+    <div class="kb-ftr__logo">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {%- if footer_logo != blank -%}
+          {%- assign logo_height = section.settings.logo_width | divided_by: footer_logo.aspect_ratio -%}
+          {%- assign logo_width_2x = section.settings.logo_width | times: 2 -%}
+          {{
+            footer_logo
+            | image_url: width: logo_width_2x
+            | image_tag:
+              loading: 'lazy',
+              width: section.settings.logo_width,
+              height: logo_height,
+              alt: footer_logo.alt | default: shop.name | escape
+          }}
+        {%- else -%}
+          <span class="kb-ftr__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
     <div class="kb-ftr__top">
       {%- if section.blocks.size > 0 -%}
         <div class="kb-ftr__menus">
@@ -194,6 +218,19 @@
       {%- endif -%}
     </div>
 
+    {%- if section.settings.payment_enable -%}
+      <div class="kb-ftr__payment">
+        <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+        <ul class="list list-payment" role="list">
+          {%- for type in shop.enabled_payment_types -%}
+            <li class="list-payment__item">
+              {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
     <div class="kb-ftr__bar">
       <div class="kb-ftr__bar-left">
         <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}. All rights reserved.</span>
@@ -271,6 +308,26 @@
     }
   ],
   "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo",
+      "info": "Leave blank to use the logo set in Theme settings > Logo."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 60,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "default": 130
+    },
     {
       "type": "header",
       "content": "Newsletter"
@@ -373,6 +430,12 @@
     },
     {
       "type": "checkbox",
+      "id": "payment_enable",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "enable_country_selector",
       "label": "Enable country/region selector",
       "default": true
@@ -426,13 +489,16 @@
       "default": 96
     }
   ],
-  "default": {
-    "blocks": [
-      { "type": "menu_column", "settings": { "heading": "Shop" } },
-      { "type": "menu_column", "settings": { "heading": "Science & Formula" } },
-      { "type": "menu_column", "settings": { "heading": "About Us" } },
-      { "type": "menu_column", "settings": { "heading": "Support & Contact" } }
-    ]
-  }
+  "presets": [
+    {
+      "name": "Kanbae footer",
+      "blocks": [
+        { "type": "menu_column", "settings": { "heading": "Shop" } },
+        { "type": "menu_column", "settings": { "heading": "Science & Formula" } },
+        { "type": "menu_column", "settings": { "heading": "About Us" } },
+        { "type": "menu_column", "settings": { "heading": "Support & Contact" } }
+      ]
+    }
+  ]
 }
 {% endschema %}
