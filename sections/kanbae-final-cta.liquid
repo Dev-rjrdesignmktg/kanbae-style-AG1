@@ -1,0 +1,292 @@
+{{ 'section-kanbae-final-cta.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeFinalCta-{{ section.id }} {
+    --kb-fcta-background: {{ section.settings.background_color }};
+    --kb-fcta-background-alt: {{ section.settings.background_color_alt }};
+    --kb-fcta-text-color: {{ section.settings.text_color }};
+    --kb-fcta-eyebrow-color: {{ section.settings.eyebrow_color }};
+    --kb-fcta-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --kb-fcta-button-background: {{ section.settings.button_background }};
+    --kb-fcta-button-text: {{ section.settings.button_text_color }};
+    --kb-fcta-button-hover-background: {{ section.settings.button_hover_background }};
+    --kb-fcta-button-hover-text: {{ section.settings.button_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeFinalCta-{{ section.id }}"
+  class="kb-fcta section-{{ section.id }}-padding{% if section.settings.background_image != blank %} kb-fcta--has-image{% endif %}"
+>
+  {%- if section.settings.background_image != blank -%}
+    <div class="kb-fcta__media" aria-hidden="true">
+      {{
+        section.settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          class: 'kb-fcta__image',
+          sizes: '100vw',
+          widths: '750, 1100, 1500, 1780, 2000, 2400',
+          loading: 'lazy'
+      }}
+      <div class="kb-fcta__overlay"></div>
+    </div>
+  {%- endif -%}
+
+  <div class="kb-fcta__page page-width">
+    <div class="kb-fcta__inner{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      {%- if section.settings.icon != 'none' -%}
+        <div class="kb-fcta__seal" aria-hidden="true">
+          <span class="svg-wrapper">
+            {%- if section.settings.icon == 'shield-check' -%}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s7.5-3.75 7.5-9.375V5.25L12 2.25l-7.5 3v6.375C4.5 17.25 12 21 12 21z"/>
+                <path d="M8.75 12.1l2.25 2.25 4.25-4.5"/>
+              </svg>
+            {%- else -%}
+              {{- section.settings.icon | append: '.svg' | inline_asset_content -}}
+            {%- endif -%}
+          </span>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="kb-fcta__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="kb-fcta__heading inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <div class="kb-fcta__description rte">
+          {{ section.settings.description }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="kb-fcta__cta-wrap">
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="button kb-fcta__cta"
+          >
+            <span>{{- section.settings.button_label | escape -}}</span>
+            <span class="svg-wrapper kb-fcta__cta-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+          </a>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.footnote != blank -%}
+        <p class="kb-fcta__footnote">{{ section.settings.footnote | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae final CTA",
+  "tag": "section",
+  "class": "section section-kanbae-final-cta",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Seal"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "shield-check", "label": "Shield check" },
+        { "value": "icon-lock", "label": "Lock" },
+        { "value": "icon-check-mark", "label": "Check mark" },
+        { "value": "icon-checkmark", "label": "Checkmark (alt)" },
+        { "value": "icon-heart", "label": "Heart" },
+        { "value": "icon-leaf", "label": "Leaf" },
+        { "value": "icon-star", "label": "Star" }
+      ],
+      "default": "shield-check"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "TRY KANBAE RISK-FREE FOR THE NEXT 30 DAYS"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Feel the Difference the Morning After, or It's On Us"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Worried about the taste? Not sure it'll actually save your next morning? We get it. Try Kanbae risk-free for 30 days. Take it before your next night out. Feel the difference the morning after. If it's not for you, contact our support team and we'll make it right — no questions asked.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Try It Risk Free"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "footnote",
+      "label": "Footnote",
+      "info": "Small print shown below the button. Leave blank to hide.",
+      "default": "30-day money-back guarantee · No questions asked · Cancel anytime"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#0b1f14"
+    },
+    {
+      "type": "color",
+      "id": "background_color_alt",
+      "label": "Background gradient color",
+      "info": "Blended with the background color for a subtle organic gradient.",
+      "default": "#132e1f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow color",
+      "default": "#a3ff9c"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Optional. Rendered behind the color/gradient with a dark overlay for contrast."
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 112
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 112
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae final CTA"
+    }
+  ]
+}
+{% endschema %}
