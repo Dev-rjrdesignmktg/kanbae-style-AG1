@@ -11,8 +11,76 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "kanbae_footer_qGMYij": {
+      "type": "kanbae-footer",
+      "blocks": {
+        "menu_column_cCEjeq": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer"
+          }
+        },
+        "menu_column_Pj3HKP": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Science & Formula",
+            "menu": "footer"
+          }
+        },
+        "menu_column_prdBBx": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "About Us",
+            "menu": "footer"
+          }
+        },
+        "menu_column_wdnU9z": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Support & Contact",
+            "menu": "main-menu"
+          }
+        }
+      },
+      "block_order": [
+        "menu_column_cCEjeq",
+        "menu_column_Pj3HKP",
+        "menu_column_prdBBx",
+        "menu_column_wdnU9z"
+      ],
+      "name": "Kanbae footer",
+      "settings": {
+        "logo": "shopify://shop_images/KANBAE-LightGreen.png",
+        "logo_width": 130,
+        "newsletter_enable": true,
+        "newsletter_heading": "Join Our Newsletter",
+        "newsletter_text": "Hangover science, early access to new drops, and morning-after tips — straight to your inbox.",
+        "input_placeholder": "Your email",
+        "button_label": "Subscribe",
+        "success_message": "Thanks for subscribing!",
+        "privacy_text": "By subscribing you agree to our Privacy Policy. Unsubscribe anytime.",
+        "social_instagram_link": "",
+        "social_tiktok_link": "",
+        "social_youtube_link": "",
+        "social_facebook_link": "",
+        "social_twitter_link": "",
+        "social_pinterest_link": "",
+        "disclaimer_text": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Consult your physician before use if you are pregnant, nursing, taking medication, or have a medical condition. Kanbae products are intended for use by adults of legal drinking age and should not be used to encourage alcohol consumption.",
+        "show_policy": true,
+        "payment_enable": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "heading_color": "#f7f6f2",
+        "link_hover_color": "#c9a24b",
+        "divider_color": "#4d5a4f",
+        "padding_top": 96
+      }
+    },
     "footer": {
       "type": "footer",
+      "disabled": true,
       "settings": {
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
@@ -30,6 +98,7 @@
     }
   },
   "order": [
+    "kanbae_footer_qGMYij",
     "footer"
   ]
 }
