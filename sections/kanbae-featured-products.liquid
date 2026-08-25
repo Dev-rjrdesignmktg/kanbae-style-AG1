@@ -1,0 +1,491 @@
+{{ 'section-kanbae-featured-products.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cards = section.blocks | where: 'type', 'product_card'
+  assign card_count = cards.size
+  assign featured_block = cards.first
+  assign display_mode = section.settings.display_mode
+  assign placeholder_images = 'product-1, product-2, product-3, product-4' | split: ', '
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KbFeat-{{ section.id }} {
+    --kb-feat-grid-cols-desktop: {{ section.settings.grid_columns_desktop }};
+    --kb-feat-card-bg: {{ section.settings.card_background }};
+    --kb-feat-cta-hover-background: {{ section.settings.cta_hover_background }};
+    --kb-feat-cta-hover-color: {{ section.settings.cta_hover_text_color }};
+    {%- if section.settings.banner_media_background != blank %}
+    --kb-feat-banner-media-bg: {{ section.settings.banner_media_background }};
+    {%- endif %}
+  }
+{%- endstyle -%}
+
+<div
+  id="KbFeat-{{ section.id }}"
+  class="kb-feat kb-feat--{{ display_mode }} section-{{ section.id }}-padding"
+>
+  <div class="kb-feat__inner page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.paragraph != blank -%}
+      <div class="kb-feat__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-feat__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-feat__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <div class="kb-feat__paragraph rte">
+            {{ section.settings.paragraph }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if display_mode == 'banner' -%}
+      {%- if featured_block != null -%}
+        {%- liquid
+          assign image_alt = featured_block.settings.image.alt | default: featured_block.settings.title
+          assign has_link = false
+          if featured_block.settings.button_link != blank
+            assign has_link = true
+          endif
+        -%}
+        <div
+          class="kb-feat__banner color-{{ featured_block.settings.color_scheme }} gradient{% if featured_block.settings.banner_layout == 'image_left' %} kb-feat__banner--image-left{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          {{ featured_block.shopify_attributes }}
+        >
+          <div class="kb-feat__banner-content">
+            {%- if featured_block.settings.badge_text != blank -%}
+              <span class="kb-feat__banner-badge">{{ featured_block.settings.badge_text | escape }}</span>
+            {%- endif -%}
+            {%- if featured_block.settings.title != blank -%}
+              <h3 class="kb-feat__banner-title">{{ featured_block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if featured_block.settings.subtitle != blank -%}
+              <p class="kb-feat__banner-subtitle">{{ featured_block.settings.subtitle | escape }}</p>
+            {%- endif -%}
+            {%- if featured_block.settings.description != blank -%}
+              <div class="kb-feat__banner-description rte">
+                {{ featured_block.settings.description }}
+              </div>
+            {%- endif -%}
+            {%- if featured_block.settings.price != blank or featured_block.settings.compare_price != blank -%}
+              <div class="kb-feat__banner-price">
+                {%- if featured_block.settings.price != blank -%}
+                  <span class="kb-feat__price">{{ featured_block.settings.price | escape }}</span>
+                {%- endif -%}
+                {%- if featured_block.settings.compare_price != blank -%}
+                  <s class="kb-feat__compare-price">{{ featured_block.settings.compare_price | escape }}</s>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            {%- if featured_block.settings.button_label != blank -%}
+              <a
+                {% if has_link %}
+                  href="{{ featured_block.settings.button_link }}"
+                {% else %}
+                  role="link" aria-disabled="true"
+                {% endif %}
+                class="button kb-feat__cta"
+              >
+                <span>{{- featured_block.settings.button_label | escape -}}</span>
+                <span class="svg-wrapper kb-feat__cta-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+              </a>
+            {%- endif -%}
+          </div>
+
+          <div class="kb-feat__banner-media">
+            {%- if featured_block.settings.image != blank -%}
+              {{
+                featured_block.settings.image
+                | image_url: width: 1600
+                | image_tag:
+                  class: 'kb-feat__banner-image',
+                  sizes: '(min-width: 990px) 46vw, 92vw',
+                  widths: '480, 640, 800, 1000, 1200, 1600',
+                  loading: 'eager',
+                  fetchpriority: 'high',
+                  alt: image_alt
+              }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'kb-feat__banner-image placeholder' }}
+            {%- endif -%}
+
+            {%- if featured_block.settings.floating_note_1 != blank -%}
+              <span class="kb-feat__floating kb-feat__floating--1">{{ featured_block.settings.floating_note_1 | escape }}</span>
+            {%- endif -%}
+            {%- if featured_block.settings.floating_note_2 != blank -%}
+              <span class="kb-feat__floating kb-feat__floating--2">{{ featured_block.settings.floating_note_2 | escape }}</span>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- else -%}
+        <p class="kb-feat__empty">Add a "Product" block in the theme editor to show your featured product here.</p>
+      {%- endif -%}
+    {%- else -%}
+      {%- if card_count > 0 -%}
+        <ul class="kb-feat__grid" role="list">
+          {%- for block in cards -%}
+            {%- liquid
+              assign has_link = false
+              if block.settings.button_link != blank
+                assign has_link = true
+              endif
+              assign card_image_alt = block.settings.image.alt | default: block.settings.title
+              assign placeholder_index = forloop.index0 | modulo: 4
+              assign placeholder_image = placeholder_images[placeholder_index]
+            -%}
+            <li
+              class="kb-feat__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="kb-feat__card-media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 800
+                    | image_tag:
+                      class: 'kb-feat__card-image',
+                      sizes: '(min-width: 990px) 24vw, (min-width: 600px) 40vw, 84vw',
+                      widths: '320, 400, 500, 640, 800',
+                      loading: 'lazy',
+                      alt: card_image_alt
+                  }}
+                {%- else -%}
+                  {{ placeholder_image | placeholder_svg_tag: 'kb-feat__card-image placeholder' }}
+                {%- endif -%}
+                {%- if block.settings.badge_text != blank -%}
+                  <span class="kb-feat__card-badge">{{ block.settings.badge_text | escape }}</span>
+                {%- endif -%}
+              </div>
+              <div class="kb-feat__card-body">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="kb-feat__card-title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.subtitle != blank -%}
+                  <p class="kb-feat__card-subtitle">{{ block.settings.subtitle | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.price != blank or block.settings.compare_price != blank -%}
+                  <div class="kb-feat__card-price">
+                    {%- if block.settings.price != blank -%}
+                      <span class="kb-feat__price">{{ block.settings.price | escape }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.compare_price != blank -%}
+                      <s class="kb-feat__compare-price">{{ block.settings.compare_price | escape }}</s>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.button_label != blank -%}
+                  <a
+                    {% if has_link %}
+                      href="{{ block.settings.button_link }}"
+                    {% else %}
+                      role="link" aria-disabled="true"
+                    {% endif %}
+                    class="button kb-feat__cta kb-feat__cta--small"
+                  >
+                    <span>{{- block.settings.button_label | escape -}}</span>
+                    <span class="svg-wrapper kb-feat__cta-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <p class="kb-feat__empty">Add "Product" blocks in the theme editor to show your product grid here.</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae featured products",
+  "tag": "section",
+  "class": "section section-kanbae-featured-products",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "OUR PRODUCTS"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Featured Products"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "info": "Optional. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "display_mode",
+      "label": "Section style",
+      "options": [
+        { "value": "banner", "label": "Banner destacado (single product)" },
+        { "value": "grid", "label": "Cuadrícula de productos (multi-product grid)" }
+      ],
+      "default": "banner",
+      "info": "Banner mode shows only the first \"Product\" block below. Grid mode shows every \"Product\" block."
+    },
+    {
+      "type": "select",
+      "id": "grid_columns_desktop",
+      "label": "Grid columns (desktop)",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "3",
+      "info": "Only used in Grid mode."
+    },
+    {
+      "type": "header",
+      "content": "Banner appearance"
+    },
+    {
+      "type": "color",
+      "id": "banner_media_background",
+      "label": "Image wrapper background",
+      "info": "Background color behind the product image (and the placeholder icon, if no image is set yet). Leave blank to use a subtle tint that adapts to the banner's own color scheme (set per-block, below)."
+    },
+    {
+      "type": "header",
+      "content": "Grid appearance"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card image background",
+      "default": "#eef1ea"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "paragraph",
+      "content": "The button's base background/text color comes from each Product block's own color scheme (readable by design, edited together in \"Edit scheme\"). These two only control the hover fill accent, shared across the whole section."
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "Button hover background",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "In Banner mode, only the first Product block is shown, as the large hero feature. In Grid mode, every Product block is shown as a card."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product image"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge",
+          "info": "e.g. \"NEW\" or \"BEST SELLER\". Leave blank to hide.",
+          "default": "NEW"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product name",
+          "default": "Kanbae Pre-Game"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Short benefit / subtitle",
+          "info": "Shown as the short line under the title, especially in Grid card mode.",
+          "default": "One scoop before you drink. Wake up feeling human."
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "info": "Longer copy, shown only in Banner mode.",
+          "default": "<p>A science-backed blend that protects your liver, replenishes electrolytes, and helps prevent the hangover before it starts — not just treat it the morning after.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Price"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "$49.00"
+        },
+        {
+          "type": "text",
+          "id": "compare_price",
+          "label": "Compare-at price",
+          "info": "Optional. Shown with a strikethrough. Leave blank to hide."
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "header",
+          "content": "Banner appearance (Banner mode only)"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "info": "Background, text, and button colors, bundled together so they always stay readable. Use \"Edit scheme\" to fine-tune.",
+          "default": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e"
+        },
+        {
+          "type": "select",
+          "id": "banner_layout",
+          "label": "Image position",
+          "options": [
+            { "value": "image_right", "label": "Image on the right" },
+            { "value": "image_left", "label": "Image on the left" }
+          ],
+          "default": "image_right"
+        },
+        {
+          "type": "text",
+          "id": "floating_note_1",
+          "label": "Floating badge 1",
+          "info": "Optional small pill shown over the banner image, e.g. \"30 servings\". Leave blank to hide."
+        },
+        {
+          "type": "text",
+          "id": "floating_note_2",
+          "label": "Floating badge 2",
+          "info": "Optional second pill, e.g. \"4.8★ rated\". Leave blank to hide."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae featured products",
+      "blocks": [
+        {
+          "type": "product_card",
+          "settings": {
+            "badge_text": "NEW",
+            "title": "Kanbae Pre-Game",
+            "subtitle": "One scoop before you drink. Wake up feeling human.",
+            "price": "$49.00"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "badge_text": "BEST SELLER",
+            "title": "Kanbae Recovery",
+            "subtitle": "Rehydrate and restore, the morning after.",
+            "price": "$45.00",
+            "compare_price": "$55.00"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "badge_text": "NEW",
+            "title": "Kanbae Hydrate",
+            "subtitle": "Electrolyte support to fight dehydration before it fights you.",
+            "price": "$39.00"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
