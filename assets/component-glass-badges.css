@@ -1,0 +1,54 @@
+.kb-glass-badge {
+  --kb-glass-icon-color: #0f2b1d;
+  --kb-glass-text-color: #14251a;
+  --kb-glass-bg: rgba(255, 255, 255, 0.75);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.35rem 0.5rem 0.35rem 0;
+  padding: 0.7rem 1.4rem;
+  vertical-align: middle;
+  background: var(--kb-glass-bg);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.kb-glass-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--kb-glass-icon-color);
+  flex-shrink: 0;
+}
+
+.kb-glass-badge__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.kb-glass-badge__text {
+  font-size: 1.3rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--kb-glass-text-color);
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 749px) {
+  .kb-glass-badge {
+    padding: 0.6rem 1.1rem;
+  }
+
+  .kb-glass-badge__text {
+    font-size: 1.2rem;
+    white-space: normal;
+  }
+}

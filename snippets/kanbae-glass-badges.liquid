@@ -1,0 +1,30 @@
+{% comment %}
+  Renders a single floating glassmorphism trust pill (icon + short metric/benefit text).
+  Add several `glass_badge` blocks back-to-back in the block list — each renders as an
+  inline pill, so consecutive ones wrap into a row automatically without a wrapping container.
+
+  Accepts:
+  - block: {Object} the `glass_badge` block; settings: icon, text, icon_color, text_color, background_color.
+
+  Usage:
+  {% render 'kanbae-glass-badges', block: block %}
+{% endcomment %}
+{{ 'component-glass-badges.css' | asset_url | stylesheet_tag }}
+
+{%- if block.settings.text != blank -%}
+  {%- style -%}
+    #GlassBadge-{{ block.id }} {
+      --kb-glass-icon-color: {{ block.settings.icon_color }};
+      --kb-glass-text-color: {{ block.settings.text_color }};
+      --kb-glass-bg: {{ block.settings.background_color }};
+    }
+  {%- endstyle -%}
+  <span id="GlassBadge-{{ block.id }}" class="kb-glass-badge" {{ block.shopify_attributes }}>
+    {%- if block.settings.icon != 'none' -%}
+      <span class="kb-glass-badge__icon" aria-hidden="true">
+        {%- render 'icon-accordion', icon: block.settings.icon -%}
+      </span>
+    {%- endif -%}
+    <span class="kb-glass-badge__text">{{ block.settings.text | escape }}</span>
+  </span>
+{%- endif -%}
