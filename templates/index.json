@@ -505,46 +505,10 @@
             "floating_note_1": "72 Capsules",
             "floating_note_2": "4.7★ Rated"
           }
-        },
-        "product_card_ad86fN": {
-          "type": "product_card",
-          "settings": {
-            "badge_text": "BEST SELLER",
-            "title": "Kanbae Recovery",
-            "subtitle": "Rehydrate and restore, the morning after.",
-            "description": "<p>A science-backed blend that protects your liver, replenishes electrolytes, and helps prevent the hangover before it starts — not just treat it the morning after.</p>",
-            "price": "$45.00",
-            "compare_price": "$55.00",
-            "button_label": "Shop now",
-            "button_link": "",
-            "color_scheme": "",
-            "banner_layout": "image_right",
-            "floating_note_1": "",
-            "floating_note_2": ""
-          }
-        },
-        "product_card_icbDqL": {
-          "type": "product_card",
-          "settings": {
-            "badge_text": "NEW",
-            "title": "Kanbae Hydrate",
-            "subtitle": "Electrolyte support to fight dehydration before it fights you.",
-            "description": "<p>A science-backed blend that protects your liver, replenishes electrolytes, and helps prevent the hangover before it starts — not just treat it the morning after.</p>",
-            "price": "$39.00",
-            "compare_price": "",
-            "button_label": "Shop now",
-            "button_link": "",
-            "color_scheme": "",
-            "banner_layout": "image_right",
-            "floating_note_1": "",
-            "floating_note_2": ""
-          }
         }
       },
       "block_order": [
-        "product_card_WcWTdA",
-        "product_card_ad86fN",
-        "product_card_icbDqL"
+        "product_card_WcWTdA"
       ],
       "name": "Kanbae featured products",
       "settings": {
