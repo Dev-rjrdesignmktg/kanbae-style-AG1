@@ -23,6 +23,10 @@
           "type": "title",
           "settings": {}
         },
+        "rating_PmNFhP": {
+          "type": "rating",
+          "settings": {}
+        },
         "price": {
           "type": "price",
           "settings": {}
@@ -54,17 +58,58 @@
           "settings": {
             "share_label": "Share"
           }
+        },
+        "collapsible_tab_LJjcwg": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_VM3VmH": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_cq43dV": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_qDMLdF": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "vendor",
         "title",
+        "rating_PmNFhP",
         "price",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share"
+        "share",
+        "collapsible_tab_LJjcwg",
+        "collapsible_tab_VM3VmH",
+        "collapsible_tab_cq43dV",
+        "collapsible_tab_qDMLdF"
       ],
       "settings": {
         "enable_sticky_info": true,
