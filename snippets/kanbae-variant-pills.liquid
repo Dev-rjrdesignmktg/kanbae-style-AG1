@@ -1,0 +1,144 @@
+{% comment %}
+  Renders Kanbae's wellness-styled "pill" cards for button-type variant options
+  (pack size / quantity selectors like "1 Box", "3 Boxes", "6 Boxes").
+
+  Drop-in replacement for 'product-variant-options' when picker_type == 'button'.
+  Keeps the exact radio/label markup and data attributes global.js's
+  VariantSelects custom element and product-info.js expect, so price, the
+  selected variant and the URL keep updating natively — nothing here talks
+  to the cart or the form directly. Non-'button' picker types are passed
+  through untouched.
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+  - picker_type: {String} type of picker to display.
+
+  Usage:
+  {% render 'kanbae-variant-pills', product: product, option: option, block: block, picker_type: picker_type %}
+{% endcomment %}
+{{ 'component-kanbae-variant-pills.css' | asset_url | stylesheet_tag }}
+
+{%- unless picker_type == 'button' -%}
+  {%- render 'product-variant-options', product: product, option: option, block: block, picker_type: picker_type -%}
+{%- else -%}
+  {%- liquid
+    assign product_form_id = 'product-form-' | append: section.id
+    assign current_variant = product.selected_or_first_available_variant
+    assign kb_best_seller_setting = block.settings.kanbae_best_seller_value | strip
+  -%}
+
+  {%- for value in option.values -%}
+    {%- liquid
+      assign option_disabled = true
+      if value.available
+        assign option_disabled = false
+      endif
+
+      assign matched_variant = null
+      for variant in product.variants
+        case option.position
+          when 1
+            if variant.option1 == value and variant.option2 == current_variant.option2 and variant.option3 == current_variant.option3
+              assign matched_variant = variant
+            endif
+          when 2
+            if variant.option2 == value and variant.option1 == current_variant.option1 and variant.option3 == current_variant.option3
+              assign matched_variant = variant
+            endif
+          when 3
+            if variant.option3 == value and variant.option1 == current_variant.option1 and variant.option2 == current_variant.option2
+              assign matched_variant = variant
+            endif
+        endcase
+        if matched_variant
+          break
+        endif
+      endfor
+
+      assign savings_percent = 0
+      if matched_variant and matched_variant.compare_at_price > matched_variant.price
+        assign kb_diff = matched_variant.compare_at_price | minus: matched_variant.price
+        assign savings_percent = kb_diff | times: 100.0 | divided_by: matched_variant.compare_at_price | round
+      endif
+
+      assign is_best_seller = false
+      if kb_best_seller_setting != blank
+        assign kb_value_str = value | strip
+        if kb_value_str == kb_best_seller_setting
+          assign is_best_seller = true
+        endif
+      endif
+
+      comment
+        Merchants can name a value "6 Boxes · Best Seller" to add a
+        denominative straight in the option text (no theme-editor setting
+        needed). Split on the middle dot so it renders on its own line,
+        above the pack size, instead of running into it.
+      endcomment
+      assign kb_value_string = value | append: ''
+      assign kb_value_parts = kb_value_string | split: '·'
+      if kb_value_parts.size > 1
+        assign kb_denom = kb_value_parts[1] | strip
+        assign kb_box_label = kb_value_parts[0] | strip
+      else
+        assign kb_denom = null
+        assign kb_box_label = kb_value_string
+      endif
+    -%}
+
+    {%- capture input_id -%}
+      {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
+    {%- endcapture -%}
+
+    {%- capture input_name -%}
+      {{ option.name }}-{{ option.position }}
+    {%- endcapture -%}
+
+    {%- capture input_dataset -%}
+      data-product-url="{{ value.product_url }}"
+      data-option-value-id="{{ value.id }}"
+      data-option-name="{{ option.name | escape }}"
+    {%- endcapture -%}
+
+    {% assign escaped_value = value | escape %}
+
+    <input
+      type="radio"
+      id="{{ input_id }}"
+      name="{{ input_name | escape }}"
+      value="{{ escaped_value }}"
+      form="{{ product_form_id }}"
+      {% if value.selected %}
+        checked
+      {% endif %}
+      {% if option_disabled %}
+        class="disabled"
+      {% endif %}
+      {{ input_dataset }}
+    >
+    <label for="{{ input_id }}" class="kb-pill">
+      {%- if is_best_seller -%}
+        <span class="kb-pill__badge kb-pill__badge--best">Best Seller</span>
+      {%- elsif savings_percent > 0 -%}
+        <span class="kb-pill__badge kb-pill__badge--save">Save {{ savings_percent }}%</span>
+      {%- endif -%}
+      {%- if kb_denom -%}
+        <span class="kb-pill__denom">{{ kb_denom }}</span>
+      {%- endif -%}
+      <span class="kb-pill__name">{{ kb_box_label }}</span>
+      {%- if matched_variant -%}
+        <span class="kb-pill__price">
+          {%- if matched_variant.compare_at_price > matched_variant.price -%}
+            <s class="kb-pill__compare-price">{{ matched_variant.compare_at_price | money }}</s>
+          {%- endif -%}
+          <span class="kb-pill__current-price">{{ matched_variant.price | money }}</span>
+        </span>
+      {%- endif -%}
+      <span class="visually-hidden label-unavailable">
+        {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
+      </span>
+    </label>
+  {%- endfor -%}
+{%- endunless -%}
