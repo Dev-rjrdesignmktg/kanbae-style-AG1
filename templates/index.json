@@ -484,6 +484,83 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_featured_products_JfHUAw": {
+      "type": "kanbae-featured-products",
+      "blocks": {
+        "product_card_WcWTdA": {
+          "type": "product_card",
+          "settings": {
+            "image": "shopify://shop_images/36_Servings_Pack_of_6_v2.png",
+            "badge_text": "Best seller",
+            "title": "Kanbae Total Alcohol Defense",
+            "subtitle": "Two pills before you drink. Wake up better.",
+            "description": "<p>A science-backed blend that protects your liver, replenishes electrolytes, and helps prevent the hangover before it starts — not just treat it the morning after.</p>",
+            "price": "$112.90",
+            "compare_price": "$119.40",
+            "button_label": "Shop now",
+            "button_link": "shopify://products/complete-alcohol-defense",
+            "color_scheme": "",
+            "banner_layout": "image_right",
+            "floating_note_1": "72 Capsules",
+            "floating_note_2": "4.7★ Rated"
+          }
+        },
+        "product_card_ad86fN": {
+          "type": "product_card",
+          "settings": {
+            "badge_text": "BEST SELLER",
+            "title": "Kanbae Recovery",
+            "subtitle": "Rehydrate and restore, the morning after.",
+            "description": "<p>A science-backed blend that protects your liver, replenishes electrolytes, and helps prevent the hangover before it starts — not just treat it the morning after.</p>",
+            "price": "$45.00",
+            "compare_price": "$55.00",
+            "button_label": "Shop now",
+            "button_link": "",
+            "color_scheme": "",
+            "banner_layout": "image_right",
+            "floating_note_1": "",
+            "floating_note_2": ""
+          }
+        },
+        "product_card_icbDqL": {
+          "type": "product_card",
+          "settings": {
+            "badge_text": "NEW",
+            "title": "Kanbae Hydrate",
+            "subtitle": "Electrolyte support to fight dehydration before it fights you.",
+            "description": "<p>A science-backed blend that protects your liver, replenishes electrolytes, and helps prevent the hangover before it starts — not just treat it the morning after.</p>",
+            "price": "$39.00",
+            "compare_price": "",
+            "button_label": "Shop now",
+            "button_link": "",
+            "color_scheme": "",
+            "banner_layout": "image_right",
+            "floating_note_1": "",
+            "floating_note_2": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_WcWTdA",
+        "product_card_ad86fN",
+        "product_card_icbDqL"
+      ],
+      "name": "Kanbae featured products",
+      "settings": {
+        "eyebrow": "OUR PRODUCTS",
+        "title": "Featured Products",
+        "heading_size": "h0",
+        "paragraph": "",
+        "display_mode": "banner",
+        "grid_columns_desktop": "3",
+        "banner_media_background": "",
+        "card_background": "#eef1ea",
+        "cta_hover_background": "#a3ff16",
+        "cta_hover_text_color": "#082310",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
@@ -492,6 +569,7 @@
     "kanbae_value_slider_P69b9z",
     "kanbae_trust_section_YW3tTp",
     "kanbae_ingredients_grid_gzzHVC",
-    "kanbae_quality_standard_FgaCzX"
+    "kanbae_quality_standard_FgaCzX",
+    "kanbae_featured_products_JfHUAw"
   ]
 }
