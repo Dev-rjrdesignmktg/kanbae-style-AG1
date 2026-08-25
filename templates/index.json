@@ -525,6 +525,90 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_faq_L7i6XF": {
+      "type": "kanbae-faq",
+      "blocks": {
+        "faq_item_hGLBWH": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What makes KANBAE better than other similar supplements?",
+            "answer": "<p>KANBAE is the only solution on the market that provides heavy duty protection against acetaldehyde, the root cause of alcohol's side effects. This is done via 4 mechanisms:</p><ul><li>Increasing the activity of ALDH enzymes that break down acetaldehyde</li><li>Increasing NAD+, an important cofactor that breaks down acetaldehyde</li><li>Directly breaking down acetaldehyde by providing electrons that oxidize acetaldehyde into acetic acid</li><li>Acting as a protection buffer against liver cell damage caused by acetaldehyde.</li></ul><p>Due to how KANBAE stacks these synergistic mechanisms, KANBAE users report feeling less intoxicated, retaining more cognitive faculties and sobering up quickly after drinking.</p>",
+            "open_by_default": true
+          }
+        },
+        "faq_item_yPeek8": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Why does KANBAE have less DHM than other brands? Isn't more DHM better?",
+            "answer": "<p>This is one of the<strong>biggest scientific myths used for marketing purposes</strong>. The bioavailability of DHM is only 4.02%, so occupying more capsule space with it actually leads to exponentially decreasing effectiveness relative to what could otherwise be achieved (with good formulation work)! Our R&D team has personally tested all possible doses of DHM and noticed a point of significantly diminishing returns. This is why we have dosed DHM in the perfect sweet spot, making space for more ingredients to work together in unison.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_j8WktA": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are alcohol recovery supplements safe to take?",
+            "answer": "<p>Alcohol recovery supplements should be taken according to the product directions.<br/><br/>We can't speak for other brands, but KANBAE Alcohol Defense is made with natural ingredients, third-party tested and manufactured in a GMP-certified facility. If you have a medical condition, are pregnant, taking medication or unsure whether the product is suitable for you, consult a healthcare professional first.<br/></p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_V8CGrW": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Are there any side-effects?",
+            "answer": "<p>Taking KANBAE before drinking will make it a little harder to get drunk. We see this as a positive side effect!<br/><br/>We have not received any reports of negative side effects thus far.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_nwVUNT": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I take KANBAE after drinking?",
+            "answer": "<p>Yes, KANBAE can actually be taken at any point when you're drinking. It's best taken 15-30 minutes before drinking, so your body gets the support it needs right from your first sip. And for heavier sessions, you may take another serving (2 capsules) after your last drink.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_gUwjeC": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if I forget to take it before drinking?",
+            "answer": "<p>Take 2 capsules after your last drink before bed. You'll still benefit significantly, especially for the morning-after hangover. For best results on future nights, take it 15–30 minutes before your first drink so the ingredients are already active in your bloodstream when you start.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_jYMQDb": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Does KANBAE help with Asian flush specifically?",
+            "answer": "<p>Yes, and this was a design priority. Asian flush is caused by acetaldehyde accumulating in the blood due to ALDH enzyme deficiency, which affects roughly 50% of East Asians. KANBAE directly enhances ALDH activity to clear acetaldehyde faster. In our focus group study, 74% of participants saw a measurable reduction in Asian flush. It's one of the reasons so many Singapore customers specifically choose KANBAE over imported alternatives</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_hGLBWH",
+        "faq_item_yPeek8",
+        "faq_item_j8WktA",
+        "faq_item_V8CGrW",
+        "faq_item_nwVUNT",
+        "faq_item_gUwjeC",
+        "faq_item_jYMQDb"
+      ],
+      "name": "Kanbae FAQ",
+      "settings": {
+        "eyebrow": "SUPPORT",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h0",
+        "subtitle": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>",
+        "exclusive_accordion": true,
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "accent_color": "#a3ff16",
+        "icon_background": "#082310",
+        "icon_color": "#f7f6f2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
@@ -534,6 +618,7 @@
     "kanbae_trust_section_YW3tTp",
     "kanbae_ingredients_grid_gzzHVC",
     "kanbae_quality_standard_FgaCzX",
-    "kanbae_featured_products_JfHUAw"
+    "kanbae_featured_products_JfHUAw",
+    "kanbae_faq_L7i6XF"
   ]
 }
