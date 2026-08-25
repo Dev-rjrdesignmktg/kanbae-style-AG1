@@ -1,0 +1,292 @@
+{{ 'section-kanbae-blog-grid.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeBlogGrid-{{ section.id }} {
+    --kb-blog-card-radius: {{ section.settings.card_radius }}px;
+    --kb-blog-accent: {{ section.settings.accent_color }};
+    --kb-blog-card-text: {{ section.settings.card_text_color }};
+    --kb-blog-overlay-color: {{ section.settings.overlay_color }};
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign blog = section.settings.blog
+  assign articles_to_show = section.settings.articles_to_show
+  assign view_all_url = section.settings.button_link
+  if view_all_url == blank and blog != blank
+    assign view_all_url = blog.url
+  endif
+-%}
+
+<div
+  id="KanbaeBlogGrid-{{ section.id }}"
+  class="kb-blog color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding"
+>
+  <div class="kb-blog__page page-width">
+    <div class="kb-blog__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      <div class="kb-blog__header-text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-blog__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-blog__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.button_label != blank -%}
+        <a
+          {% if view_all_url == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="{{ view_all_url }}"
+          {% endif %}
+          class="kb-blog__view-all link"
+        >
+          <span>{{- section.settings.button_label | escape -}}</span>
+          <span class="svg-wrapper kb-blog__view-all-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if blog != blank and blog.articles_count > 0 -%}
+      <ul class="kb-blog__grid{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}" role="list">
+        {%- for article in blog.articles limit: articles_to_show -%}
+          {%- liquid
+            assign category = blog.title
+            if article.tags.size > 0
+              assign category = article.tags.first
+            endif
+          -%}
+          <li class="kb-blog__item" style="--kb-blog-index: {{ forloop.index0 }};">
+            <a href="{{ article.url }}" class="kb-blog__card">
+              <div class="kb-blog__media">
+                {%- if article.image -%}
+                  {{
+                    article.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'kb-blog__image',
+                      sizes: '(min-width: 990px) 33vw, (min-width: 750px) 45vw, 80vw',
+                      widths: '375, 550, 750, 1000, 1200',
+                      loading: 'lazy',
+                      alt: article.image.alt
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-blog__image kb-blog__image--placeholder placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="kb-blog__scrim" aria-hidden="true"></div>
+              <div class="kb-blog__content">
+                {%- if section.settings.show_category -%}
+                  <span class="kb-blog__category caption-with-letter-spacing">{{ category | escape }}</span>
+                {%- endif -%}
+                <h3 class="kb-blog__title">{{ article.title | escape }}</h3>
+                <span class="kb-blog__read">
+                  <span>{{ section.settings.read_label | escape }}</span>
+                  <span class="svg-wrapper kb-blog__read-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                </span>
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- elsif request.design_mode -%}
+      <ul class="kb-blog__grid" role="list">
+        {%- for i in (1..3) -%}
+          <li class="kb-blog__item">
+            <div class="kb-blog__card">
+              <div class="kb-blog__media">
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-blog__image kb-blog__image--placeholder placeholder' }}
+              </div>
+              <div class="kb-blog__scrim" aria-hidden="true"></div>
+              <div class="kb-blog__content">
+                {%- if section.settings.show_category -%}
+                  <span class="kb-blog__category caption-with-letter-spacing">Nutrition &amp; Science</span>
+                {%- endif -%}
+                <h3 class="kb-blog__title">Select a blog to show your latest articles</h3>
+                <span class="kb-blog__read">
+                  <span>{{ section.settings.read_label | escape }}</span>
+                  <span class="svg-wrapper kb-blog__read-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                </span>
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae blog grid",
+  "tag": "section",
+  "class": "section section-kanbae-blog-grid",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Latest articles are pulled automatically from the selected blog."
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "label": "Articles to show",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show article category",
+      "info": "Uses the article's first tag. Falls back to the blog title if the article has no tags.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "THE SCIENCE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore Our Research"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "\"View all\" label",
+      "default": "View All Articles"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "\"View all\" link",
+      "info": "Defaults to the selected blog's page when left blank."
+    },
+    {
+      "type": "text",
+      "id": "read_label",
+      "label": "Card button label",
+      "default": "Read Article"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for the eyebrow text and card arrows.",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Card overlay color",
+      "info": "Base color of the gradient scrim behind the card text.",
+      "default": "#0b1f14"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae blog grid"
+    }
+  ]
+}
+{% endschema %}
