@@ -61,7 +61,7 @@
             "text": "94% Experience reduced post-alcohol symptoms",
             "icon_color": "#0f2b1d",
             "text_color": "#14251a",
-            "background_color": "#CBFFDA"
+            "background_color": "#cbffda"
           }
         },
         "glass_badge_nWMcn4": {
@@ -71,7 +71,7 @@
             "text": "2,000,000+ Mornings saved",
             "icon_color": "#0f2b1d",
             "text_color": "#14251a",
-            "background_color": "#CBFFDA"
+            "background_color": "#cbffda"
           }
         },
         "glass_badge_7FwVK6": {
@@ -81,7 +81,7 @@
             "text": "40,000+ Happy customers",
             "icon_color": "#0f2b1d",
             "text_color": "#14251a",
-            "background_color": "#CBFFDA"
+            "background_color": "#cbffda"
           }
         },
         "buy_buttons": {
@@ -234,12 +234,234 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
+    },
+    "kanbae_key_ingredients_LyxcCB": {
+      "type": "kanbae-key-ingredients",
+      "blocks": {
+        "ingredient_DF443w": {
+          "type": "ingredient",
+          "settings": {
+            "number": "01",
+            "name": "Dihydromyricetin (DHM)",
+            "tagline": "Neutralizes toxins before they cause damage",
+            "description": "<p>A flavonoid extracted from the Japanese raisin tree, traditionally used to support liver function. DHM helps the body process acetaldehyde, a toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>",
+            "studies_text": "Backed by peer-reviewed research",
+            "image": "shopify://shop_images/nuts_seeds_roots_wellness.png",
+            "accent_color": "#f7f6f2",
+            "accent_text_color": "#082310"
+          }
+        },
+        "ingredient_HXxfxk": {
+          "type": "ingredient",
+          "settings": {
+            "number": "02",
+            "name": "S-Acetyl Glutathione",
+            "tagline": "Restores what a night out depletes",
+            "description": "<p>Highly bioavailable (and expensive) form of your body's master antioxidant, directly neutralizes acetaldehyde via a second pathway.</p>",
+            "studies_text": "Clinically studied hydration blend",
+            "image": "shopify://shop_images/lemon_botanical_flat_lay.png",
+            "accent_color": "#f7f6f2",
+            "accent_text_color": "#082310"
+          }
+        },
+        "ingredient_N7JN39": {
+          "type": "ingredient",
+          "settings": {
+            "number": "03",
+            "name": "Succinic Acid",
+            "tagline": "Supports cellular resilience overnight",
+            "description": "<p>Keeps liver cells energized during detox by bypassing the metabolic blockage alcohol creates in mitochondria.</p>",
+            "studies_text": "Used for centuries, studied for decades",
+            "image": "shopify://shop_images/Sachet_with_Fruits_hero_-_vert.png",
+            "accent_color": "#f7f6f2",
+            "accent_text_color": "#082310"
+          }
+        }
+      },
+      "block_order": [
+        "ingredient_DF443w",
+        "ingredient_HXxfxk",
+        "ingredient_N7JN39"
+      ],
+      "name": "Kanbae key ingredients",
+      "settings": {
+        "eyebrow": "THE SCIENCE INSIDE",
+        "title": "3 active ingredients that protect your body further",
+        "heading_size": "h0",
+        "paragraph": "",
+        "card_background": "rgba(247, 246, 242, 0.04)",
+        "card_border_color": "rgba(247, 246, 242, 0.14)",
+        "card_text_color": "#f7f6f2",
+        "card_muted_text_color": "#9ba89f",
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "kanbae_faq_3Ba8tn": {
+      "type": "kanbae-faq",
+      "blocks": {
+        "faq_item_qqHtHz": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is Kanbae Pre-Game and when should I take it?",
+            "answer": "<p>Kanbae Pre-Game is formulated with DHM and liver-supporting botanicals designed to be taken before you start drinking. Take one serving with water about 30–60 minutes before your first drink to help your body process alcohol more efficiently.</p>",
+            "open_by_default": true
+          }
+        },
+        "faq_item_xnzWKx": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How is Kanbae different from a multivitamin?",
+            "answer": "<p>Kanbae isn't a daily multivitamin — it's a targeted hangover-prevention and recovery system built specifically to support liver function, hydration, and electrolyte balance around drinking, not general everyday nutrition.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_iHiC4G": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When should I take Kanbae Recovery?",
+            "answer": "<p>Take Kanbae Recovery before bed or first thing the next morning. It's formulated with electrolytes and rehydration support to help you bounce back after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_ymK34R": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is DHM and why is it in Kanbae?",
+            "answer": "<p>DHM (Dihydromyricetin) is a botanical extract studied for its ability to support liver enzyme activity and help the body clear acetaldehyde, a byproduct of alcohol metabolism linked to hangover symptoms.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_FhPcMQ": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is Kanbae third-party tested?",
+            "answer": "<p>Yes. Every batch of Kanbae is independently lab tested for purity and potency, so you know exactly what you're putting in your body before and after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_iqq6jW": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I take Kanbae if I don't drink alcohol every day?",
+            "answer": "<p>Absolutely — Kanbae is designed for occasional and social drinkers. Keep Pre-Game and Recovery on hand for whenever you plan on having a few drinks.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_qqHtHz",
+        "faq_item_xnzWKx",
+        "faq_item_iHiC4G",
+        "faq_item_ymK34R",
+        "faq_item_FhPcMQ",
+        "faq_item_iqq6jW"
+      ],
+      "name": "Kanbae FAQ",
+      "settings": {
+        "eyebrow": "SUPPORT",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h0",
+        "subtitle": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>",
+        "exclusive_accordion": true,
+        "color_scheme": "",
+        "accent_color": "#a3ff16",
+        "icon_background": "#082310",
+        "icon_color": "#f7f6f2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "kanbae_ingredients_grid_VgjEP8": {
+      "type": "kanbae-ingredients-grid",
+      "blocks": {
+        "ingredient_card_89dVqD": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/lemon_botanical_flat_lay.png",
+            "badge_text": "01",
+            "title": "Cellular & Liver Defense",
+            "description": "DHM and botanical extracts working to shield liver function and support cellular resilience.",
+            "card_link": ""
+          }
+        },
+        "ingredient_card_yhzDYn": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/nuts_seeds_roots_wellness.png",
+            "badge_text": "02",
+            "title": "Cellular Energy",
+            "description": "Organic acids that fuel mitochondrial energy production, without the crash.",
+            "card_link": ""
+          }
+        },
+        "ingredient_card_hfyUmJ": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg",
+            "badge_text": "03",
+            "title": "Vitamins & Recovery",
+            "description": "A B-complex and Vitamin C blend built to restore what a night out depletes.",
+            "card_link": ""
+          }
+        },
+        "ingredient_card_9dLfqx": {
+          "type": "ingredient_card",
+          "settings": {
+            "image": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg",
+            "badge_text": "04",
+            "title": "Advanced Absorption",
+            "description": "Ginger and black pepper working together to maximize how much your body actually uses.",
+            "card_link": ""
+          }
+        },
+        "facts_panel_UWdeTk": {
+          "type": "facts_panel",
+          "settings": {
+            "product_image": "shopify://shop_images/Kanbae-12.jpg",
+            "product_label": "Kanbae total alcohol defense",
+            "facts_image": "shopify://shop_images/Supplement_facts.png"
+          }
+        }
+      },
+      "block_order": [
+        "ingredient_card_89dVqD",
+        "ingredient_card_yhzDYn",
+        "ingredient_card_hfyUmJ",
+        "ingredient_card_9dLfqx",
+        "facts_panel_UWdeTk"
+      ],
+      "name": "Kanbae ingredients grid",
+      "settings": {
+        "eyebrow": "THE SCIENCE INSIDE",
+        "title": "Ingredients Engineered for Recovery",
+        "heading_size": "h0",
+        "paragraph": "",
+        "view_all_label": "View All Ingredients",
+        "view_all_link": "",
+        "supplement_facts_label": "Supplement Facts",
+        "facts_modal_title": "Supplement Facts",
+        "cta_hover_background": "#a3ff16",
+        "cta_hover_text_color": "#082310",
+        "autoplay_speed": 22,
+        "card_gradient_start": "rgba(6, 20, 13, 0.45)",
+        "card_gradient_end": "rgba(4, 12, 8, 0.78)",
+        "card_title_color": "#f7f6f2",
+        "card_text_color": "#c3d3c8",
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "main",
     "disclosures",
     "kanbae_pdp_final_cta",
-    "related-products"
+    "related-products",
+    "kanbae_key_ingredients_LyxcCB",
+    "kanbae_faq_3Ba8tn",
+    "kanbae_ingredients_grid_VgjEP8"
   ]
 }
