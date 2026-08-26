@@ -1,0 +1,347 @@
+{{ 'section-kanbae-key-ingredients.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign ingredients = section.blocks | where: 'type', 'ingredient'
+  assign ingredient_count = ingredients.size
+-%}
+
+{%- if ingredient_count > 1 -%}
+  <script src="{{ 'kanbae-key-ingredients.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeKeyIngredients-{{ section.id }} {
+    --kb-key-ing-card-background: {{ section.settings.card_background }};
+    --kb-key-ing-card-border: {{ section.settings.card_border_color }};
+    --kb-key-ing-card-text: {{ section.settings.card_text_color }};
+    --kb-key-ing-card-muted-text: {{ section.settings.card_muted_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeKeyIngredients-{{ section.id }}"
+  class="kb-key-ing color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-key-ing__inner page-width">
+    <div class="kb-key-ing__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="kb-key-ing__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="kb-key-ing__title inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.paragraph != blank -%}
+        <div class="kb-key-ing__paragraph rte">
+          {{ section.settings.paragraph }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if ingredient_count > 0 -%}
+      <div
+        id="KbKeyIngTabs-{{ section.id }}"
+        class="kb-key-ing__tabs{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+        role="tablist"
+        aria-label="{{ section.settings.title | strip_html | default: 'Key active ingredients' | escape }}"
+      >
+        {%- for block in ingredients -%}
+          {%- liquid
+            assign is_active = false
+            if forloop.first
+              assign is_active = true
+            endif
+          -%}
+          <button
+            type="button"
+            id="KbKeyIngTab-{{ section.id }}-{{ forloop.index0 }}"
+            class="kb-key-ing__tab{% if is_active %} is-active{% endif %}"
+            role="tab"
+            aria-selected="{% if is_active %}true{% else %}false{% endif %}"
+            aria-controls="KbKeyIngPanel-{{ section.id }}-{{ forloop.index0 }}"
+            tabindex="{% if is_active %}0{% else %}-1{% endif %}"
+            data-kb-key-ing-tab
+            data-target="KbKeyIngPanel-{{ section.id }}-{{ forloop.index0 }}"
+            style="--kb-key-ing-tab-accent: {{ block.settings.accent_color }}; --kb-key-ing-tab-accent-text: {{ block.settings.accent_text_color }};"
+            {{ block.shopify_attributes }}
+          >
+            <span class="kb-key-ing__tab-number">{{ block.settings.number | default: forloop.index | prepend: '0' | slice: -2, 2 }}.</span>
+            <span class="kb-key-ing__tab-name">{{ block.settings.name | escape }}</span>
+            {%- if block.settings.tagline != blank -%}
+              <span class="kb-key-ing__tab-tagline">{{ block.settings.tagline | escape }}</span>
+            {%- endif -%}
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <div class="kb-key-ing__panels{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- for block in ingredients -%}
+          {%- liquid
+            assign is_active = false
+            if forloop.first
+              assign is_active = true
+            endif
+            assign image_alt = block.settings.image.alt | default: block.settings.name
+          -%}
+          <div
+            id="KbKeyIngPanel-{{ section.id }}-{{ forloop.index0 }}"
+            class="kb-key-ing__panel{% if is_active %} is-active{% endif %}"
+            role="tabpanel"
+            aria-labelledby="KbKeyIngTab-{{ section.id }}-{{ forloop.index0 }}"
+            {% unless is_active %}hidden{% endunless %}
+            data-kb-key-ing-panel
+          >
+            <div class="kb-key-ing__panel-grid">
+              <div class="kb-key-ing__panel-text">
+                <span class="kb-key-ing__panel-number" style="color: {{ block.settings.accent_color }};">
+                  {{ block.settings.number | default: forloop.index | prepend: '0' | slice: -2, 2 }}
+                </span>
+                <h3 class="kb-key-ing__panel-title">{{ block.settings.name | escape }}</h3>
+                {%- if block.settings.description != blank -%}
+                  <div class="kb-key-ing__panel-description rte">
+                    {{ block.settings.description }}
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.studies_text != blank -%}
+                  <p class="kb-key-ing__panel-studies" style="color: {{ block.settings.accent_color }};">
+                    {{ block.settings.studies_text | escape }}
+                  </p>
+                {%- endif -%}
+              </div>
+              <div class="kb-key-ing__panel-media">
+                <div class="kb-key-ing__panel-media-inner">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 1200
+                      | image_tag:
+                        class: 'kb-key-ing__panel-image',
+                        sizes: '(min-width: 990px) 44vw, 90vw',
+                        widths: '360, 480, 640, 800, 1000, 1200',
+                        loading: 'lazy',
+                        alt: image_alt
+                    }}
+                  {%- else -%}
+                    {{ 'product-2' | placeholder_svg_tag: 'kb-key-ing__panel-image placeholder' }}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae key ingredients",
+  "tag": "section",
+  "class": "section section-kanbae-key-ingredients",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE SCIENCE INSIDE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "3 active ingredients that protect your body further"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "info": "Optional. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Inactive tab appearance"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Inactive tab background",
+      "default": "rgba(247, 246, 242, 0.04)"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Inactive tab border",
+      "default": "rgba(247, 246, 242, 0.14)"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Inactive tab text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "card_muted_text_color",
+      "label": "Inactive tab tagline color",
+      "default": "#9ba89f"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number label",
+          "info": "e.g. 01. Leave blank to auto-number by block order.",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Ingredient name",
+          "default": "Dihydromyricetin (DHM)"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tab tagline",
+          "info": "Short one-line benefit shown on the tab itself.",
+          "default": "Neutralizes toxins before they cause damage"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Detailed description",
+          "info": "Shown below the tabs when this ingredient is selected. Cover origin, benefits, and how it works.",
+          "default": "<p>A flavonoid extracted from the Japanese raisin tree, traditionally used to support liver function. DHM helps the body process acetaldehyde, a toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>"
+        },
+        {
+          "type": "text",
+          "id": "studies_text",
+          "label": "Research badge",
+          "info": "Optional small line citing backing research, e.g. \"Backed by 12+ peer-reviewed studies\". Leave blank to hide.",
+          "default": "Backed by peer-reviewed research"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Ingredient image",
+          "info": "Recommended: clean macro or studio shot of the ingredient, landscape crop (about 4:3)."
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Active tab background",
+          "default": "#f7f6f2"
+        },
+        {
+          "type": "color",
+          "id": "accent_text_color",
+          "label": "Active tab text color",
+          "default": "#082310"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae key ingredients",
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "number": "01",
+            "name": "Dihydromyricetin (DHM)",
+            "tagline": "Neutralizes toxins before they cause damage",
+            "studies_text": "Backed by peer-reviewed research"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "number": "02",
+            "name": "Electrolyte Complex",
+            "tagline": "Restores what a night out depletes",
+            "studies_text": "Clinically studied hydration blend"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "number": "03",
+            "name": "Milk Thistle Extract",
+            "tagline": "Supports cellular resilience overnight",
+            "studies_text": "Used for centuries, studied for decades"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

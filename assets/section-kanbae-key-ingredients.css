@@ -1,0 +1,234 @@
+.kb-key-ing {
+  position: relative;
+  width: 100%;
+}
+
+/* Header */
+
+.kb-key-ing__header {
+  max-width: 68rem;
+  margin: 0 auto 3.2rem;
+  text-align: center;
+}
+
+.kb-key-ing__eyebrow {
+  margin: 0 0 1.2rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-key-ing__eyebrow {
+    font-size: 1.7rem;
+  }
+}
+
+.kb-key-ing__title {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.kb-key-ing__paragraph {
+  margin: 1.6rem auto 0;
+  max-width: 52rem;
+  opacity: 0.8;
+}
+
+.kb-key-ing__paragraph > * {
+  margin: 0;
+}
+
+/* Tabs */
+
+.kb-key-ing__tabs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(78%, 30rem);
+  gap: 1.2rem;
+  margin: 0 0 -0.1rem;
+  padding: 0 0 0.4rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.kb-key-ing__tabs::-webkit-scrollbar {
+  height: 0.6rem;
+}
+
+.kb-key-ing__tabs::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-foreground), 0.2);
+  border-radius: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-key-ing__tabs {
+    grid-auto-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+}
+
+.kb-key-ing__tab {
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  width: 100%;
+  min-height: 14rem;
+  padding: 2rem 2.2rem;
+  border: 0.1rem solid var(--kb-key-ing-card-border, rgba(247, 246, 242, 0.14));
+  border-radius: 1.2rem;
+  background-color: var(--kb-key-ing-card-background, rgba(247, 246, 242, 0.04));
+  color: var(--kb-key-ing-card-text, #f7f6f2);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.kb-key-ing__tab.is-active {
+  background-color: var(--kb-key-ing-tab-accent, #f7f6f2);
+  border-color: var(--kb-key-ing-tab-accent, #f7f6f2);
+  color: var(--kb-key-ing-tab-accent-text, #082310);
+  transform: translateY(-0.2rem);
+}
+
+@media (hover: hover) {
+  .kb-key-ing__tab:not(.is-active):hover {
+    border-color: var(--kb-key-ing-tab-accent, rgba(247, 246, 242, 0.4));
+    transform: translateY(-0.2rem);
+  }
+}
+
+.kb-key-ing__tab:focus-visible {
+  outline: 0.2rem solid var(--kb-key-ing-tab-accent, currentColor);
+  outline-offset: 0.2rem;
+}
+
+.kb-key-ing__tab-number {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.04rem;
+  opacity: 0.6;
+}
+
+.kb-key-ing__tab-name {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.kb-key-ing__tab-tagline {
+  margin-top: auto;
+  padding-top: 0.4rem;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--kb-key-ing-card-muted-text, #9ba89f);
+}
+
+.kb-key-ing__tab.is-active .kb-key-ing__tab-tagline {
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* Panels */
+
+.kb-key-ing__panels {
+  margin-top: 4rem;
+}
+
+.kb-key-ing__panel[hidden] {
+  display: none;
+}
+
+.kb-key-ing__panel-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.8rem;
+  align-items: center;
+}
+
+@media screen and (min-width: 990px) {
+  .kb-key-ing__panel-grid {
+    grid-template-columns: minmax(0, 46%) 1fr;
+    gap: 5rem;
+  }
+}
+
+.kb-key-ing__panel-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kb-key-ing__panel-number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04rem;
+}
+
+.kb-key-ing__panel-title {
+  margin: 0.8rem 0 0;
+  font-size: 3.2rem;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.kb-key-ing__panel-description {
+  margin: 1.6rem 0 0;
+  font-size: 1.6rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.kb-key-ing__panel-description > * {
+  margin: 0 0 1.2rem;
+}
+
+.kb-key-ing__panel-description > *:last-child {
+  margin-bottom: 0;
+}
+
+.kb-key-ing__panel-studies {
+  margin: 2rem 0 0;
+  padding-top: 1.6rem;
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.12);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+}
+
+.kb-key-ing__panel-media {
+  position: relative;
+}
+
+.kb-key-ing__panel-media-inner {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.6rem;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.kb-key-ing__panel-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-key-ing__tab {
+    transition: none;
+  }
+}
