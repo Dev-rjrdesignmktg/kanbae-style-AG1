@@ -1,0 +1,409 @@
+{{ 'section-kanbae-pdp-final-cta.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KbPdpCta-{{ section.id }} {
+    --kb-pdp-background: {{ section.settings.background_color }};
+    --kb-pdp-background-alt: {{ section.settings.background_color_alt }};
+    --kb-pdp-text-color: {{ section.settings.text_color }};
+    --kb-pdp-scarcity-color: {{ section.settings.scarcity_color }};
+    --kb-pdp-scarcity-rgb: {{ section.settings.scarcity_color.red }}, {{ section.settings.scarcity_color.green }}, {{ section.settings.scarcity_color.blue }};
+    --kb-pdp-glow-color: {{ section.settings.glow_color }};
+    --kb-pdp-glow-rgb: {{ section.settings.glow_color.red }}, {{ section.settings.glow_color.green }}, {{ section.settings.glow_color.blue }};
+    --kb-pdp-button-background: {{ section.settings.button_background }};
+    --kb-pdp-button-text: {{ section.settings.button_text_color }};
+    --kb-pdp-button-hover-background: {{ section.settings.button_hover_background }};
+    --kb-pdp-button-hover-text: {{ section.settings.button_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div id="KbPdpCta-{{ section.id }}" class="kb-pdp-cta section-{{ section.id }}-padding">
+  <div class="kb-pdp-cta__page page-width">
+    <div class="kb-pdp-cta__card{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      <div class="kb-pdp-cta__glow" aria-hidden="true"></div>
+      <div class="kb-pdp-cta__inner">
+        <div class="kb-pdp-cta__grid{% if section.settings.image != blank %} kb-pdp-cta__grid--has-image{% endif %}{% if section.settings.image_position == 'right' %} kb-pdp-cta__grid--image-right{% endif %}">
+          {%- if section.settings.image != blank -%}
+            {%- assign kb_pdp_cta_image_alt = section.settings.image.alt | default: section.settings.heading | strip_html -%}
+            <div class="kb-pdp-cta__media">
+              {{
+                section.settings.image
+                | image_url: width: 800
+                | image_tag:
+                  class: 'kb-pdp-cta__image',
+                  sizes: '(min-width: 990px) 24rem, 60vw',
+                  widths: '300, 450, 600, 800',
+                  loading: 'lazy',
+                  alt: kb_pdp_cta_image_alt
+              }}
+            </div>
+          {%- endif -%}
+
+          <div class="kb-pdp-cta__content">
+            <div class="kb-pdp-cta__message">
+              {%- if section.settings.scarcity_label != blank -%}
+                <span class="kb-pdp-cta__scarcity">
+                  <span class="kb-pdp-cta__scarcity-dot" aria-hidden="true"></span>
+                  {{- section.settings.scarcity_label | escape -}}
+                </span>
+              {%- endif -%}
+
+              {%- if section.settings.heading != blank -%}
+                <h2 class="kb-pdp-cta__heading inline-richtext {{ section.settings.heading_size }}">
+                  {{ section.settings.heading }}
+                </h2>
+              {%- endif -%}
+
+              {%- if section.settings.subtitle != blank -%}
+                <div class="kb-pdp-cta__subtitle rte">
+                  {{ section.settings.subtitle }}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="kb-pdp-cta__action">
+              {%- if section.settings.button_label != blank -%}
+                {%- if section.settings.cta_action == 'custom_link' -%}
+                  <a
+                    {% if section.settings.button_link == blank %}
+                      role="link" aria-disabled="true"
+                    {% else %}
+                      href="{{ section.settings.button_link }}"
+                    {% endif %}
+                    class="button kb-pdp-cta__button"
+                  >
+                    <span>{{- section.settings.button_label | escape -}}</span>
+                    <span class="svg-wrapper kb-pdp-cta__button-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                  </a>
+                {%- else -%}
+                  <button type="button" class="button kb-pdp-cta__button" data-kb-pdp-cta-scroll>
+                    <span>{{- section.settings.button_label | escape -}}</span>
+                    <span class="svg-wrapper kb-pdp-cta__button-icon">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                  </button>
+                {%- endif -%}
+              {%- endif -%}
+
+              {%- if section.settings.footnote != blank -%}
+                <p class="kb-pdp-cta__footnote">{{ section.settings.footnote | escape }}</p>
+              {%- endif -%}
+            </div>
+
+            {%- if section.settings.show_trust_badges -%}
+              {%- assign badge_blocks = section.blocks | where: 'type', 'trust_badge' -%}
+              {%- if badge_blocks.size > 0 -%}
+                <ul class="kb-pdp-cta__badges" role="list">
+                  {%- for block in badge_blocks -%}
+                    <li class="kb-pdp-cta__badge" {{ block.shopify_attributes }}>
+                      {%- if block.settings.icon != 'none' -%}
+                        <span class="svg-wrapper" aria-hidden="true">
+                          {%- if block.settings.icon == 'shield-check' -%}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M12 21s7.5-3.75 7.5-9.375V5.25L12 2.25l-7.5 3v6.375C4.5 17.25 12 21 12 21z"/>
+                              <path d="M8.75 12.1l2.25 2.25 4.25-4.5"/>
+                            </svg>
+                          {%- else -%}
+                            {{- block.settings.icon | append: '.svg' | inline_asset_content -}}
+                          {%- endif -%}
+                        </span>
+                      {%- endif -%}
+                      <span>{{ block.settings.text | escape }}</span>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if section.settings.cta_action != 'custom_link' -%}
+  <script>
+    (function () {
+      if (window.kbPdpCtaScrollBound) return;
+      window.kbPdpCtaScrollBound = true;
+
+      document.addEventListener('click', function (event) {
+        var trigger = event.target.closest('[data-kb-pdp-cta-scroll]');
+        if (!trigger) return;
+
+        var target = document.querySelector('product-info, [id^="MainProduct-"]');
+        if (!target) return;
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        window.setTimeout(function () {
+          var focusTarget = target.querySelector(
+            'variant-selects input:not(:checked), variant-selects select, .product-form__submit, [name="add"]'
+          );
+          if (focusTarget && typeof focusTarget.focus === 'function') {
+            focusTarget.focus({ preventScroll: true });
+          }
+        }, 550);
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Kanbae PDP final CTA",
+  "tag": "section",
+  "class": "section section-kanbae-pdp-final-cta",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Message"
+    },
+    {
+      "type": "text",
+      "id": "scarcity_label",
+      "label": "Urgency text",
+      "default": "BEFORE YOUR NEXT NIGHT OUT"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your next hangover-free morning starts today"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Normal" },
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Don't let a great night wreck your morning. Take it before you go out and wake up with real energy, guilt-free.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Optional. Displayed alongside the message and CTA."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left of content" },
+        { "value": "right", "label": "Right of content" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "header",
+      "content": "Trust badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "CTA button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Secure My Treatment Now"
+    },
+    {
+      "type": "select",
+      "id": "cta_action",
+      "label": "Button action",
+      "options": [
+        { "value": "scroll_to_variants", "label": "Scroll to purchase selectors" },
+        { "value": "custom_link", "label": "Custom link" }
+      ],
+      "default": "scroll_to_variants",
+      "info": "\"Scroll\" takes the shopper straight to the variant picker and add-to-cart button higher up the page."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "info": "Only used when the button action is \"Custom link\"."
+    },
+    {
+      "type": "text",
+      "id": "footnote",
+      "label": "Trust / legal text",
+      "info": "Small print shown below the button. Leave blank to hide.",
+      "default": "Fast shipping · 45-day money-back guarantee"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#0b1f14"
+    },
+    {
+      "type": "color",
+      "id": "background_color_alt",
+      "label": "Background color (gradient)",
+      "default": "#16311f"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "scarcity_color",
+      "label": "Urgency text color",
+      "default": "#ffcf6b"
+    },
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Card glow color",
+      "default": "#a3ff9c"
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "shield-check", "label": "Shield check" },
+            { "value": "icon-truck", "label": "Truck / shipping" },
+            { "value": "icon-lightning-bolt", "label": "Lightning bolt" },
+            { "value": "icon-return", "label": "Return" },
+            { "value": "icon-lock", "label": "Lock" },
+            { "value": "icon-check-mark", "label": "Check mark" },
+            { "value": "icon-checkmark", "label": "Checkmark (alt)" },
+            { "value": "icon-heart", "label": "Heart" },
+            { "value": "icon-leaf", "label": "Leaf" },
+            { "value": "icon-star", "label": "Star" }
+          ],
+          "default": "shield-check"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "45-day money-back guarantee"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae PDP final CTA",
+      "blocks": [
+        {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shield-check",
+            "text": "45-day money-back guarantee"
+          }
+        },
+        {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "icon-truck",
+            "text": "Fast 24-48h shipping"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

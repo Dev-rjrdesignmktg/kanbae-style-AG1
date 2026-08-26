@@ -196,6 +196,27 @@
         "padding_bottom": 0
       }
     },
+    "kanbae_pdp_final_cta": {
+      "type": "kanbae-pdp-final-cta",
+      "blocks": {
+        "trust_badge_shield": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shield-check",
+            "text": "45-day money-back guarantee"
+          }
+        },
+        "trust_badge_truck": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "icon-truck",
+            "text": "Fast 24-48h shipping"
+          }
+        }
+      },
+      "block_order": ["trust_badge_shield", "trust_badge_truck"],
+      "settings": {}
+    },
     "related-products": {
       "type": "related-products",
       "settings": {
@@ -218,6 +239,7 @@
   "order": [
     "main",
     "disclosures",
+    "kanbae_pdp_final_cta",
     "related-products"
   ]
 }
