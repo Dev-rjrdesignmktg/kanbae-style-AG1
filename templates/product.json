@@ -38,36 +38,6 @@
             "item_spacing": 3
           }
         },
-        "glass_badge_e7icw8": {
-          "type": "glass_badge",
-          "settings": {
-            "icon": "check_mark",
-            "text": "94% Experience reduced post-alcohol symptoms",
-            "icon_color": "#0f2b1d",
-            "text_color": "#14251a",
-            "background_color": "#CBFFDA"
-          }
-        },
-        "glass_badge_7FwVK6": {
-          "type": "glass_badge",
-          "settings": {
-            "icon": "account",
-            "text": "40,000+ Happy customers",
-            "icon_color": "#0f2b1d",
-            "text_color": "#14251a",
-            "background_color": "#CBFFDA"
-          }
-        },
-        "glass_badge_nWMcn4": {
-          "type": "glass_badge",
-          "settings": {
-            "icon": "check_mark",
-            "text": "2,000,000+ Mornings saved",
-            "icon_color": "#0f2b1d",
-            "text_color": "#14251a",
-            "background_color": "#CBFFDA"
-          }
-        },
         "price": {
           "type": "price",
           "settings": {}
@@ -84,6 +54,36 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "glass_badge_e7icw8": {
+          "type": "glass_badge",
+          "settings": {
+            "icon": "check_mark",
+            "text": "94% Experience reduced post-alcohol symptoms",
+            "icon_color": "#0f2b1d",
+            "text_color": "#14251a",
+            "background_color": "#CBFFDA"
+          }
+        },
+        "glass_badge_nWMcn4": {
+          "type": "glass_badge",
+          "settings": {
+            "icon": "check_mark",
+            "text": "2,000,000+ Mornings saved",
+            "icon_color": "#0f2b1d",
+            "text_color": "#14251a",
+            "background_color": "#CBFFDA"
+          }
+        },
+        "glass_badge_7FwVK6": {
+          "type": "glass_badge",
+          "settings": {
+            "icon": "account",
+            "text": "40,000+ Happy customers",
+            "icon_color": "#0f2b1d",
+            "text_color": "#14251a",
+            "background_color": "#CBFFDA"
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -95,45 +95,58 @@
           "type": "description",
           "settings": {}
         },
-        "share": {
-          "type": "share",
+        "kanbae_trust_bar_Bwbekz": {
+          "type": "kanbae_trust_bar",
           "settings": {
-            "share_label": "Share"
+            "pillar_1_icon": "truck",
+            "pillar_1_title": "Fast & Free Delivery",
+            "pillar_1_subtitle": "Free shipping on subscription orders",
+            "pillar_2_icon": "return",
+            "pillar_2_title": "45-Day Money-Back Guarantee",
+            "pillar_2_subtitle": "Try it risk-free, no questions asked",
+            "pillar_3_icon": "lock",
+            "pillar_3_title": "Secure Checkout",
+            "pillar_3_subtitle": "Encrypted payments & 24/7 support",
+            "show_dividers": true,
+            "icon_color": "#0f2b1d",
+            "title_color": "#14251a",
+            "subtitle_color": "#4a5c52",
+            "background_color": "#ffffff"
           }
         },
         "collapsible_tab_LJjcwg": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Collapsible row",
-            "icon": "check_mark",
-            "content": "",
+            "heading": "Key Benefits",
+            "icon": "heart",
+            "content": "<p><strong>CLEAR - </strong>Supports your body's natural breakdown of acetaldehyde, the toxic alcohol byproduct that causes rough mornings.</p><p><strong>PROTECT - </strong>Promotes liver health and supports your natural detox pathways during alcohol metabolism.</p><p><strong>RESTORE - </strong>Replenishes the glutathione, B vitamins, and antioxidants that alcohol directly depletes overnight.</p><p><strong>SHOW UP - </strong>So you wake up feeling balanced, clear, and ready for whatever the day holds.</p>",
             "page": ""
           }
         },
         "collapsible_tab_VM3VmH": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Collapsible row",
-            "icon": "check_mark",
-            "content": "",
+            "heading": "How it Works",
+            "icon": "question_mark",
+            "content": "<p>When you drink, your liver converts alcohol into acetaldehyde - a highly toxic compound responsible for nausea, flushing, headaches, and hangovers.</p><p>ALDH2 enzymes further break down acetaldehyde into harmless acetate. But this process takes time - around one drink per hour - and is even slower for those with an ALDH2 deficiency (~50% of East Asians). This allows acetaldehyde to build up to dangerous levels.</p><p>Kanbae supercharges ALDH activity, boosts antioxidants, and replenishes nutrients to help clear acetaldehyde faster while protecting your liver.</p>",
             "page": ""
           }
         },
         "collapsible_tab_cq43dV": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Collapsible row",
-            "icon": "check_mark",
-            "content": "",
+            "heading": "When to Take",
+            "icon": "clipboard",
+            "content": "<p><strong>Before: </strong>Take 2 capsules (1 sachet) 15-30 minutes before drinking, as they take time to break down in your stomach.</p><p><strong>After: </strong>If you’ve had a heavy session, you can take up to 2 more capsules after your last drink.</p><p><strong>Reminder:</strong><br/>Drink responsibly.  Anti hangover pills are not designed to help you drink more than your personal limit, drive after drinking or ignore proper hydration and rest.</p>",
             "page": ""
           }
         },
         "collapsible_tab_qDMLdF": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Collapsible row",
+            "heading": "Quality Standards",
             "icon": "check_mark",
-            "content": "",
+            "content": "<p>Our products are formulated in-house by Singapore Health Sciences Authority (HSA) accredited experts.</p><p>KANBAE is the only anti-hangover brand to have been clinically tested for efficacy.</p><p>Our products are shipped from Singapore, third-party tested, and manufactured in a GMP-certified facility.</p>",
             "page": ""
           }
         }
@@ -142,15 +155,15 @@
         "vendor",
         "title",
         "kanbae_star_rating_R4VhNR",
-        "glass_badge_e7icw8",
-        "glass_badge_7FwVK6",
-        "glass_badge_nWMcn4",
         "price",
         "variant_picker",
         "quantity_selector",
+        "glass_badge_e7icw8",
+        "glass_badge_nWMcn4",
+        "glass_badge_7FwVK6",
         "buy_buttons",
         "description",
-        "share",
+        "kanbae_trust_bar_Bwbekz",
         "collapsible_tab_LJjcwg",
         "collapsible_tab_VM3VmH",
         "collapsible_tab_cq43dV",
