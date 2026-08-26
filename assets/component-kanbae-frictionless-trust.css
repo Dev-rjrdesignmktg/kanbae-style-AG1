@@ -1,0 +1,108 @@
+/*
+  Kanbae PDP "friction reducer" trust bar — a quiet, glass-toned strip of
+  3 pillars (shipping / guarantee / secure checkout), stacked in a single
+  column, sitting under the buy buttons. Pure CSS flexbox, no external
+  assets beyond inline SVGs already shipped with the theme
+  (icon-accordion.liquid).
+*/
+
+.kb-trust-bar {
+  --kb-trust-ink: 15, 43, 29;
+  --kb-trust-icon-color: rgb(var(--kb-trust-ink));
+  --kb-trust-title-color: rgb(var(--kb-trust-ink));
+  --kb-trust-subtitle-color: rgba(var(--kb-trust-ink), 0.62);
+  --kb-trust-bg: rgba(255, 255, 255, 0.55);
+
+  margin-top: 1.6rem;
+  padding: 1.8rem 2rem;
+  background: var(--kb-trust-bg);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 1.6rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.kb-trust-bar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kb-trust-bar__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+}
+
+.kb-trust-bar--divided .kb-trust-bar__item:not(:last-child) {
+  border-bottom: 1px solid rgba(var(--kb-trust-ink), 0.12);
+  padding-bottom: 1.4rem;
+}
+
+.kb-trust-bar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.6rem;
+  height: 3.6rem;
+  color: var(--kb-trust-icon-color);
+  background: rgba(var(--kb-trust-ink), 0.06);
+  border-radius: 50%;
+}
+
+.kb-trust-bar__icon svg {
+  width: 1.7rem;
+  height: 1.7rem;
+  fill: currentColor;
+}
+
+.kb-trust-bar__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.kb-trust-bar__title {
+  font-size: 1.3rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--kb-trust-title-color);
+}
+
+.kb-trust-bar__subtitle {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: var(--kb-trust-subtitle-color);
+}
+
+@media screen and (max-width: 749px) {
+  .kb-trust-bar {
+    padding: 1.5rem 1.6rem;
+  }
+
+  .kb-trust-bar__icon {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  .kb-trust-bar__icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .kb-trust-bar__title {
+    font-size: 1.2rem;
+  }
+
+  .kb-trust-bar__subtitle {
+    font-size: 1.1rem;
+  }
+}

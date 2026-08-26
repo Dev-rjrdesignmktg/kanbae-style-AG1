@@ -1,0 +1,65 @@
+{% comment %}
+  Renders Kanbae's PDP "friction reducer" trust bar: a 3-pillar strip
+  (shipping / guarantee / secure checkout & support) meant to sit right
+  below the buy buttons and dissolve last-minute purchase objections.
+
+  Accepts:
+  - block: {Object} the `kanbae_trust_bar` block; settings: pillar_1/2/3
+    icon, title, subtitle, icon_color, title_color, subtitle_color,
+    background_color, show_dividers.
+
+  Usage:
+  {% render 'kanbae-frictionless-trust', block: block %}
+{% endcomment %}
+{{ 'component-kanbae-frictionless-trust.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #KanbaeTrustBar-{{ block.id }} {
+    --kb-trust-icon-color: {{ block.settings.icon_color }};
+    --kb-trust-title-color: {{ block.settings.title_color }};
+    --kb-trust-subtitle-color: {{ block.settings.subtitle_color }};
+    --kb-trust-bg: {{ block.settings.background_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeTrustBar-{{ block.id }}"
+  class="kb-trust-bar{% if block.settings.show_dividers %} kb-trust-bar--divided{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  <ul class="kb-trust-bar__list" role="list">
+    <li class="kb-trust-bar__item">
+      <span class="kb-trust-bar__icon" aria-hidden="true">
+        {%- render 'icon-accordion', icon: block.settings.pillar_1_icon -%}
+      </span>
+      <span class="kb-trust-bar__copy">
+        <span class="kb-trust-bar__title">{{ block.settings.pillar_1_title | escape }}</span>
+        {%- if block.settings.pillar_1_subtitle != blank -%}
+          <span class="kb-trust-bar__subtitle">{{ block.settings.pillar_1_subtitle | escape }}</span>
+        {%- endif -%}
+      </span>
+    </li>
+    <li class="kb-trust-bar__item">
+      <span class="kb-trust-bar__icon" aria-hidden="true">
+        {%- render 'icon-accordion', icon: block.settings.pillar_2_icon -%}
+      </span>
+      <span class="kb-trust-bar__copy">
+        <span class="kb-trust-bar__title">{{ block.settings.pillar_2_title | escape }}</span>
+        {%- if block.settings.pillar_2_subtitle != blank -%}
+          <span class="kb-trust-bar__subtitle">{{ block.settings.pillar_2_subtitle | escape }}</span>
+        {%- endif -%}
+      </span>
+    </li>
+    <li class="kb-trust-bar__item">
+      <span class="kb-trust-bar__icon" aria-hidden="true">
+        {%- render 'icon-accordion', icon: block.settings.pillar_3_icon -%}
+      </span>
+      <span class="kb-trust-bar__copy">
+        <span class="kb-trust-bar__title">{{ block.settings.pillar_3_title | escape }}</span>
+        {%- if block.settings.pillar_3_subtitle != blank -%}
+          <span class="kb-trust-bar__subtitle">{{ block.settings.pillar_3_subtitle | escape }}</span>
+        {%- endif -%}
+      </span>
+    </li>
+  </ul>
+</div>
