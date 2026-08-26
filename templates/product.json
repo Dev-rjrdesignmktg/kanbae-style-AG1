@@ -67,7 +67,7 @@
         "glass_badge_nWMcn4": {
           "type": "glass_badge",
           "settings": {
-            "icon": "check_mark",
+            "icon": "star",
             "text": "2,000,000+ Mornings saved",
             "icon_color": "#0f2b1d",
             "text_color": "#14251a",
