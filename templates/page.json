@@ -100,10 +100,86 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_faq_KhBEQj": {
+      "type": "kanbae-faq",
+      "blocks": {
+        "faq_item_hzg64L": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is Kanbae Pre-Game and when should I take it?",
+            "answer": "<p>Kanbae Pre-Game is formulated with DHM and liver-supporting botanicals designed to be taken before you start drinking. Take one serving with water about 30–60 minutes before your first drink to help your body process alcohol more efficiently.</p>",
+            "open_by_default": true
+          }
+        },
+        "faq_item_EcDJQ6": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How is Kanbae different from a multivitamin?",
+            "answer": "<p>Kanbae isn't a daily multivitamin — it's a targeted hangover-prevention and recovery system built specifically to support liver function, hydration, and electrolyte balance around drinking, not general everyday nutrition.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_rXXVJR": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When should I take Kanbae Recovery?",
+            "answer": "<p>Take Kanbae Recovery before bed or first thing the next morning. It's formulated with electrolytes and rehydration support to help you bounce back after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_KdEa9D": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is DHM and why is it in Kanbae?",
+            "answer": "<p>DHM (Dihydromyricetin) is a botanical extract studied for its ability to support liver enzyme activity and help the body clear acetaldehyde, a byproduct of alcohol metabolism linked to hangover symptoms.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_zFGDkJ": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is Kanbae third-party tested?",
+            "answer": "<p>Yes. Every batch of Kanbae is independently lab tested for purity and potency, so you know exactly what you're putting in your body before and after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_pTt6Rw": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I take Kanbae if I don't drink alcohol every day?",
+            "answer": "<p>Absolutely — Kanbae is designed for occasional and social drinkers. Keep Pre-Game and Recovery on hand for whenever you plan on having a few drinks.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_hzg64L",
+        "faq_item_EcDJQ6",
+        "faq_item_rXXVJR",
+        "faq_item_KdEa9D",
+        "faq_item_zFGDkJ",
+        "faq_item_pTt6Rw"
+      ],
+      "name": "Kanbae FAQ",
+      "settings": {
+        "eyebrow": "SUPPORT",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h0",
+        "subtitle": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>",
+        "exclusive_accordion": true,
+        "color_scheme": "",
+        "accent_color": "#a3ff16",
+        "icon_background": "#082310",
+        "icon_color": "#f7f6f2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "main",
-    "kanbae_ingredients_explorer_DQagxm"
+    "kanbae_ingredients_explorer_DQagxm",
+    "kanbae_faq_KhBEQj"
   ]
 }
