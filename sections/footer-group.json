@@ -18,21 +18,21 @@
           "type": "menu_column",
           "settings": {
             "heading": "Shop",
-            "menu": "footer"
+            "menu": "shop"
           }
         },
         "menu_column_Pj3HKP": {
           "type": "menu_column",
           "settings": {
             "heading": "Science & Formula",
-            "menu": "footer"
+            "menu": "science-and-formula"
           }
         },
         "menu_column_prdBBx": {
           "type": "menu_column",
           "settings": {
             "heading": "About Us",
-            "menu": "footer"
+            "menu": "about"
           }
         },
         "menu_column_wdnU9z": {
