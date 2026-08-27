@@ -11,13 +11,99 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "kanbae_ingredients_explorer_DQagxm": {
+      "type": "kanbae-ingredients-explorer",
+      "blocks": {
+        "category_L676wX": {
+          "type": "category",
+          "settings": {
+            "number": "01",
+            "icon": "shopify://shop_images/lemon_botanical_flat_lay.png",
+            "nav_label": "Liver & Cellular Defense",
+            "panel_heading": "Liver & Cellular Defense",
+            "description": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "DHM, Milk Thistle, NAC",
+            "benefits": "Faster toxin clearance\nReduced next-day fatigue\nSupports cellular resilience overnight",
+            "image": "shopify://shop_images/lemon_botanical_flat_lay.png"
+          }
+        },
+        "category_geXpEN": {
+          "type": "category",
+          "settings": {
+            "number": "02",
+            "icon": "shopify://shop_images/nuts_seeds_roots_wellness.png",
+            "nav_label": "Hydration & Electrolytes",
+            "panel_heading": "Hydration & Electrolytes",
+            "description": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "Sodium, Potassium, Magnesium, Coconut Water Extract",
+            "benefits": "Rehydrates faster than water alone\nEases the morning-after headache\nRestores what alcohol depletes",
+            "image": "shopify://shop_images/nuts_seeds_roots_wellness.png"
+          }
+        },
+        "category_b4VdzR": {
+          "type": "category",
+          "settings": {
+            "number": "03",
+            "icon": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg",
+            "nav_label": "Digestive Comfort",
+            "panel_heading": "Digestive Comfort & Prebiotics",
+            "description": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "Ginger Root, ZingiBain, Prebiotic Fiber",
+            "benefits": "Less bloating and nausea\nCalms an unsettled stomach\nSupports gut recovery overnight",
+            "image": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg"
+          }
+        },
+        "category_KKyQpR": {
+          "type": "category",
+          "settings": {
+            "number": "04",
+            "icon": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg",
+            "nav_label": "Absorption",
+            "panel_heading": "Advanced Absorption",
+            "description": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "Black Pepper Extract (BioPerine)",
+            "benefits": "Maximizes nutrient uptake\nFaster-acting formula\nNothing wasted, nothing diluted",
+            "image": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "category_L676wX",
+        "category_geXpEN",
+        "category_b4VdzR",
+        "category_KKyQpR"
+      ],
+      "name": "Kanbae Ingredient Guide",
+      "settings": {
+        "eyebrow": "THE FORMULA",
+        "title": "Explore What's Inside Every Dose",
+        "heading_size": "h0",
+        "paragraph": "<p>Every active ingredient is chosen and dosed for one job: protecting your body before, during, and after alcohol.</p>",
+        "accent_color": "#9CFF1B",
+        "nav_active_background": "#CBFFDA",
+        "nav_text_color": "#CBFFDA",
+        "nav_muted_text_color": "#F6FBF5",
+        "nav_active_text_color": "#0F3B2E",
+        "spotlight_background": "#9CFF1B",
+        "spotlight_text_color": "#0F3B2E",
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "kanbae_ingredients_explorer_DQagxm"
   ]
 }
