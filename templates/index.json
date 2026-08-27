@@ -724,7 +724,7 @@
       "type": "kanbae-blog-grid",
       "name": "Kanbae blog grid",
       "settings": {
-        "blog": "",
+        "blog": "news",
         "articles_to_show": 3,
         "show_category": true,
         "eyebrow": "THE SCIENCE",
@@ -734,7 +734,7 @@
         "button_link": "",
         "read_label": "Read Article",
         "color_scheme": "",
-        "accent_color": "#a3ff16",
+        "accent_color": "#0F3B2E",
         "card_text_color": "#f7f6f2",
         "overlay_color": "#0b1f14",
         "card_radius": 24,
