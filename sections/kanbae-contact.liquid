@@ -1,0 +1,459 @@
+{{ 'section-kanbae-contact.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign contact_form_id = 'KbContactForm-' | append: section.id
+  assign trust_items = section.blocks | where: 'type', 'trust_item'
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeContact-{{ section.id }} {
+    --kb-contact-card-background: {{ section.settings.card_background }};
+    --kb-contact-card-border: {{ section.settings.card_border_color }};
+    --kb-contact-card-radius: {{ section.settings.card_radius }}px;
+    --kb-contact-input-border: {{ section.settings.input_border_color }};
+    --kb-contact-input-background: {{ section.settings.input_background }};
+    --kb-contact-input-focus: {{ section.settings.input_focus_color }};
+    --kb-contact-button-background: {{ section.settings.button_background }};
+    --kb-contact-button-text: {{ section.settings.button_text_color }};
+    --kb-contact-button-hover-background: {{ section.settings.button_hover_background }};
+    --kb-contact-button-hover-text: {{ section.settings.button_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeContact-{{ section.id }}"
+  class="kb-contact color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-contact__inner page-width">
+    <div class="kb-contact__grid">
+      <div class="kb-contact__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-contact__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h1 class="kb-contact__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h1>
+        {%- endif -%}
+
+        {%- if section.settings.paragraph != blank -%}
+          <div class="kb-contact__paragraph rte">
+            {{ section.settings.paragraph }}
+          </div>
+        {%- endif -%}
+
+        {%- if trust_items.size > 0 -%}
+          <ul class="kb-contact__trust" role="list">
+            {%- for block in trust_items -%}
+              <li class="kb-contact__trust-item" {{ block.shopify_attributes }}>
+                <span class="kb-contact__trust-icon" aria-hidden="true">
+                  {%- render 'icon-accordion', icon: block.settings.icon -%}
+                </span>
+                <span class="kb-contact__trust-copy">
+                  <span class="kb-contact__trust-title">{{ block.settings.title | escape }}</span>
+                  {%- if block.settings.subtitle != blank -%}
+                    <span class="kb-contact__trust-subtitle">{{ block.settings.subtitle | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <div class="kb-contact__card-col{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        <div class="kb-contact__card{% if section.settings.card_glass_effect %} kb-contact__card--glass{% endif %}">
+          {%- form 'contact', id: contact_form_id, class: 'kb-contact__form' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="kb-contact__success" tabindex="-1" autofocus>
+                <span class="kb-contact__success-icon svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
+                <h3 class="kb-contact__success-title">{{ section.settings.success_heading | escape }}</h3>
+                <p class="kb-contact__success-text">{{ section.settings.success_message | escape }}</p>
+              </div>
+            {%- else -%}
+              {%- if form.errors -%}
+                <div class="kb-contact__error" role="alert" tabindex="-1" autofocus>
+                  <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+                  <span>
+                    {{- form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email -}}
+                  </span>
+                </div>
+              {%- endif -%}
+
+              <div class="kb-contact__row">
+                <div class="kb-contact__field">
+                  <label class="kb-contact__label" for="{{ contact_form_id }}-name">
+                    {{ 'templates.contact.form.name' | t }}
+                  </label>
+                  <input
+                    class="kb-contact__input"
+                    autocomplete="name"
+                    type="text"
+                    id="{{ contact_form_id }}-name"
+                    name="contact[{{ 'templates.contact.form.name' | t }}]"
+                    value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                    placeholder="{{ 'templates.contact.form.name' | t }}"
+                  >
+                </div>
+                <div class="kb-contact__field">
+                  <label class="kb-contact__label" for="{{ contact_form_id }}-email">
+                    {{- 'templates.contact.form.email' | t }}
+                    <span aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    autocomplete="email"
+                    type="email"
+                    id="{{ contact_form_id }}-email"
+                    class="kb-contact__input"
+                    name="contact[email]"
+                    spellcheck="false"
+                    autocapitalize="off"
+                    value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                    aria-required="true"
+                    {% if form.errors contains 'email' %}
+                      aria-invalid="true"
+                      aria-describedby="{{ contact_form_id }}-email-error"
+                    {% endif %}
+                    placeholder="{{ 'templates.contact.form.email' | t }}"
+                    required
+                  >
+                  {%- if form.errors contains 'email' -%}
+                    <small class="kb-contact__field-error" id="{{ contact_form_id }}-email-error">
+                      <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                      {{- form.errors.translated_fields.email | capitalize }}
+                      {{ form.errors.messages.email -}}
+                    </small>
+                  {%- endif -%}
+                </div>
+              </div>
+
+              {%- if section.settings.show_phone_field -%}
+                <div class="kb-contact__field">
+                  <label class="kb-contact__label" for="{{ contact_form_id }}-phone">
+                    {{ 'templates.contact.form.phone' | t }}
+                  </label>
+                  <input
+                    type="tel"
+                    id="{{ contact_form_id }}-phone"
+                    class="kb-contact__input"
+                    autocomplete="tel"
+                    name="contact[{{ 'templates.contact.form.phone' | t }}]"
+                    pattern="[0-9\-]*"
+                    value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                    placeholder="{{ 'templates.contact.form.phone' | t }}"
+                  >
+                </div>
+              {%- endif -%}
+
+              <div class="kb-contact__field">
+                <label class="kb-contact__label" for="{{ contact_form_id }}-body">
+                  {{ 'templates.contact.form.comment' | t }}
+                </label>
+                <textarea
+                  rows="6"
+                  id="{{ contact_form_id }}-body"
+                  class="kb-contact__input kb-contact__textarea"
+                  name="contact[{{ 'templates.contact.form.comment' | t }}]"
+                  placeholder="{{ section.settings.message_placeholder | escape }}"
+                >{{- form.body -}}</textarea>
+              </div>
+
+              <div class="kb-contact__submit-row">
+                <button type="submit" class="kb-contact__submit">
+                  {{ section.settings.submit_button_label | escape }}
+                </button>
+              </div>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae contact",
+  "tag": "section",
+  "class": "section section-kanbae-contact",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "GET IN TOUCH"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We're here to support your journey"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Supporting text",
+      "default": "<p>Have questions about your order, the ritual, or need personalized advice? Our team of experts is here to help, day or night.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone_field",
+      "label": "Show phone field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "message_placeholder",
+      "label": "Message field placeholder",
+      "default": "How can we help?"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_label",
+      "label": "Submit button label",
+      "default": "Send message"
+    },
+    {
+      "type": "text",
+      "id": "success_heading",
+      "label": "Success heading",
+      "default": "Message sent"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you for reaching out. Our team will get back to you within 24 hours."
+    },
+    {
+      "type": "header",
+      "content": "Trust indicators"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add up to 3 trust indicators as blocks below (response time, support, guarantee, etc.)."
+    },
+    {
+      "type": "header",
+      "content": "Card"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_glass_effect",
+      "label": "Frosted glass effect",
+      "info": "Adds a soft blur behind a translucent card background.",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border",
+      "default": "rgba(0, 0, 0, 0.08)"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Inputs"
+    },
+    {
+      "type": "color",
+      "id": "input_background",
+      "label": "Input background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border",
+      "default": "rgba(0, 0, 0, 0.12)"
+    },
+    {
+      "type": "color",
+      "id": "input_focus_color",
+      "label": "Input focus color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Submit button"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background color",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust indicator",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "chat_bubble", "label": "Chat bubble" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "lock", "label": "Lock / secure" },
+            { "value": "checkmark", "label": "Check mark" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "return", "label": "Return arrow" }
+          ],
+          "default": "stopwatch"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Under 24h response"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "info": "Optional.",
+          "default": "We reply fast, every day"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae contact",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "stopwatch",
+            "title": "Under 24h response",
+            "subtitle": "We reply fast, every day"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "chat_bubble",
+            "title": "Direct expert support",
+            "subtitle": "Real people, real answers"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "heart",
+            "title": "Satisfaction guaranteed",
+            "subtitle": "We stand behind the ritual"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
