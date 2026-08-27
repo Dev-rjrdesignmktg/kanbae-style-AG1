@@ -196,27 +196,6 @@
         "padding_bottom": 0
       }
     },
-    "kanbae_pdp_final_cta": {
-      "type": "kanbae-pdp-final-cta",
-      "blocks": {
-        "trust_badge_shield": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "shield-check",
-            "text": "45-day money-back guarantee"
-          }
-        },
-        "trust_badge_truck": {
-          "type": "trust_badge",
-          "settings": {
-            "icon": "icon-truck",
-            "text": "Fast 24-48h shipping"
-          }
-        }
-      },
-      "block_order": ["trust_badge_shield", "trust_badge_truck"],
-      "settings": {}
-    },
     "related-products": {
       "type": "related-products",
       "settings": {
@@ -289,8 +268,8 @@
         "title": "3 active ingredients that protect your body further",
         "heading_size": "h0",
         "paragraph": "",
-        "card_background": "rgba(247, 246, 242, 0.04)",
-        "card_border_color": "rgba(247, 246, 242, 0.14)",
+        "card_background": "#f7f6f20a",
+        "card_border_color": "#f7f6f224",
         "card_text_color": "#f7f6f2",
         "card_muted_text_color": "#9ba89f",
         "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
@@ -445,23 +424,163 @@
         "cta_hover_background": "#a3ff16",
         "cta_hover_text_color": "#082310",
         "autoplay_speed": 22,
-        "card_gradient_start": "rgba(6, 20, 13, 0.45)",
-        "card_gradient_end": "rgba(4, 12, 8, 0.78)",
+        "card_gradient_start": "#06140d73",
+        "card_gradient_end": "#040c08c7",
         "card_title_color": "#f7f6f2",
         "card_text_color": "#c3d3c8",
         "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_pdp_final_cta": {
+      "type": "kanbae-pdp-final-cta",
+      "blocks": {
+        "trust_badge_shield": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shield-check",
+            "text": "45-day money-back guarantee"
+          }
+        },
+        "trust_badge_truck": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "icon-truck",
+            "text": "Fast 24-48h shipping"
+          }
+        }
+      },
+      "block_order": [
+        "trust_badge_shield",
+        "trust_badge_truck"
+      ],
+      "settings": {
+        "scarcity_label": "BEFORE YOUR NEXT NIGHT OUT",
+        "heading": "Your next hangover-free morning starts today",
+        "heading_size": "h1",
+        "subtitle": "<p>Don't let a great night wreck your morning. Take it before you go out and wake up with real energy, guilt-free.</p>",
+        "image": "shopify://shop_images/2_4646ffa3-834d-4712-b9f2-772a78d83d82.png",
+        "image_position": "right",
+        "show_trust_badges": true,
+        "button_label": "Secure My Treatment Now",
+        "cta_action": "scroll_to_variants",
+        "button_link": "",
+        "footnote": "Fast shipping · 45-day money-back guarantee",
+        "background_color": "#0b1f14",
+        "background_color_alt": "#16311f",
+        "text_color": "#f7f6f2",
+        "scarcity_color": "#ffcf6b",
+        "glow_color": "#a3ff9c",
+        "button_background": "#a3ff16",
+        "button_text_color": "#082310",
+        "button_hover_background": "#CBFFDA",
+        "button_hover_text_color": "#082310",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "178778329194ab598e": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "17877833125c9967be": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_yycbdB": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "product_reviews",
+            "products": [
+              "complete-alcohol-defense"
+            ],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "star_rating": "4_to_5_star",
+            "show_review_media": true,
+            "display_order": "most_recent",
+            "no_image_fallback": "product_image",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#F9F9F9",
+            "stars_color": "",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        },
+        "judge_me_reviews_videos_carousel_kP8PHq": {
+          "type": "shopify://apps/judge-me-reviews/blocks/videos_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "product_reviews",
+            "products": [
+              "complete-alcohol-defense"
+            ],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "star_rating": "all",
+            "review_type": "photo_and_video",
+            "max_reviews": 20,
+            "show_reviewer_name": true,
+            "stars_size": "medium",
+            "text_size": "medium",
+            "arrows_position": "bottom",
+            "max_width": 1100,
+            "corner_styling": "round",
+            "header_text_color": "#000000",
+            "card_color": "#7D7D7D",
+            "stars_color": "",
+            "text_color": "#FFFFFF",
+            "arrows_color": "#000000",
+            "show_drop_shadow": true,
+            "show_border": true,
+            "border_color": "#108474",
+            "autoplay_media": true,
+            "transition_speed": 5,
+            "carousel_style": "highlight",
+            "header_text": "Real customer stories",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_yycbdB",
+        "judge_me_reviews_videos_carousel_kP8PHq"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "main",
     "disclosures",
-    "kanbae_pdp_final_cta",
     "related-products",
     "kanbae_key_ingredients_LyxcCB",
     "kanbae_faq_3Ba8tn",
-    "kanbae_ingredients_grid_VgjEP8"
+    "kanbae_ingredients_grid_VgjEP8",
+    "kanbae_pdp_final_cta",
+    "178778329194ab598e",
+    "17877833125c9967be"
   ]
 }
