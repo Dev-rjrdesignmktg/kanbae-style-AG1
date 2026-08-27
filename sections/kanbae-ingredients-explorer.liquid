@@ -1,0 +1,432 @@
+{{ 'section-kanbae-ingredients-explorer.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign categories = section.blocks | where: 'type', 'category'
+  assign category_count = categories.size
+-%}
+
+{%- if category_count > 1 -%}
+  <script src="{{ 'kanbae-ingredients-explorer.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KbIngExplorer-{{ section.id }} {
+    --kb-ing-exp-accent: {{ section.settings.accent_color }};
+    --kb-ing-exp-nav-active-bg: {{ section.settings.nav_active_background }};
+    --kb-ing-exp-nav-text: {{ section.settings.nav_text_color }};
+    --kb-ing-exp-nav-muted: {{ section.settings.nav_muted_text_color }};
+    --kb-ing-exp-nav-active-text: {{ section.settings.nav_active_text_color }};
+    --kb-ing-exp-spotlight-bg: {{ section.settings.spotlight_background }};
+    --kb-ing-exp-spotlight-text: {{ section.settings.spotlight_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KbIngExplorer-{{ section.id }}"
+  class="kb-ing-exp color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-ing-exp__inner page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.paragraph != blank -%}
+      <div class="kb-ing-exp__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-ing-exp__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-ing-exp__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <div class="kb-ing-exp__paragraph rte">
+            {{ section.settings.paragraph }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if category_count > 0 -%}
+      <div class="kb-ing-exp__layout{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        <div class="kb-ing-exp__nav-wrap">
+          <div
+            id="KbIngExpNav-{{ section.id }}"
+            class="kb-ing-exp__nav"
+            role="tablist"
+            aria-orientation="vertical"
+            aria-label="{{ section.settings.title | strip_html | default: 'Ingredient categories' | escape }}"
+          >
+            {%- for block in categories -%}
+              {%- liquid
+                assign is_active = false
+                if forloop.first
+                  assign is_active = true
+                endif
+              -%}
+              <button
+                type="button"
+                id="KbIngExpTab-{{ section.id }}-{{ forloop.index0 }}"
+                class="kb-ing-exp__nav-item{% if is_active %} is-active{% endif %}"
+                role="tab"
+                aria-selected="{% if is_active %}true{% else %}false{% endif %}"
+                aria-controls="KbIngExpPanel-{{ section.id }}-{{ forloop.index0 }}"
+                tabindex="{% if is_active %}0{% else %}-1{% endif %}"
+                data-kb-ing-exp-tab
+                data-target="KbIngExpPanel-{{ section.id }}-{{ forloop.index0 }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.icon != blank -%}
+                  <span class="kb-ing-exp__nav-item-icon">
+                    {{ block.settings.icon | image_url: width: 64 | image_tag: loading: 'lazy', widths: '32, 48, 64', alt: '' }}
+                  </span>
+                {%- endif -%}
+                <span class="kb-ing-exp__nav-item-text">
+                  <span class="kb-ing-exp__nav-item-label">{{ block.settings.nav_label | escape }}</span>
+                  {%- if block.settings.number != blank -%}
+                    <span class="kb-ing-exp__nav-item-number">{{ block.settings.number | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="kb-ing-exp__panels">
+          {%- for block in categories -%}
+            {%- liquid
+              assign is_active = false
+              if forloop.first
+                assign is_active = true
+              endif
+              assign benefit_lines = block.settings.benefits | newline_to_br | split: '<br />'
+              assign image_alt = block.settings.image.alt | default: block.settings.panel_heading
+            -%}
+            <div
+              id="KbIngExpPanel-{{ section.id }}-{{ forloop.index0 }}"
+              class="kb-ing-exp__panel{% if is_active %} is-active{% endif %}"
+              role="tabpanel"
+              aria-labelledby="KbIngExpTab-{{ section.id }}-{{ forloop.index0 }}"
+              {% unless is_active %}hidden{% endunless %}
+              data-kb-ing-exp-panel
+            >
+              <div class="kb-ing-exp__panel-grid">
+                <div class="kb-ing-exp__panel-text">
+                  {%- if block.settings.number != blank -%}
+                    <span class="kb-ing-exp__panel-eyebrow">{{ block.settings.number | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.panel_heading != blank -%}
+                    <h3 class="kb-ing-exp__panel-title">{{ block.settings.panel_heading | escape }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="kb-ing-exp__panel-description rte">
+                      {{ block.settings.description }}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.spotlight_text != blank -%}
+                    <p class="kb-ing-exp__spotlight">
+                      {%- if block.settings.spotlight_label != blank -%}
+                        <span class="kb-ing-exp__spotlight-label">{{ block.settings.spotlight_label | escape }}:</span>
+                      {%- endif -%}
+                      <span class="kb-ing-exp__spotlight-text">{{ block.settings.spotlight_text | escape }}</span>
+                    </p>
+                  {%- endif -%}
+
+                  {%- if benefit_lines.size > 0 -%}
+                    <ul class="kb-ing-exp__benefits" role="list">
+                      {%- for line in benefit_lines -%}
+                        {%- assign trimmed_line = line | strip -%}
+                        {%- if trimmed_line != blank -%}
+                          <li class="kb-ing-exp__benefit">
+                            <span class="svg-wrapper kb-ing-exp__benefit-icon">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                            <span>{{ trimmed_line | escape }}</span>
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+
+                <div class="kb-ing-exp__panel-media">
+                  <div class="kb-ing-exp__panel-media-inner">
+                    {%- if block.settings.image != blank -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 1200
+                        | image_tag:
+                          class: 'kb-ing-exp__panel-image',
+                          sizes: '(min-width: 990px) 40vw, 90vw',
+                          widths: '360, 480, 640, 800, 1000, 1200',
+                          loading: 'lazy',
+                          alt: image_alt
+                      }}
+                    {%- else -%}
+                      {{ 'product-2' | placeholder_svg_tag: 'kb-ing-exp__panel-image placeholder' }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae Ingredient Guide",
+  "tag": "section",
+  "class": "section section-kanbae-ingredients-explorer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE FORMULA"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Explore What's Inside Every Dose"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "info": "Optional. Leave blank to hide.",
+      "default": "<p>Every active ingredient is chosen and dosed for one job: protecting your body before, during, and after alcohol.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar appearance"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for the active category's border, checkmarks, and spotlight text.",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "nav_active_background",
+      "label": "Active item background",
+      "default": "rgba(8, 35, 16, 0.06)"
+    },
+    {
+      "type": "color",
+      "id": "nav_text_color",
+      "label": "Category name color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "nav_muted_text_color",
+      "label": "Inactive number color",
+      "default": "rgba(8, 35, 16, 0.45)"
+    },
+    {
+      "type": "color",
+      "id": "nav_active_text_color",
+      "label": "Active category name color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Ingredient spotlight appearance"
+    },
+    {
+      "type": "color",
+      "id": "spotlight_background",
+      "label": "Spotlight tag background",
+      "default": "rgba(8, 35, 16, 0.06)"
+    },
+    {
+      "type": "color",
+      "id": "spotlight_text_color",
+      "label": "Spotlight tag text color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number label",
+          "info": "e.g. 01. Optional — leave blank to hide.",
+          "default": "01"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Sidebar icon",
+          "info": "Optional small icon shown next to the category name in the sidebar."
+        },
+        {
+          "type": "text",
+          "id": "nav_label",
+          "label": "Sidebar label",
+          "info": "Short category name shown in the navigation.",
+          "default": "Liver & Cellular Defense"
+        },
+        {
+          "type": "text",
+          "id": "panel_heading",
+          "label": "Panel heading",
+          "info": "Larger descriptive heading shown at the top of the detail panel.",
+          "default": "Liver & Cellular Defense"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "info": "Scientific / explanatory paragraph describing how this ingredient works in the body.",
+          "default": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>"
+        },
+        {
+          "type": "text",
+          "id": "spotlight_label",
+          "label": "Spotlight label",
+          "default": "Ingredient Spotlight"
+        },
+        {
+          "type": "text",
+          "id": "spotlight_text",
+          "label": "Spotlight ingredients",
+          "info": "Comma-separated list, e.g. \"DHM, Milk Thistle, NAC\".",
+          "default": "DHM, Milk Thistle, NAC"
+        },
+        {
+          "type": "textarea",
+          "id": "benefits",
+          "label": "Key benefits",
+          "info": "One benefit per line.",
+          "default": "Faster toxin clearance\nReduced next-day fatigue\nSupports cellular resilience overnight"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Ingredient image",
+          "info": "Recommended: clean macro or studio shot, landscape crop (about 4:3)."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae Ingredient Guide",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "number": "01",
+            "nav_label": "Liver & Cellular Defense",
+            "panel_heading": "Liver & Cellular Defense",
+            "spotlight_text": "DHM, Milk Thistle, NAC",
+            "benefits": "Faster toxin clearance\nReduced next-day fatigue\nSupports cellular resilience overnight"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "number": "02",
+            "nav_label": "Hydration & Electrolytes",
+            "panel_heading": "Hydration & Electrolytes",
+            "spotlight_text": "Sodium, Potassium, Magnesium, Coconut Water Extract",
+            "description": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
+            "benefits": "Rehydrates faster than water alone\nEases the morning-after headache\nRestores what alcohol depletes"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "number": "03",
+            "nav_label": "Digestive Comfort",
+            "panel_heading": "Digestive Comfort & Prebiotics",
+            "spotlight_text": "Ginger Root, ZingiBain, Prebiotic Fiber",
+            "description": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
+            "benefits": "Less bloating and nausea\nCalms an unsettled stomach\nSupports gut recovery overnight"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "number": "04",
+            "nav_label": "Absorption",
+            "panel_heading": "Advanced Absorption",
+            "spotlight_text": "Black Pepper Extract (BioPerine)",
+            "description": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
+            "benefits": "Maximizes nutrient uptake\nFaster-acting formula\nNothing wasted, nothing diluted"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
