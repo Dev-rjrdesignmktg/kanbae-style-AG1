@@ -1,5 +1,3 @@
-{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
@@ -14,39 +12,151 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  #KbJournal-{{ section.id }} {
+    --kb-journal-accent: {{ section.settings.accent_color }};
+    --kb-journal-ink: {{ section.settings.accent_ink_color }};
+  }
 {%- endstyle -%}
 
-{%- paginate blog.articles by 6 -%}
-  <div class="main-blog page-width section-{{ section.id }}-padding">
-    <h1 class="title--primary{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-      {{ blog.title | escape }}
-    </h1>
+{%- liquid
+  assign articles_per_page = section.settings.articles_per_page
+  assign show_featured = section.settings.show_featured
+-%}
 
-    <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
-      {%- for article in blog.articles -%}
-        <div
-          class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-            style="--animation-order: {{ forloop.index }};"
-          {% endif %}
-        >
-          {%- render 'article-card',
-            article: article,
-            media_height: section.settings.image_height,
-            media_aspect_ratio: article.image.aspect_ratio,
-            show_image: section.settings.show_image,
-            show_date: section.settings.show_date,
-            show_author: section.settings.show_author,
-            show_excerpt: true
-          -%}
-        </div>
-      {%- endfor -%}
+{%- paginate blog.articles by articles_per_page -%}
+  {%- liquid
+    assign feature_count = 0
+    if show_featured and paginate.current_page == 1
+      assign feature_count = section.settings.featured_count
+      if feature_count > blog.articles.size
+        assign feature_count = blog.articles.size
+      endif
+    endif
+    assign remaining_count = blog.articles.size | minus: feature_count
+  -%}
+  <div
+    id="KbJournal-{{ section.id }}"
+    class="kb-journal color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding"
+  >
+    <div class="kb-journal__page page-width">
+
+      {%- comment -%} Editorial header {%- endcomment -%}
+      <div class="kb-journal__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-journal__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h1 class="kb-journal__heading">
+          {%- if section.settings.heading != blank -%}
+            {{ section.settings.heading }}
+          {%- else -%}
+            {{ blog.title | escape }}
+          {%- endif -%}
+        </h1>
+        {%- if section.settings.subheading != blank -%}
+          <div class="kb-journal__subheading">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Tag filter pills {%- endcomment -%}
+      {%- if section.settings.show_tag_filter and blog.all_tags.size > 0 -%}
+        <nav class="kb-journal__tags" aria-label="{{ section.settings.all_tags_label | escape }}">
+          <ul class="kb-journal__tags-list" role="list">
+            <li>
+              <a
+                href="{{ blog.url }}"
+                class="kb-journal__tag{% if blog.current_tags == blank %} kb-journal__tag--active{% endif %}"
+                {% if blog.current_tags == blank %}aria-current="page"{% endif %}
+              >
+                {{ section.settings.all_tags_label | escape }}
+              </a>
+            </li>
+            {%- for tag in blog.all_tags -%}
+              <li>
+                <a
+                  href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                  class="kb-journal__tag{% if blog.current_tags contains tag %} kb-journal__tag--active{% endif %}"
+                  {% if blog.current_tags contains tag %}aria-current="page"{% endif %}
+                >
+                  {{ tag | escape }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+
+      {%- if blog.articles.size > 0 -%}
+
+        {%- comment -%} Featured row: 1 large editorial highlight + up to 2 stacked, page 1 only {%- endcomment -%}
+        {%- if feature_count > 0 -%}
+          <ul
+            class="kb-journal__grid kb-journal__grid--featured{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+            role="list"
+          >
+            {%- for article in blog.articles limit: feature_count -%}
+              {%- liquid
+                assign card_size = 'standard'
+                if forloop.index0 == 0
+                  assign card_size = 'hero'
+                endif
+              -%}
+              {%- render 'kb-journal-card',
+                article: article,
+                blog: blog,
+                show_category: section.settings.show_category,
+                show_date: section.settings.show_date,
+                show_author: section.settings.show_author,
+                show_excerpt: false,
+                size: card_size
+              -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- comment -%} Standard grid: 4 columns on desktop {%- endcomment -%}
+        {%- if remaining_count > 0 -%}
+          <ul
+            class="kb-journal__grid{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+            role="list"
+          >
+            {%- for article in blog.articles offset: feature_count -%}
+              {%- render 'kb-journal-card',
+                article: article,
+                blog: blog,
+                show_category: section.settings.show_category,
+                show_date: section.settings.show_date,
+                show_author: section.settings.show_author,
+                show_excerpt: section.settings.show_excerpt
+              -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+      {%- elsif request.design_mode -%}
+        <ul class="kb-journal__grid" role="list">
+          {%- for i in (1..3) -%}
+            <li class="kb-journal__item">
+              <div class="kb-journal__card">
+                <div class="kb-journal__media">
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-journal__image kb-journal__image--placeholder placeholder' }}
+                </div>
+                <div class="kb-journal__card-content">
+                  <h3 class="kb-journal__title">Publish your first article to see the grid in action</h3>
+                  {%- if section.settings.show_category -%}
+                    <span class="kb-journal__category">Nutrition and Gut Health</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        {%- render 'pagination', paginate: paginate -%}
+      {%- endif -%}
     </div>
-
-    {%- if paginate.pages > 1 -%}
-      {%- render 'pagination', paginate: paginate -%}
-    {%- endif -%}
   </div>
 {%- endpaginate -%}
 
@@ -57,62 +167,125 @@
   "class": "section",
   "settings": [
     {
-      "type": "select",
-      "id": "layout",
-      "options": [
-        {
-          "value": "grid",
-          "label": "t:sections.main-blog.settings.layout.options__1.label"
-        },
-        {
-          "value": "collage",
-          "label": "t:sections.main-blog.settings.layout.options__2.label"
-        }
-      ],
-      "default": "collage",
-      "label": "t:sections.main-blog.settings.layout.label"
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "THE KANBAE JOURNAL"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to use the blog's title.",
+      "default": "The Ritual"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Science, wellness, and habits designed to power your days and optimize your rest.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Tag filter"
     },
     {
       "type": "checkbox",
-      "id": "show_image",
-      "default": true,
-      "label": "t:sections.main-blog.settings.show_image.label"
+      "id": "show_tag_filter",
+      "label": "Show tag filter bar",
+      "default": true
     },
     {
-      "type": "select",
-      "id": "image_height",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.main-blog.settings.image_height.options__1.label"
-        },
-        {
-          "value": "small",
-          "label": "t:sections.main-blog.settings.image_height.options__2.label"
-        },
-        {
-          "value": "medium",
-          "label": "t:sections.main-blog.settings.image_height.options__3.label"
-        },
-        {
-          "value": "large",
-          "label": "t:sections.main-blog.settings.image_height.options__4.label"
-        }
-      ],
-      "default": "medium",
-      "label": "t:sections.main-blog.settings.image_height.label"
+      "type": "text",
+      "id": "all_tags_label",
+      "label": "\"All\" pill label",
+      "default": "All"
+    },
+    {
+      "type": "header",
+      "content": "Featured row"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured",
+      "label": "Feature the first articles",
+      "info": "Shown at the top of page 1 only: the first article as a large editorial highlight on the left, the next up to two stacked beside it.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "featured_count",
+      "label": "Number of featured articles",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Article grid"
+    },
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "Articles per page",
+      "min": 6,
+      "max": 12,
+      "step": 3,
+      "default": 9
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show article category",
+      "info": "Uses the article's first tag. Falls back to the blog title if the article has no tags.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt on grid cards",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "show_date",
-      "default": true,
-      "label": "t:sections.main-blog.settings.show_date.label"
+      "label": "Show date",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "show_author",
-      "default": false,
-      "label": "t:sections.main-blog.settings.show_author.label"
+      "label": "Show author",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Section color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for the active tag pill.",
+      "default": "#9CFF1B"
+    },
+    {
+      "type": "color",
+      "id": "accent_ink_color",
+      "label": "Accent ink color",
+      "info": "Text color used on top of the accent color (active pill).",
+      "default": "#0f2b1d"
     },
     {
       "type": "header",
@@ -122,21 +295,21 @@
       "type": "range",
       "id": "padding_top",
       "min": 0,
-      "max": 100,
+      "max": 160,
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "default": 72
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
-      "max": 100,
+      "max": 160,
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "default": 72
     }
   ]
 }

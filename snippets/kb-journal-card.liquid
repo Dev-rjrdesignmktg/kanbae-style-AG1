@@ -1,0 +1,71 @@
+{% comment %}
+  Renders a Kanbae Journal article card: image on top, title, then category.
+
+  Accepts:
+  - article: {Object} Article
+  - blog: {Object} Blog
+  - show_category: {Boolean}
+  - show_date: {Boolean}
+  - show_author: {Boolean}
+  - show_excerpt: {Boolean}
+  - size: {String} 'hero' (large editorial image, left of the featured row) or 'standard' (default)
+
+  Usage:
+  {% render 'kb-journal-card', article: article, blog: blog, show_category: true, size: 'hero' %}
+{% endcomment %}
+
+{%- liquid
+  assign category = blog.title
+  if article.tags.size > 0
+    assign category = article.tags.first
+  endif
+
+  assign image_width = 900
+  assign image_sizes = '(min-width: 990px) 23vw, (min-width: 750px) 46vw, 92vw'
+  assign image_widths = '360, 480, 640, 800, 900'
+  if size == 'hero'
+    assign image_width = 1400
+    assign image_sizes = '(min-width: 750px) 45vw, 92vw'
+    assign image_widths = '480, 640, 800, 1000, 1200, 1400'
+  endif
+-%}
+
+<li class="kb-journal__item{% if size == 'hero' %} kb-journal__item--hero{% endif %}">
+  <a href="{{ article.url }}" class="kb-journal__card">
+    <div class="kb-journal__media">
+      {%- if article.image -%}
+        {{
+          article.image
+          | image_url: width: image_width
+          | image_tag:
+            class: 'kb-journal__image',
+            sizes: image_sizes,
+            widths: image_widths,
+            loading: 'lazy',
+            alt: article.image.alt
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-journal__image kb-journal__image--placeholder placeholder' }}
+      {%- endif -%}
+    </div>
+    <div class="kb-journal__card-content">
+      <h3 class="kb-journal__title">{{ article.title | escape }}</h3>
+      {%- if show_category -%}
+        <span class="kb-journal__category">{{ category | escape }}</span>
+      {%- endif -%}
+      {%- if show_excerpt and article.excerpt.size > 0 -%}
+        <p class="kb-journal__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
+      {%- endif -%}
+      {%- if show_date or show_author -%}
+        <div class="kb-journal__meta">
+          {%- if show_date -%}
+            <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+          {%- endif -%}
+          {%- if show_author -%}
+            <span>{{ article.author }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </a>
+</li>
