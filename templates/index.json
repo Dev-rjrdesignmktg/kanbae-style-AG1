@@ -632,6 +632,69 @@
         "padding_bottom": 96
       }
     },
+    "kanbae_homepage_testimonials_yjXARQ": {
+      "type": "kanbae-homepage-testimonials",
+      "blocks": {
+        "testimonial_4H34mJ": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/10.png",
+            "quote": "I take one before drinks and actually remember the night — and wake up feeling human.",
+            "author_name": "Sarah M.",
+            "author_role": "Verified Customer"
+          }
+        },
+        "testimonial_yN7wy4": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/2_4646ffa3-834d-4712-b9f2-772a78d83d82.png",
+            "quote": "Behind the bar every weekend. Kanbae is the only thing that keeps me sharp the next morning.",
+            "author_name": "James T.",
+            "author_role": "Bartender & Mixologist"
+          }
+        },
+        "testimonial_rk3jBJ": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/4.png",
+            "quote": "Training doesn't stop because I went out the night before. This changed that equation completely.",
+            "author_name": "Marcus D. & John S.",
+            "author_role": "Soccer players"
+          }
+        },
+        "testimonial_K9DBgi": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/8.png",
+            "quote": "I travel for work constantly and drink socially. Kanbae is non-negotiable in my carry-on now.",
+            "author_name": "Priya K. & Stephanie M.",
+            "author_role": "bolleyball players"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_4H34mJ",
+        "testimonial_yN7wy4",
+        "testimonial_rk3jBJ",
+        "testimonial_K9DBgi"
+      ],
+      "name": "Kanbae testimonials",
+      "settings": {
+        "show_rating": true,
+        "rating_text": "10,000+ verified 5-star reviews",
+        "star_color": "#3ecf5b",
+        "title": "Trusted by Bartenders, Athletes & High Performers",
+        "heading_size": "h0",
+        "subtitle": "",
+        "button_label": "Read More Reviews",
+        "button_link": "",
+        "cta_hover_background": "#082310",
+        "cta_hover_text_color": "#f7f6f2",
+        "color_scheme": "",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
     "kanbae_final_cta_Ck73zP": {
       "type": "kanbae-final-cta",
       "name": "Kanbae final CTA",
@@ -690,6 +753,7 @@
     "kanbae_featured_products_JfHUAw",
     "kanbae_faq_L7i6XF",
     "kanbae_newsletter_RFLb9V",
+    "kanbae_homepage_testimonials_yjXARQ",
     "kanbae_final_cta_Ck73zP",
     "kanbae_blog_grid_RTHqcM"
   ]
