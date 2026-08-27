@@ -1,0 +1,301 @@
+.kb-ht {
+  position: relative;
+  width: 100%;
+}
+
+/* Header */
+
+.kb-ht__header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.4rem;
+  margin-bottom: 3.2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-ht__header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 4.8rem;
+  }
+}
+
+.kb-ht__header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.4rem;
+  max-width: 62rem;
+}
+
+.kb-ht__rating {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.kb-ht__stars {
+  display: inline-flex;
+  gap: 0.2rem;
+}
+
+.kb-ht__star {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--kb-ht-star-color, #3ecf5b);
+}
+
+.kb-ht__star svg,
+.kb-ht__star svg path {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.kb-ht__rating-text {
+  margin: 0;
+  font-size: 1.5rem;
+  opacity: 0.85;
+}
+
+.kb-ht__title {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.kb-ht__subtitle {
+  margin: 0;
+  max-width: 52rem;
+  opacity: 0.8;
+}
+
+.kb-ht__subtitle > * {
+  margin: 0;
+}
+
+.kb-ht__header-cta {
+  flex-shrink: 0;
+}
+
+.kb-ht__cta {
+  --buttons-radius: 3rem;
+  --buttons-radius-outset: 3rem;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.kb-ht__cta:hover {
+  background-color: var(--kb-ht-cta-hover-background) !important;
+  color: var(--kb-ht-cta-hover-color) !important;
+  border-color: var(--kb-ht-cta-hover-background) !important;
+}
+
+/* Grid / carousel
+   Position is driven entirely in JS via `transform: translateX()` on the
+   track, not native scrollLeft — a scroll-snap-based approach kept fighting
+   our silent wrap-around jump (the browser would re-settle the snap and
+   visibly yank the row back), which is what caused the "resets to the
+   start" glitch. A JS-owned transform has no such interference: nothing
+   moves without us setting it. */
+
+/* Full-bleed viewport: break out of .page-width so the row runs edge-to-edge,
+   independent of the centered header above it (same trick as .kb-ing__marquee).
+   Clips the cloned cards that sit off-screen on either side of the track. */
+.kb-ht__viewport {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow: hidden;
+}
+
+@media (hover: hover) {
+  .kb-ht__viewport {
+    cursor: grab;
+  }
+
+  .kb-ht__viewport--dragging {
+    cursor: grabbing;
+  }
+}
+
+.kb-ht__grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.8rem;
+  margin: 0;
+  padding: 0 0 0.6rem;
+  list-style: none;
+  touch-action: pan-y;
+  will-change: transform;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-ht__grid {
+    gap: 2.2rem;
+  }
+}
+
+/* Controls: centered below the row, not floated over it, so they read as
+   permanent navigation for the circular carousel rather than edge affordances. */
+.kb-ht__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-top: 2.4rem;
+}
+
+.kb-ht__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--kb-ht-star-color, #3ecf5b);
+  color: #082310;
+  cursor: pointer;
+  box-shadow: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease;
+}
+
+.kb-ht__arrow:hover {
+  background: var(--kb-ht-cta-hover-background, #082310);
+  color: var(--kb-ht-cta-hover-color, #f7f6f2);
+}
+
+.kb-ht__arrow .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.kb-ht__arrow--prev .icon {
+  transform: rotate(90deg);
+}
+
+.kb-ht__arrow--next .icon {
+  transform: rotate(-90deg);
+}
+
+.kb-ht__card {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(30rem, 34vw, 46rem);
+  scroll-snap-align: start;
+  aspect-ratio: 5 / 7;
+  border-radius: 2rem;
+  overflow: hidden;
+  background-color: rgba(var(--color-foreground), 0.04);
+  isolation: isolate;
+  transform: translateZ(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+  .kb-ht__card:hover {
+    transform: translateY(-0.4rem);
+    box-shadow: 0 1.6rem 3.2rem rgba(var(--color-foreground), 0.2);
+  }
+
+  .kb-ht__card:hover .kb-ht__card-image {
+    transform: scale(1.05);
+  }
+}
+
+.kb-ht__card-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.kb-ht__card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+/* Soft fade behind the name label so it stays legible over bright photos */
+.kb-ht__card-top-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.kb-ht__card-name {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 2;
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03rem;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.5);
+}
+
+/* Frosted glass panel: blurs the photo behind it so the quote stays readable
+   over any background while still showing the image through it. */
+.kb-ht__card-glass {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 2.2rem 2rem 2.4rem;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.12) 0%,
+    rgba(8, 8, 8, 0.58) 30%,
+    rgba(6, 6, 6, 0.76) 100%
+  );
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-top: 0.1rem solid rgba(255, 255, 255, 0.14);
+}
+
+.kb-ht__quote {
+  margin: 0;
+  color: #ffffff;
+}
+
+.kb-ht__quote p {
+  margin: 0;
+  font-size: 1.7rem;
+  line-height: 1.45;
+  font-weight: 500;
+  text-wrap: pretty;
+}
+
+.kb-ht__author-role {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-ht__card,
+  .kb-ht__card-image {
+    transition: none;
+  }
+}

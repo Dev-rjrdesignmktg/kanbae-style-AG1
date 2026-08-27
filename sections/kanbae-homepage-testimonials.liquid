@@ -1,0 +1,344 @@
+{{ 'section-kanbae-homepage-testimonials.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign testimonials = section.blocks | where: 'type', 'testimonial'
+  assign testimonial_count = testimonials.size
+-%}
+
+{%- if testimonial_count > 1 -%}
+  <script src="{{ 'kanbae-homepage-testimonials.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeHomepageTestimonials-{{ section.id }} {
+    --kb-ht-star-color: {{ section.settings.star_color }};
+    --kb-ht-cta-hover-background: {{ section.settings.cta_hover_background }};
+    --kb-ht-cta-hover-color: {{ section.settings.cta_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeHomepageTestimonials-{{ section.id }}"
+  class="kb-ht color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-ht__inner page-width">
+    <div class="kb-ht__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      <div class="kb-ht__header-text">
+        {%- if section.settings.show_rating -%}
+          <div class="kb-ht__rating">
+            <span class="kb-ht__stars" role="img" aria-label="{{ section.settings.rating_text | escape }}">
+              {%- for i in (1..5) -%}
+                <span class="svg-wrapper kb-ht__star">{{- 'icon-star-filled.svg' | inline_asset_content -}}</span>
+              {%- endfor -%}
+            </span>
+            {%- if section.settings.rating_text != blank -%}
+              <p class="kb-ht__rating-text">{{ section.settings.rating_text | escape }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-ht__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subtitle != blank -%}
+          <div class="kb-ht__subtitle rte">
+            {{ section.settings.subtitle }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="kb-ht__header-cta">
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="button button--secondary kb-ht__cta"
+          >
+            {{- section.settings.button_label | escape -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if testimonial_count > 0 -%}
+      <div
+        class="kb-ht__slider{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+        data-kb-ht-slider
+      >
+        <div class="kb-ht__viewport" data-kb-ht-viewport>
+          <ul class="kb-ht__grid" role="list" data-kb-ht-track>
+          {%- for block in testimonials -%}
+            {%- liquid
+              assign author_name = block.settings.author_name
+              assign author_role = block.settings.author_role
+              assign card_alt = author_name | default: 'Kanbae customer'
+            -%}
+            <li class="kb-ht__card" {{ block.shopify_attributes }}>
+              <div class="kb-ht__card-media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'kb-ht__card-image',
+                      sizes: '(min-width: 1440px) 46rem, (min-width: 750px) 34vw, 80vw',
+                      widths: '400, 600, 800, 1000, 1200',
+                      loading: 'lazy',
+                      alt: block.settings.image.alt | default: card_alt
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-ht__card-image placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="kb-ht__card-top-scrim" aria-hidden="true"></div>
+              {%- if author_name != blank -%}
+                <p class="kb-ht__card-name">{{ author_name | escape }}</p>
+              {%- endif -%}
+              <div class="kb-ht__card-glass">
+                {%- if block.settings.quote != blank -%}
+                  <blockquote class="kb-ht__quote">
+                    <p>&ldquo;{{ block.settings.quote | strip_html }}&rdquo;</p>
+                  </blockquote>
+                {%- endif -%}
+                {%- if author_role != blank -%}
+                  <p class="kb-ht__author-role">{{ author_role | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+          </ul>
+        </div>
+
+        {%- if testimonial_count > 1 -%}
+          <div class="kb-ht__controls">
+            <button
+              type="button"
+              class="kb-ht__arrow kb-ht__arrow--prev"
+              data-kb-ht-prev
+              aria-label="{{ 'general.slider.previous_slide' | t }}"
+            >
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </button>
+            <button
+              type="button"
+              class="kb-ht__arrow kb-ht__arrow--next"
+              data-kb-ht-next
+              aria-label="{{ 'general.slider.next_slide' | t }}"
+            >
+              <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae testimonials",
+  "tag": "section",
+  "class": "section section-kanbae-homepage-testimonials",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Rating badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show star rating badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "50,000+ verified 5-star reviews"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#3ecf5b"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Trusted by Bartenders, Athletes & High Performers"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "info": "Optional text shown below the title."
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read More Reviews"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_background",
+      "label": "Button hover background",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "cta_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image",
+          "info": "Recommended: high-resolution portrait photo, at least 1200px tall."
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Testimonial text",
+          "default": "I take one before drinks and actually remember the night — and wake up feeling human."
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author name",
+          "default": "Sarah M."
+        },
+        {
+          "type": "text",
+          "id": "author_role",
+          "label": "Author role or category",
+          "default": "Verified Customer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I take one before drinks and actually remember the night — and wake up feeling human.",
+            "author_name": "Sarah M.",
+            "author_role": "Verified Customer"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Behind the bar every weekend. Kanbae is the only thing that keeps me sharp the next morning.",
+            "author_name": "James T.",
+            "author_role": "Bartender & Mixologist"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Training doesn't stop because I went out the night before. This changed that equation completely.",
+            "author_name": "Marcus D.",
+            "author_role": "Endurance Athlete"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I travel for work constantly and drink socially. Kanbae is non-negotiable in my carry-on now.",
+            "author_name": "Priya K.",
+            "author_role": "Frequent Traveler"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
