@@ -176,10 +176,10 @@
         "padding_bottom": 96
       }
     },
-    "17879305553b63cd2f": {
-      "type": "apps",
+    "kanbae_judgeme_reviews_WzJiG6": {
+      "type": "kanbae-judgeme-reviews",
       "blocks": {
-        "judge_me_reviews_cards_carousel_qnctUU": {
+        "judge_me_reviews_cards_carousel_CkT3nV": {
           "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "show_sample_reviews": true,
@@ -190,9 +190,9 @@
             "filter_pinned": false,
             "filter_featured": false,
             "filter_custom_tags": "",
-            "star_rating": "4_to_5_star",
+            "star_rating": "all",
             "show_review_media": true,
-            "display_order": "most_recent",
+            "display_order": "media_first",
             "no_image_fallback": "review_text_only",
             "max_reviews": 20,
             "review_length": "medium",
@@ -205,23 +205,33 @@
             "arrows_position": "sides",
             "max_width": 1100,
             "corner_styling": "round",
-            "header_text_color": "#000000",
-            "text_color": "#000000",
-            "card_color": "#cbffda",
-            "stars_color": "#0f3b2e",
+            "header_text_color": "#0F3B2E",
+            "text_color": "#FFFFFF",
+            "card_color": "#0F3B2E",
+            "stars_color": "",
             "arrows_color": "#000000",
             "transition_speed": 5,
-            "header_text": "Customers are saying",
+            "header_text": "",
             "show_average_rating": true,
             "rating_display": "default"
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_cards_carousel_qnctUU"
+        "judge_me_reviews_cards_carousel_CkT3nV"
       ],
+      "name": "Kanbae Reviews (Judge.me)",
       "settings": {
-        "include_margins": true
+        "eyebrow": "SOCIAL PROOF",
+        "heading": "Verified reviews",
+        "heading_size": "h0",
+        "color_scheme": "",
+        "star_color": "#C9A24B",
+        "heading_color": "#14251A",
+        "background_color": "#FFFFFF99",
+        "border_color": "#0F2B1D14",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     }
   },
@@ -229,6 +239,6 @@
     "main",
     "kanbae_ingredients_explorer_DQagxm",
     "kanbae_faq_KhBEQj",
-    "17879305553b63cd2f"
+    "kanbae_judgeme_reviews_WzJiG6"
   ]
 }
