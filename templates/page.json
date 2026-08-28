@@ -11,13 +11,224 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "kanbae_ingredients_explorer_DQagxm": {
+      "type": "kanbae-ingredients-explorer",
+      "blocks": {
+        "category_L676wX": {
+          "type": "category",
+          "settings": {
+            "number": "01",
+            "icon": "shopify://shop_images/lemon_botanical_flat_lay.png",
+            "nav_label": "Liver & Cellular Defense",
+            "panel_heading": "Liver & Cellular Defense",
+            "description": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "DHM, Milk Thistle, NAC",
+            "benefits": "Faster toxin clearance\nReduced next-day fatigue\nSupports cellular resilience overnight",
+            "image": "shopify://shop_images/lemon_botanical_flat_lay.png"
+          }
+        },
+        "category_geXpEN": {
+          "type": "category",
+          "settings": {
+            "number": "02",
+            "icon": "shopify://shop_images/nuts_seeds_roots_wellness.png",
+            "nav_label": "Hydration & Electrolytes",
+            "panel_heading": "Hydration & Electrolytes",
+            "description": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "Sodium, Potassium, Magnesium, Coconut Water Extract",
+            "benefits": "Rehydrates faster than water alone\nEases the morning-after headache\nRestores what alcohol depletes",
+            "image": "shopify://shop_images/nuts_seeds_roots_wellness.png"
+          }
+        },
+        "category_b4VdzR": {
+          "type": "category",
+          "settings": {
+            "number": "03",
+            "icon": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg",
+            "nav_label": "Digestive Comfort",
+            "panel_heading": "Digestive Comfort & Prebiotics",
+            "description": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "Ginger Root, ZingiBain, Prebiotic Fiber",
+            "benefits": "Less bloating and nausea\nCalms an unsettled stomach\nSupports gut recovery overnight",
+            "image": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg"
+          }
+        },
+        "category_KKyQpR": {
+          "type": "category",
+          "settings": {
+            "number": "04",
+            "icon": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg",
+            "nav_label": "Absorption",
+            "panel_heading": "Advanced Absorption",
+            "description": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
+            "spotlight_label": "Ingredient Spotlight",
+            "spotlight_text": "Black Pepper Extract (BioPerine)",
+            "benefits": "Maximizes nutrient uptake\nFaster-acting formula\nNothing wasted, nothing diluted",
+            "image": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "category_L676wX",
+        "category_geXpEN",
+        "category_b4VdzR",
+        "category_KKyQpR"
+      ],
+      "name": "Kanbae Ingredient Guide",
+      "settings": {
+        "eyebrow": "THE FORMULA",
+        "title": "Explore What's Inside Every Dose",
+        "heading_size": "h0",
+        "paragraph": "<p>Every active ingredient is chosen and dosed for one job: protecting your body before, during, and after alcohol.</p>",
+        "accent_color": "#9cff1b",
+        "nav_active_background": "#cbffda",
+        "nav_text_color": "#cbffda",
+        "nav_muted_text_color": "#f6fbf5",
+        "nav_active_text_color": "#0f3b2e",
+        "spotlight_background": "#9cff1b",
+        "spotlight_text_color": "#0f3b2e",
+        "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "kanbae_faq_KhBEQj": {
+      "type": "kanbae-faq",
+      "blocks": {
+        "faq_item_hzg64L": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is Kanbae Pre-Game and when should I take it?",
+            "answer": "<p>Kanbae Pre-Game is formulated with DHM and liver-supporting botanicals designed to be taken before you start drinking. Take one serving with water about 30–60 minutes before your first drink to help your body process alcohol more efficiently.</p>",
+            "open_by_default": true
+          }
+        },
+        "faq_item_EcDJQ6": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How is Kanbae different from a multivitamin?",
+            "answer": "<p>Kanbae isn't a daily multivitamin — it's a targeted hangover-prevention and recovery system built specifically to support liver function, hydration, and electrolyte balance around drinking, not general everyday nutrition.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_rXXVJR": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When should I take Kanbae Recovery?",
+            "answer": "<p>Take Kanbae Recovery before bed or first thing the next morning. It's formulated with electrolytes and rehydration support to help you bounce back after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_KdEa9D": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is DHM and why is it in Kanbae?",
+            "answer": "<p>DHM (Dihydromyricetin) is a botanical extract studied for its ability to support liver enzyme activity and help the body clear acetaldehyde, a byproduct of alcohol metabolism linked to hangover symptoms.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_zFGDkJ": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is Kanbae third-party tested?",
+            "answer": "<p>Yes. Every batch of Kanbae is independently lab tested for purity and potency, so you know exactly what you're putting in your body before and after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_pTt6Rw": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I take Kanbae if I don't drink alcohol every day?",
+            "answer": "<p>Absolutely — Kanbae is designed for occasional and social drinkers. Keep Pre-Game and Recovery on hand for whenever you plan on having a few drinks.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_hzg64L",
+        "faq_item_EcDJQ6",
+        "faq_item_rXXVJR",
+        "faq_item_KdEa9D",
+        "faq_item_zFGDkJ",
+        "faq_item_pTt6Rw"
+      ],
+      "name": "Kanbae FAQ",
+      "settings": {
+        "eyebrow": "SUPPORT",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h0",
+        "subtitle": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>",
+        "exclusive_accordion": true,
+        "color_scheme": "",
+        "accent_color": "#a3ff16",
+        "icon_background": "#082310",
+        "icon_color": "#f7f6f2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "17879305553b63cd2f": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_qnctUU": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "all",
+            "products": [
+              "complete-alcohol-defense"
+            ],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "star_rating": "4_to_5_star",
+            "show_review_media": true,
+            "display_order": "most_recent",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "round",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#CBFFDA",
+            "stars_color": "#0F3B2E",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true,
+            "rating_display": "default"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_qnctUU"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "kanbae_ingredients_explorer_DQagxm",
+    "kanbae_faq_KhBEQj",
+    "17879305553b63cd2f"
   ]
 }

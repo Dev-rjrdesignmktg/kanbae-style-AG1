@@ -26,14 +26,6 @@
     "kanbae_marquee_VpGhpP": {
       "type": "kanbae-marquee",
       "blocks": {
-        "marquee_item_wMwbRY": {
-          "type": "marquee_item",
-          "settings": {
-            "text": "",
-            "icon": "image",
-            "icon_class": ""
-          }
-        },
         "marquee_item_TgxyRX": {
           "type": "marquee_item",
           "settings": {
@@ -77,7 +69,6 @@
         }
       },
       "block_order": [
-        "marquee_item_wMwbRY",
         "marquee_item_TgxyRX",
         "marquee_item_6kEtBk",
         "marquee_item_yBThWD",
@@ -143,11 +134,18 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
+    },
+    "1787893691bab8f824": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "announcement-bar",
     "kanbae_marquee_VpGhpP",
-    "header"
+    "header",
+    "1787893691bab8f824"
   ]
 }

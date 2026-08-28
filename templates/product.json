@@ -277,77 +277,105 @@
         "padding_bottom": 96
       }
     },
-    "kanbae_faq_3Ba8tn": {
-      "type": "kanbae-faq",
+    "kanbae_vs_competitors_fqx7Td": {
+      "type": "kanbae-vs-competitors",
       "blocks": {
-        "faq_item_qqHtHz": {
-          "type": "faq_item",
+        "comparison_row_NxiUa3": {
+          "type": "comparison_row",
           "settings": {
-            "question": "What is Kanbae Pre-Game and when should I take it?",
-            "answer": "<p>Kanbae Pre-Game is formulated with DHM and liver-supporting botanicals designed to be taken before you start drinking. Take one serving with water about 30–60 minutes before your first drink to help your body process alcohol more efficiently.</p>",
-            "open_by_default": true
+            "attribute": "Active Dosage",
+            "kanbae_icon": "none",
+            "kanbae_text": "1160mg",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "1000-1200mg",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
           }
         },
-        "faq_item_xnzWKx": {
-          "type": "faq_item",
+        "comparison_row_mJweWC": {
+          "type": "comparison_row",
           "settings": {
-            "question": "How is Kanbae different from a multivitamin?",
-            "answer": "<p>Kanbae isn't a daily multivitamin — it's a targeted hangover-prevention and recovery system built specifically to support liver function, hydration, and electrolyte balance around drinking, not general everyday nutrition.</p>",
-            "open_by_default": false
+            "attribute": "Active ingredients",
+            "kanbae_icon": "check",
+            "kanbae_text": "",
+            "competitor_a_icon": "cross",
+            "competitor_a_text": "",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
           }
         },
-        "faq_item_iHiC4G": {
-          "type": "faq_item",
+        "comparison_row_rNNGLp": {
+          "type": "comparison_row",
           "settings": {
-            "question": "When should I take Kanbae Recovery?",
-            "answer": "<p>Take Kanbae Recovery before bed or first thing the next morning. It's formulated with electrolytes and rehydration support to help you bounce back after a night out.</p>",
-            "open_by_default": false
+            "attribute": "Hero Ingredients",
+            "kanbae_icon": "none",
+            "kanbae_text": "DHM, S-Acetyl Glutathione, Pyroglutamic Acid, Succinic Acid",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "DHM",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
           }
         },
-        "faq_item_ymK34R": {
-          "type": "faq_item",
+        "comparison_row_wLPUPG": {
+          "type": "comparison_row",
           "settings": {
-            "question": "What is DHM and why is it in Kanbae?",
-            "answer": "<p>DHM (Dihydromyricetin) is a botanical extract studied for its ability to support liver enzyme activity and help the body clear acetaldehyde, a byproduct of alcohol metabolism linked to hangover symptoms.</p>",
-            "open_by_default": false
+            "attribute": "Clinically Tested Formula",
+            "kanbae_icon": "check",
+            "kanbae_text": "",
+            "competitor_a_icon": "cross",
+            "competitor_a_text": "",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
           }
         },
-        "faq_item_FhPcMQ": {
-          "type": "faq_item",
+        "comparison_row_VEyaEA": {
+          "type": "comparison_row",
           "settings": {
-            "question": "Is Kanbae third-party tested?",
-            "answer": "<p>Yes. Every batch of Kanbae is independently lab tested for purity and potency, so you know exactly what you're putting in your body before and after a night out.</p>",
-            "open_by_default": false
+            "attribute": "Developed in House (no OEM)",
+            "kanbae_icon": "cross",
+            "kanbae_text": "None",
+            "competitor_a_icon": "check",
+            "competitor_a_text": "Often included",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
           }
         },
-        "faq_item_iqq6jW": {
-          "type": "faq_item",
+        "comparison_row_xAF6cM": {
+          "type": "comparison_row",
           "settings": {
-            "question": "Can I take Kanbae if I don't drink alcohol every day?",
-            "answer": "<p>Absolutely — Kanbae is designed for occasional and social drinkers. Keep Pre-Game and Recovery on hand for whenever you plan on having a few drinks.</p>",
-            "open_by_default": false
+            "attribute": "Convenient Single Servings",
+            "kanbae_icon": "none",
+            "kanbae_text": "2 pills",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "Multiple pills & powders",
+            "competitor_b_icon": "cross",
+            "competitor_b_text": ""
           }
         }
       },
       "block_order": [
-        "faq_item_qqHtHz",
-        "faq_item_xnzWKx",
-        "faq_item_iHiC4G",
-        "faq_item_ymK34R",
-        "faq_item_FhPcMQ",
-        "faq_item_iqq6jW"
+        "comparison_row_NxiUa3",
+        "comparison_row_mJweWC",
+        "comparison_row_rNNGLp",
+        "comparison_row_wLPUPG",
+        "comparison_row_VEyaEA",
+        "comparison_row_xAF6cM"
       ],
-      "name": "Kanbae FAQ",
+      "name": "Kanbae vs competitors",
       "settings": {
-        "eyebrow": "SUPPORT",
-        "heading": "Frequently Asked Questions",
+        "eyebrow": "THE KANBAE DIFFERENCE",
+        "title": "Not just different. Better.",
         "heading_size": "h0",
-        "subtitle": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>",
-        "exclusive_accordion": true,
+        "subtitle": "<p>See how Kanbae compares to the generic multivitamins and traditional powders sitting in your cabinet.</p>",
+        "kanbae_label": "Kanbae",
+        "kanbae_image": "shopify://shop_images/Kanbae_ColorBG_DSC05352_25MP.jpg",
+        "show_star_badge": true,
+        "competitor_a_label": "Other supplements",
+        "show_competitor_b": false,
+        "competitor_b_label": "Generic multivitamins",
+        "button_label": "",
+        "button_link": "",
         "color_scheme": "",
-        "accent_color": "#a3ff16",
-        "icon_background": "#082310",
-        "icon_color": "#f7f6f2",
         "padding_top": 96,
         "padding_bottom": 96
       }
@@ -433,6 +461,81 @@
         "padding_bottom": 96
       }
     },
+    "kanbae_faq_3Ba8tn": {
+      "type": "kanbae-faq",
+      "blocks": {
+        "faq_item_qqHtHz": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is Kanbae Pre-Game and when should I take it?",
+            "answer": "<p>Kanbae Pre-Game is formulated with DHM and liver-supporting botanicals designed to be taken before you start drinking. Take one serving with water about 30–60 minutes before your first drink to help your body process alcohol more efficiently.</p>",
+            "open_by_default": true
+          }
+        },
+        "faq_item_xnzWKx": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How is Kanbae different from a multivitamin?",
+            "answer": "<p>Kanbae isn't a daily multivitamin — it's a targeted hangover-prevention and recovery system built specifically to support liver function, hydration, and electrolyte balance around drinking, not general everyday nutrition.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_iHiC4G": {
+          "type": "faq_item",
+          "settings": {
+            "question": "When should I take Kanbae Recovery?",
+            "answer": "<p>Take Kanbae Recovery before bed or first thing the next morning. It's formulated with electrolytes and rehydration support to help you bounce back after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_ymK34R": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is DHM and why is it in Kanbae?",
+            "answer": "<p>DHM (Dihydromyricetin) is a botanical extract studied for its ability to support liver enzyme activity and help the body clear acetaldehyde, a byproduct of alcohol metabolism linked to hangover symptoms.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_FhPcMQ": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Is Kanbae third-party tested?",
+            "answer": "<p>Yes. Every batch of Kanbae is independently lab tested for purity and potency, so you know exactly what you're putting in your body before and after a night out.</p>",
+            "open_by_default": false
+          }
+        },
+        "faq_item_iqq6jW": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I take Kanbae if I don't drink alcohol every day?",
+            "answer": "<p>Absolutely — Kanbae is designed for occasional and social drinkers. Keep Pre-Game and Recovery on hand for whenever you plan on having a few drinks.</p>",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_qqHtHz",
+        "faq_item_xnzWKx",
+        "faq_item_iHiC4G",
+        "faq_item_ymK34R",
+        "faq_item_FhPcMQ",
+        "faq_item_iqq6jW"
+      ],
+      "name": "Kanbae FAQ",
+      "settings": {
+        "eyebrow": "SUPPORT",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h0",
+        "subtitle": "<p>Got questions? We're here to help with everything you need to know about Kanbae Pre-Game and Recovery.</p>",
+        "exclusive_accordion": true,
+        "color_scheme": "",
+        "accent_color": "#a3ff16",
+        "icon_background": "#082310",
+        "icon_color": "#f7f6f2",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
     "kanbae_pdp_final_cta": {
       "type": "kanbae-pdp-final-cta",
       "blocks": {
@@ -474,7 +577,7 @@
         "glow_color": "#a3ff9c",
         "button_background": "#a3ff16",
         "button_text_color": "#082310",
-        "button_hover_background": "#CBFFDA",
+        "button_hover_background": "#cbffda",
         "button_hover_text_color": "#082310",
         "padding_top": 80,
         "padding_bottom": 80
@@ -482,6 +585,63 @@
     },
     "17877833689052b9fd": {
       "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_snippet_widget_wRp8TG": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "reviews_selection": "current_product",
+            "products": [
+              "complete-alcohol-defense"
+            ],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "min_star_rating": "4",
+            "show_review_media": true,
+            "max_reviews": 5,
+            "review_length": "large",
+            "text_size": "medium",
+            "max_width": 1100,
+            "max_image_size": "small",
+            "arrows_visibility": "always_shown",
+            "transition_speed": 5,
+            "corner_styling": "round",
+            "text_color": "",
+            "card_color": "#cbffda",
+            "stars_color": "#0f3b2e",
+            "arrows_color": "#9cff1b",
+            "arrows_background_color": "#0f3b2e"
+          }
+        },
+        "judge_me_reviews_trust_badge_tLcUgz": {
+          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "structure": "default",
+            "color": "default",
+            "star": "default",
+            "alignment": "left"
+          }
+        },
+        "judge_me_reviews_medals_bNYadi": {
+          "type": "shopify://apps/judge-me-reviews/blocks/medals/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "judge_me_reviews_review_widget_gB4tNK": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_snippet_widget_wRp8TG",
+        "judge_me_reviews_trust_badge_tLcUgz",
+        "judge_me_reviews_medals_bNYadi",
+        "judge_me_reviews_review_widget_gB4tNK"
+      ],
       "settings": {
         "include_margins": true
       }
@@ -492,8 +652,9 @@
     "disclosures",
     "related-products",
     "kanbae_key_ingredients_LyxcCB",
-    "kanbae_faq_3Ba8tn",
+    "kanbae_vs_competitors_fqx7Td",
     "kanbae_ingredients_grid_VgjEP8",
+    "kanbae_faq_3Ba8tn",
     "kanbae_pdp_final_cta",
     "17877833689052b9fd"
   ]
