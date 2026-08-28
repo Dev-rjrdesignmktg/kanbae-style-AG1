@@ -1,0 +1,179 @@
+{% comment %}
+  Kanbae wellness-premium wrapper for native Judge.me app blocks.
+
+  This store's Judge.me install uses Shopify App Blocks (Theme App
+  Extension), not the legacy `render 'judgeme_widgets'` snippet — that
+  snippet doesn't exist on this theme, so it can't be called directly
+  from custom Liquid. App blocks are opaque to the parent template
+  (`block.type` is always the literal string "@app"), so the only way
+  to give them a branded container is to wrap the block loop itself,
+  the same pattern Dawn's own sections/apps.liquid uses.
+
+  Usage: add this section anywhere in the product template, then use
+  "Add block" → Apps → Judge.me Product Reviews → pick a block
+  (Review widget, Trust badge, Medals, Review carousel) inside it.
+{% endcomment %}
+{{ 'component-kanbae-judgeme.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeJudgeme-{{ section.id }} {
+    --kb-jdgm-star: {{ section.settings.star_color }};
+    --kb-jdgm-heading: {{ section.settings.heading_color }};
+    --kb-jdgm-bg: {{ section.settings.background_color }};
+    --kb-jdgm-border: {{ section.settings.border_color }};
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div id="KanbaeJudgeme-{{ section.id }}" class="kb-judgeme page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+      <div class="kb-judgeme__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-judgeme__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-judgeme__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="kb-judgeme__body">
+      {%- for block in section.blocks -%}
+        {% render block %}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.blocks.size == 0 and request.design_mode -%}
+      <p class="kb-judgeme__placeholder">
+        Add an app block below — "Add block" → Apps → Judge.me Product Reviews → Review widget — to show your reviews here.
+      </p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae Reviews (Judge.me)",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Wraps whatever app block(s) you add below in a Kanbae glass card. Add Judge.me's Review widget (and optionally Trust badge / Medals / Review carousel) via \"Add block\" → Apps."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "SOCIAL PROOF"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Verified reviews"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#C9A24B"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading & text color",
+      "default": "#14251A"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Card background color",
+      "info": "Supports transparency — lower the opacity to keep the frosted-glass look.",
+      "default": "#FFFFFF99",
+      "alpha": true
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Card border color",
+      "info": "Supports transparency for a subtle hairline border.",
+      "default": "#0F2B1D14",
+      "alpha": true
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae Reviews (Judge.me)"
+    }
+  ]
+}
+{% endschema %}

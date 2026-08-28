@@ -1,0 +1,302 @@
+/*
+  Kanbae x Judge.me — wellness-premium skin for Judge.me's native
+  Shopify App Blocks (Review widget, Trust badge, Medals, Review
+  carousel), rendered inside sections/kanbae-judgeme-reviews.liquid.
+
+  Judge.me owns the markup, data-fetching and JS behavior inside each
+  .shopify-app-block wrapper; this file only overrides presentation on
+  top of it. Everything is scoped under .kb-judgeme so no other app
+  block elsewhere in the theme (header icons, footer, etc.) is
+  affected.
+
+  Judge.me's own stylesheet loads after theme CSS and carries decent
+  selector specificity on color/background/border/font-family, so a
+  handful of !important flags are used deliberately on those
+  properties only — this is Judge.me's own documented override
+  pattern, not a shortcut around normal cascade rules.
+*/
+
+.kb-judgeme {
+  --kb-jdgm-star: #c9a24b;
+  --kb-jdgm-heading: #14251a;
+  --kb-jdgm-bg: rgba(255, 255, 255, 0.6);
+  --kb-jdgm-border: rgba(15, 43, 29, 0.08);
+  --kb-jdgm-ink: 20, 37, 26;
+  --kb-jdgm-radius: 16px;
+}
+
+.kb-judgeme__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 62rem;
+  margin: 0 auto 2.4rem;
+  text-align: center;
+}
+
+.kb-judgeme__eyebrow {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.18rem;
+  opacity: 0.75;
+}
+
+@media screen and (min-width: 750px) {
+  .kb-judgeme__eyebrow {
+    font-size: 1.7rem;
+  }
+}
+
+.kb-judgeme__heading {
+  margin: 0;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.kb-judgeme__placeholder {
+  margin: 0;
+  padding: 1.6rem;
+  border: 1px dashed var(--kb-jdgm-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--kb-jdgm-ink), 0.6);
+  font-size: 1.3rem;
+  font-style: italic;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- */
+/* Glass card around each app block Judge.me renders inside .kb-judgeme */
+/* ---------------------------------------------------------------- */
+
+.kb-judgeme__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.kb-judgeme__body .shopify-app-block {
+  padding: 3.2rem clamp(2rem, 4vw, 4rem);
+  background: var(--kb-jdgm-bg);
+  border: 1px solid var(--kb-jdgm-border);
+  border-radius: var(--kb-jdgm-radius);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 40px -12px rgba(var(--kb-jdgm-ink), 0.12);
+  font-family: var(--font-body-family);
+  color: rgba(var(--kb-jdgm-ink), 0.85);
+}
+
+/* ---------------------------------------------------------------- */
+/* Stars — preview badge, trust badge, widget header, each review */
+/* ---------------------------------------------------------------- */
+
+.kb-judgeme .jdgm-star,
+.kb-judgeme .jdgm-star:before {
+  color: rgba(var(--kb-jdgm-ink), 0.18) !important;
+}
+
+.kb-judgeme .jdgm-star.jdgm--on:before,
+.kb-judgeme .jdgm-star.jdgm--half:before {
+  color: var(--kb-jdgm-star) !important;
+}
+
+/* ---------------------------------------------------------------- */
+/* Full review widget */
+/* ---------------------------------------------------------------- */
+
+.kb-judgeme .jdgm-widget {
+  font-family: inherit;
+}
+
+.kb-judgeme .jdgm-rev-widg__title {
+  font-family: var(--font-heading-family);
+  color: var(--kb-jdgm-heading) !important;
+}
+
+.kb-judgeme .jdgm-rev-widg__summary {
+  padding: 0 0 2.4rem;
+  border-bottom: 1px solid var(--kb-jdgm-border);
+  margin-bottom: 2.4rem;
+}
+
+.kb-judgeme .jdgm-rev-widg__average {
+  font-family: var(--font-heading-family);
+  font-size: 4.8rem;
+  font-weight: 600;
+  color: var(--kb-jdgm-heading) !important;
+}
+
+/* Histogram (5/4/3/2/1-star breakdown bars) */
+
+.kb-judgeme .jdgm-histogram__row {
+  align-items: center;
+  gap: 1rem;
+}
+
+.kb-judgeme .jdgm-histogram__bar-container {
+  background-color: rgba(var(--kb-jdgm-ink), 0.08) !important;
+  border-radius: 999px;
+  overflow: hidden;
+  height: 8px;
+}
+
+.kb-judgeme .jdgm-histogram__bar-content {
+  background-color: var(--kb-jdgm-star) !important;
+  border-radius: 999px;
+}
+
+.kb-judgeme .jdgm-histogram__frequency {
+  color: rgba(var(--kb-jdgm-ink), 0.6) !important;
+  font-size: 1.2rem;
+}
+
+/* Write-a-review button */
+
+.kb-judgeme .jdgm-write-rev-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem 2.4rem;
+  border: 1px solid rgba(var(--kb-jdgm-ink), 0.7) !important;
+  border-radius: 999px;
+  background: transparent !important;
+  color: rgba(var(--kb-jdgm-ink), 1) !important;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.kb-judgeme .jdgm-write-rev-link:hover {
+  background: rgba(var(--kb-jdgm-ink), 1) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------------------------------- */
+/* Individual review cards */
+/* ---------------------------------------------------------------- */
+
+.kb-judgeme .jdgm-rev {
+  padding: 2.4rem 0;
+  border: none !important;
+  border-bottom: 1px solid var(--kb-jdgm-border) !important;
+}
+
+.kb-judgeme .jdgm-rev:last-child {
+  border-bottom: none !important;
+  padding-bottom: 0;
+}
+
+.kb-judgeme .jdgm-rev__author {
+  font-family: var(--font-heading-family);
+  font-weight: 600;
+  color: var(--kb-jdgm-heading) !important;
+}
+
+.kb-judgeme .jdgm-rev__timestamp {
+  color: rgba(var(--kb-jdgm-ink), 0.5) !important;
+  font-size: 1.2rem;
+}
+
+.kb-judgeme .jdgm-rev__title {
+  font-family: var(--font-heading-family);
+  color: var(--kb-jdgm-heading) !important;
+  font-weight: 600;
+}
+
+.kb-judgeme .jdgm-rev__body {
+  color: rgba(var(--kb-jdgm-ink), 0.8) !important;
+  line-height: 1.6;
+}
+
+.kb-judgeme .jdgm-rev__pic img {
+  border-radius: 10px;
+}
+
+.kb-judgeme .jdgm-verified-badge {
+  color: var(--kb-jdgm-star) !important;
+}
+
+/* "Was this helpful" thumbs buttons */
+
+.kb-judgeme .jdgm-rev__buttons .jdgm-btn {
+  border-radius: 999px !important;
+  border: 1px solid var(--kb-jdgm-border) !important;
+  background: transparent !important;
+  color: rgba(var(--kb-jdgm-ink), 0.6) !important;
+}
+
+/* Pagination */
+
+.kb-judgeme .jdgm-paginate__page {
+  border-radius: 999px !important;
+  color: rgba(var(--kb-jdgm-ink), 0.6) !important;
+}
+
+.kb-judgeme .jdgm-paginate__page.jdgm-paginate__page-current {
+  background: rgba(var(--kb-jdgm-ink), 1) !important;
+  color: #fff !important;
+}
+
+/* ---------------------------------------------------------------- */
+/* Write-a-review form */
+/* ---------------------------------------------------------------- */
+
+.kb-judgeme .jdgm-form {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid var(--kb-jdgm-border) !important;
+  border-radius: 12px;
+  padding: 2.4rem;
+}
+
+.kb-judgeme .jdgm-form__input,
+.kb-judgeme .jdgm-form__textarea,
+.kb-judgeme input[type="text"],
+.kb-judgeme input[type="email"],
+.kb-judgeme textarea {
+  border: 1px solid var(--kb-jdgm-border) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  font-family: inherit !important;
+}
+
+.kb-judgeme .jdgm-form__submit-btn,
+.kb-judgeme .jdgm-submit-rev {
+  background: rgba(var(--kb-jdgm-ink), 1) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- */
+/* Trust badge / medals app blocks (compact variants) */
+/* ---------------------------------------------------------------- */
+
+.kb-judgeme .jdgm-prev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.kb-judgeme .jdgm-prev-badge__text {
+  color: rgba(var(--kb-jdgm-ink), 0.65) !important;
+  text-decoration: none !important;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 749px) {
+  .kb-judgeme__body .shopify-app-block {
+    padding: 2.4rem 1.8rem;
+  }
+
+  .kb-judgeme .jdgm-rev-widg__average {
+    font-size: 3.6rem;
+  }
+}
