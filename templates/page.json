@@ -176,45 +176,49 @@
         "padding_bottom": 96
       }
     },
-    "1787927681cd4b95a6": {
+    "17879305553b63cd2f": {
       "type": "apps",
       "blocks": {
-        "judge_me_reviews_trust_badge_g67bhT": {
-          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "judge_me_reviews_cards_carousel_qnctUU": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "structure": "outline",
-            "color": "default",
-            "star": "default",
-            "alignment": "left"
-          }
-        },
-        "judge_me_reviews_trust_badge_CLfUWf": {
-          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "structure": "default",
-            "color": "default",
-            "star": "default",
-            "alignment": "left"
-          }
-        },
-        "judge_me_reviews_medals_YLdwA6": {
-          "type": "shopify://apps/judge-me-reviews/blocks/medals/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
-        "judge_me_reviews_review_widget_homepage_agjD9k": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget_homepage/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "product": "complete-alcohol-defense",
-            "review_data": "real_data",
-            "max_width": 1200
+            "show_sample_reviews": true,
+            "reviews_selection": "all",
+            "products": [
+              "complete-alcohol-defense"
+            ],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "star_rating": "4_to_5_star",
+            "show_review_media": true,
+            "display_order": "most_recent",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "medium",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": true,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "round",
+            "header_text_color": "#000000",
+            "text_color": "#000000",
+            "card_color": "#CBFFDA",
+            "stars_color": "#0F3B2E",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Customers are saying",
+            "show_average_rating": true,
+            "rating_display": "default"
           }
         }
       },
       "block_order": [
-        "judge_me_reviews_trust_badge_g67bhT",
-        "judge_me_reviews_trust_badge_CLfUWf",
-        "judge_me_reviews_medals_YLdwA6",
-        "judge_me_reviews_review_widget_homepage_agjD9k"
+        "judge_me_reviews_cards_carousel_qnctUU"
       ],
       "settings": {
         "include_margins": true
@@ -225,6 +229,6 @@
     "main",
     "kanbae_ingredients_explorer_DQagxm",
     "kanbae_faq_KhBEQj",
-    "1787927681cd4b95a6"
+    "17879305553b63cd2f"
   ]
 }
