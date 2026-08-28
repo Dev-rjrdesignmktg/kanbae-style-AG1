@@ -486,12 +486,14 @@
         "judge_me_reviews_review_snippet_widget_wRp8TG": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "reviews_selection": "auto",
-            "products": [],
+            "reviews_selection": "product",
+            "products": [
+              "complete-alcohol-defense"
+            ],
             "filter_pinned": false,
             "filter_featured": false,
             "filter_custom_tags": "",
-            "min_star_rating": "inherit",
+            "min_star_rating": "4",
             "show_review_media": true,
             "max_reviews": 5,
             "review_length": "medium",
