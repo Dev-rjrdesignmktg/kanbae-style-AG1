@@ -187,12 +187,12 @@
         "comparison_row_crRiMV": {
           "type": "comparison_row",
           "settings": {
-            "attribute": "Daily Routine",
-            "kanbae_icon": "check",
-            "kanbae_text": "",
-            "competitor_a_icon": "check",
-            "competitor_a_text": "",
-            "competitor_b_icon": "cross",
+            "attribute": "Convenient Single Servings",
+            "kanbae_icon": "none",
+            "kanbae_text": "2 Pills",
+            "competitor_a_icon": "none",
+            "competitor_a_text": "Multiple pills",
+            "competitor_b_icon": "none",
             "competitor_b_text": ""
           }
         }
@@ -734,9 +734,9 @@
         "button_link": "",
         "read_label": "Read Article",
         "color_scheme": "",
-        "accent_color": "#9CFF1B",
-        "card_text_color": "#F6FBF5",
-        "overlay_color": "#2C2D2B",
+        "accent_color": "#9cff1b",
+        "card_text_color": "#f6fbf5",
+        "overlay_color": "#2c2d2b",
         "card_radius": 24,
         "padding_top": 96,
         "padding_bottom": 96
