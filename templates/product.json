@@ -474,7 +474,7 @@
         "glow_color": "#a3ff9c",
         "button_background": "#a3ff16",
         "button_text_color": "#082310",
-        "button_hover_background": "#CBFFDA",
+        "button_hover_background": "#cbffda",
         "button_hover_text_color": "#082310",
         "padding_top": 80,
         "padding_bottom": 80
@@ -482,6 +482,61 @@
     },
     "17877833689052b9fd": {
       "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_snippet_widget_wRp8TG": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "reviews_selection": "auto",
+            "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "min_star_rating": "inherit",
+            "show_review_media": true,
+            "max_reviews": 5,
+            "review_length": "medium",
+            "text_size": "medium",
+            "max_width": 1100,
+            "max_image_size": "small",
+            "arrows_visibility": "always_shown",
+            "transition_speed": 5,
+            "corner_styling": "inherit",
+            "text_color": "",
+            "card_color": "",
+            "stars_color": "",
+            "arrows_color": "",
+            "arrows_background_color": ""
+          }
+        },
+        "judge_me_reviews_trust_badge_tLcUgz": {
+          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "structure": "default",
+            "color": "default",
+            "star": "default",
+            "alignment": "left"
+          }
+        },
+        "judge_me_reviews_medals_bNYadi": {
+          "type": "shopify://apps/judge-me-reviews/blocks/medals/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "judge_me_reviews_review_widget_gB4tNK": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_snippet_widget_wRp8TG",
+        "judge_me_reviews_trust_badge_tLcUgz",
+        "judge_me_reviews_medals_bNYadi",
+        "judge_me_reviews_review_widget_gB4tNK"
+      ],
       "settings": {
         "include_margins": true
       }
