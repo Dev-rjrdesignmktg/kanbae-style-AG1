@@ -496,18 +496,18 @@
             "min_star_rating": "4",
             "show_review_media": true,
             "max_reviews": 5,
-            "review_length": "medium",
+            "review_length": "large",
             "text_size": "medium",
             "max_width": 1100,
             "max_image_size": "small",
             "arrows_visibility": "always_shown",
             "transition_speed": 5,
-            "corner_styling": "inherit",
+            "corner_styling": "round",
             "text_color": "",
-            "card_color": "",
-            "stars_color": "",
-            "arrows_color": "",
-            "arrows_background_color": ""
+            "card_color": "#CBFFDA",
+            "stars_color": "#0F3B2E",
+            "arrows_color": "#9CFF1B",
+            "arrows_background_color": "#0F3B2E"
           }
         },
         "judge_me_reviews_trust_badge_tLcUgz": {
