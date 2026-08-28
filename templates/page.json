@@ -89,13 +89,13 @@
         "title": "Explore What's Inside Every Dose",
         "heading_size": "h0",
         "paragraph": "<p>Every active ingredient is chosen and dosed for one job: protecting your body before, during, and after alcohol.</p>",
-        "accent_color": "#9CFF1B",
-        "nav_active_background": "#CBFFDA",
-        "nav_text_color": "#CBFFDA",
-        "nav_muted_text_color": "#F6FBF5",
-        "nav_active_text_color": "#0F3B2E",
-        "spotlight_background": "#9CFF1B",
-        "spotlight_text_color": "#0F3B2E",
+        "accent_color": "#9cff1b",
+        "nav_active_background": "#cbffda",
+        "nav_text_color": "#cbffda",
+        "nav_muted_text_color": "#f6fbf5",
+        "nav_active_text_color": "#0f3b2e",
+        "spotlight_background": "#9cff1b",
+        "spotlight_text_color": "#0f3b2e",
         "color_scheme": "scheme-0c8c555d-15f4-413c-b907-ae3f543c985e",
         "padding_top": 96,
         "padding_bottom": 96
@@ -175,11 +175,56 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "1787927681cd4b95a6": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_trust_badge_g67bhT": {
+          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "structure": "outline",
+            "color": "default",
+            "star": "default",
+            "alignment": "left"
+          }
+        },
+        "judge_me_reviews_trust_badge_CLfUWf": {
+          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "structure": "default",
+            "color": "default",
+            "star": "default",
+            "alignment": "left"
+          }
+        },
+        "judge_me_reviews_medals_YLdwA6": {
+          "type": "shopify://apps/judge-me-reviews/blocks/medals/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
+        "judge_me_reviews_review_widget_homepage_agjD9k": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget_homepage/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "product": "complete-alcohol-defense",
+            "review_data": "real_data",
+            "max_width": 1200
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_trust_badge_g67bhT",
+        "judge_me_reviews_trust_badge_CLfUWf",
+        "judge_me_reviews_medals_YLdwA6",
+        "judge_me_reviews_review_widget_homepage_agjD9k"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "main",
     "kanbae_ingredients_explorer_DQagxm",
-    "kanbae_faq_KhBEQj"
+    "kanbae_faq_KhBEQj",
+    "1787927681cd4b95a6"
   ]
 }
