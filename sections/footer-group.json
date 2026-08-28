@@ -14,6 +14,13 @@
     "kanbae_footer_qGMYij": {
       "type": "kanbae-footer",
       "blocks": {
+        "menu_column_BFayDd": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer"
+          }
+        },
         "menu_column_cCEjeq": {
           "type": "menu_column",
           "settings": {
@@ -44,6 +51,7 @@
         }
       },
       "block_order": [
+        "menu_column_BFayDd",
         "menu_column_cCEjeq",
         "menu_column_Pj3HKP",
         "menu_column_prdBBx",
