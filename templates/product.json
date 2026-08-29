@@ -446,7 +446,7 @@
         "heading_size": "h0",
         "paragraph": "",
         "view_all_label": "View All Ingredients",
-        "view_all_link": "",
+        "view_all_link": "shopify://pages/ingredients",
         "supplement_facts_label": "Supplement Facts",
         "facts_modal_title": "Supplement Facts",
         "cta_hover_background": "#a3ff16",
@@ -638,6 +638,26 @@
         "padding_top": 64,
         "padding_bottom": 64
       }
+    },
+    "kanbae_sticky_checkout_bar_jQbRHm": {
+      "type": "kanbae-sticky-checkout-bar",
+      "name": "Kanbae Sticky Bar",
+      "settings": {
+        "show_image": true,
+        "button_label": "Add to Cart",
+        "sold_out_label": "Sold Out",
+        "unavailable_label": "Unavailable",
+        "enable_on_mobile": true,
+        "enable_on_desktop": true,
+        "scroll_offset": 0,
+        "background_color": "#0F3B2E",
+        "text_color": "#f7f6f2",
+        "border_color": "#a3ff9c",
+        "button_background": "#a3ff16",
+        "button_text_color": "#082310",
+        "button_hover_background": "#f7f6f2",
+        "button_hover_text_color": "#082310"
+      }
     }
   },
   "order": [
@@ -649,6 +669,7 @@
     "kanbae_ingredients_grid_VgjEP8",
     "kanbae_faq_3Ba8tn",
     "kanbae_pdp_final_cta",
-    "kanbae_judgeme_reviews_qpqd3g"
+    "kanbae_judgeme_reviews_qpqd3g",
+    "kanbae_sticky_checkout_bar_jQbRHm"
   ]
 }
