@@ -1,0 +1,568 @@
+{% comment %}
+  Kanbae Sticky Checkout Bar
+  ---------------------------------------------------------------
+  Persistent bottom purchase bar for the product page. Hidden while
+  the PDP's own Add to Cart button is on screen; slides in once the
+  shopper scrolls it out of view, and slides back out when it
+  returns. Reads live price/availability from Dawn's own
+  `PUB_SUB_EVENTS.variantChange` pub/sub (fired by product-info.js)
+  so it never needs its own copy of variant logic, and its button
+  proxies a click on the real `[name="add"]` button so cart-drawer /
+  cart-notification behavior is inherited for free.
+
+  Place this section anywhere below the main product section.
+{% endcomment %}
+
+{%- if product -%}
+  {%- assign kb_variant = product.selected_or_first_available_variant -%}
+  {%- assign kb_image = kb_variant.featured_image | default: product.featured_image -%}
+
+  {%- style -%}
+    #KbStickyBar-{{ section.id }} {
+      --kb-sticky-bg: {{ section.settings.background_color }};
+      --kb-sticky-text: {{ section.settings.text_color }};
+      --kb-sticky-border: {{ section.settings.border_color }};
+      --kb-sticky-btn-bg: {{ section.settings.button_background }};
+      --kb-sticky-btn-text: {{ section.settings.button_text_color }};
+      --kb-sticky-btn-bg-hover: {{ section.settings.button_hover_background }};
+      --kb-sticky-btn-text-hover: {{ section.settings.button_hover_text_color }};
+    }
+
+    #KbStickyBar-{{ section.id }} {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      background: var(--kb-sticky-bg);
+      color: var(--kb-sticky-text);
+      border-top: 0.1rem solid var(--kb-sticky-border);
+      box-shadow: 0 -0.6rem 2.4rem rgba(0, 0, 0, 0.18);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      transform: translateY(calc(100% + env(safe-area-inset-bottom, 0px)));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
+      will-change: transform;
+    }
+
+    #KbStickyBar-{{ section.id }}.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__inner {
+      width: 100%;
+      max-width: {{ settings.page_width | default: 1200 }}px;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1rem 1.6rem;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__media {
+      flex-shrink: 0;
+      width: 4.4rem;
+      height: 4.4rem;
+      border-radius: 0.8rem;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__info {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__title {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--kb-sticky-text);
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__price {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--kb-sticky-text);
+      line-height: 1.3;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__price .price {
+      color: inherit;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__price .price--on-sale .price-item--regular {
+      opacity: 0.6;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__action {
+      flex-shrink: 0;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button {
+      --buttons-radius: 2.4rem;
+      --buttons-radius-outset: 2.4rem;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      min-width: 13rem;
+      padding: 1.2rem 1.8rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      background-color: var(--kb-sticky-btn-bg) !important;
+      color: var(--kb-sticky-btn-text) !important;
+      border-color: var(--kb-sticky-btn-bg) !important;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:before,
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:after {
+      content: none;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: inherit;
+      background-color: var(--kb-sticky-btn-bg-hover);
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 0.45s ease;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:active {
+      transform: scale(0.97);
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button--loading {
+      opacity: 0.75;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:not(:disabled):hover,
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:not(:disabled):focus-visible {
+      color: var(--kb-sticky-btn-text-hover) !important;
+    }
+
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:not(:disabled):hover::before,
+    #KbStickyBar-{{ section.id }} .kb-sticky-bar__button:not(:disabled):focus-visible::before {
+      clip-path: inset(0 0 0 0);
+    }
+
+    @media screen and (max-width: 479px) {
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__title {
+        display: none;
+      }
+    }
+
+    @media screen and (min-width: 750px) {
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__inner {
+        padding: 0.8rem 2.4rem;
+        gap: 1.4rem;
+      }
+
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__media {
+        width: 3.8rem;
+        height: 3.8rem;
+      }
+
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__title {
+        display: block;
+        font-size: 1.3rem;
+      }
+
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__price {
+        font-size: 1.35rem;
+      }
+
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__button {
+        min-width: 13rem;
+        padding: 0.85rem 1.8rem;
+        font-size: 1.25rem;
+      }
+    }
+
+    @media screen and (min-width: 990px) {
+      #KbStickyBar-{{ section.id }} {
+        left: auto;
+        right: 2.4rem;
+        bottom: 2.4rem;
+        border-top: none;
+        border: 0.1rem solid var(--kb-sticky-border);
+        border-radius: 9999px;
+        box-shadow: 0 1.2rem 3.2rem rgba(0, 0, 0, 0.24);
+        padding-bottom: 0;
+      }
+
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__inner {
+        width: auto;
+        max-width: 40rem;
+      }
+    }
+
+    {%- unless section.settings.enable_on_mobile -%}
+      @media screen and (max-width: 989px) {
+        #KbStickyBar-{{ section.id }} {
+          display: none !important;
+        }
+      }
+    {%- endunless -%}
+
+    {%- unless section.settings.enable_on_desktop -%}
+      @media screen and (min-width: 990px) {
+        #KbStickyBar-{{ section.id }} {
+          display: none !important;
+        }
+      }
+    {%- endunless -%}
+
+    @media (prefers-reduced-motion: reduce) {
+      #KbStickyBar-{{ section.id }} {
+        transition: opacity 0.15s ease;
+        transform: none;
+      }
+
+      #KbStickyBar-{{ section.id }} .kb-sticky-bar__button::before {
+        transition: none;
+      }
+    }
+  {%- endstyle -%}
+
+  <kb-sticky-checkout-bar
+    id="KbStickyBar-{{ section.id }}"
+    class="kb-sticky-bar"
+    role="region"
+    aria-label="{{ 'products.product.add_to_cart' | t }}"
+    aria-hidden="true"
+    data-original-selector='product-form [name="add"], form[data-type="add-to-cart-form"] [name="add"], [name="add"]'
+    data-scroll-offset="{{ section.settings.scroll_offset | default: 0 }}"
+    data-button-label="{{ section.settings.button_label | escape }}"
+    data-sold-out-label="{{ section.settings.sold_out_label | escape }}"
+    data-unavailable-label="{{ section.settings.unavailable_label | escape }}"
+  >
+    <div class="kb-sticky-bar__inner">
+      {%- if section.settings.show_image -%}
+        <div class="kb-sticky-bar__media" data-kb-sticky-media>
+          {%- if kb_image -%}
+            {{
+              kb_image
+              | image_url: width: 160
+              | image_tag: width: 80, height: 80, loading: 'lazy', alt: kb_image.alt | default: product.title | escape
+            }}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="kb-sticky-bar__info">
+        <p class="kb-sticky-bar__title">{{ product.title | escape }}</p>
+        <div class="kb-sticky-bar__price" id="KbStickyPrice-{{ section.id }}" data-kb-sticky-price role="status">
+          {%- render 'price', product: product, use_variant: true, show_badges: false, price_class: 'price--small' -%}
+        </div>
+      </div>
+
+      <div class="kb-sticky-bar__action">
+        <button
+          type="button"
+          class="button kb-sticky-bar__button"
+          data-kb-sticky-add
+          {% if kb_variant == null or kb_variant.available == false %}
+            disabled
+          {% endif %}
+        >
+          <span data-kb-sticky-button-text>
+            {%- if kb_variant == null -%}
+              {{ section.settings.unavailable_label }}
+            {%- elsif kb_variant.available == false -%}
+              {{ section.settings.sold_out_label }}
+            {%- else -%}
+              {{ section.settings.button_label }}
+            {%- endif -%}
+          </span>
+        </button>
+      </div>
+    </div>
+  </kb-sticky-checkout-bar>
+
+  <script>
+    (function () {
+      if (customElements.get('kb-sticky-checkout-bar')) return;
+
+      class KbStickyCheckoutBar extends HTMLElement {
+        connectedCallback() {
+          this.addButton = this.querySelector('[data-kb-sticky-add]');
+          this.buttonTextEl = this.querySelector('[data-kb-sticky-button-text]');
+          this.priceEl = this.querySelector('[data-kb-sticky-price]');
+          this.mediaEl = this.querySelector('[data-kb-sticky-media]');
+          this.originalSelector = this.dataset.originalSelector;
+          this.scrollOffset = parseInt(this.dataset.scrollOffset, 10) || 0;
+
+          this.bindAddToCart();
+          this.subscribeToVariantChange();
+
+          if (document.readyState === 'complete') {
+            this.setupObserver();
+          } else {
+            window.addEventListener('load', () => this.setupObserver(), { once: true });
+          }
+        }
+
+        disconnectedCallback() {
+          this.intersectionObserver?.disconnect();
+          this.originalButtonObserver?.disconnect();
+          this.variantChangeUnsubscriber?.();
+        }
+
+        getOriginalButton() {
+          return document.querySelector(this.originalSelector);
+        }
+
+        setupObserver() {
+          if (this.intersectionObserver) return;
+
+          const originalButton = this.getOriginalButton();
+          if (!originalButton) return;
+
+          this.originalButton = originalButton;
+
+          this.intersectionObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                const scrolledPastTop = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+                this.toggleVisibility(scrolledPastTop);
+              });
+            },
+            { root: null, rootMargin: `-${this.scrollOffset}px 0px 0px 0px`, threshold: 0 }
+          );
+          this.intersectionObserver.observe(originalButton);
+
+          this.originalButtonObserver = new MutationObserver(() => this.syncButtonState());
+          this.originalButtonObserver.observe(originalButton, {
+            attributes: true,
+            attributeFilter: ['disabled', 'aria-disabled'],
+          });
+          this.syncButtonState();
+        }
+
+        toggleVisibility(visible) {
+          this.classList.toggle('is-visible', visible);
+          this.setAttribute('aria-hidden', visible ? 'false' : 'true');
+        }
+
+        syncButtonState() {
+          if (!this.originalButton || !this.addButton) return;
+          const isDisabled =
+            this.originalButton.disabled || this.originalButton.getAttribute('aria-disabled') === 'true';
+          this.addButton.disabled = isDisabled;
+        }
+
+        bindAddToCart() {
+          if (!this.addButton) return;
+
+          this.addButton.addEventListener('click', () => {
+            const originalButton = this.originalButton || this.getOriginalButton();
+            if (!originalButton || originalButton.disabled) return;
+
+            this.addButton.classList.add('kb-sticky-bar__button--loading');
+            originalButton.click();
+
+            window.setTimeout(() => {
+              this.addButton.classList.remove('kb-sticky-bar__button--loading');
+            }, 1200);
+          });
+        }
+
+        subscribeToVariantChange() {
+          if (typeof subscribe !== 'function' || typeof PUB_SUB_EVENTS === 'undefined') return;
+
+          this.variantChangeUnsubscriber = subscribe(PUB_SUB_EVENTS.variantChange, (event) => {
+            this.updateFromVariant(event && event.data);
+          });
+        }
+
+        updateFromVariant(data) {
+          if (!data) return;
+          const { html, variant } = data;
+
+          if (this.priceEl && html) {
+            const sourcePrice = html.getElementById(`price-${data.sectionId}`);
+            if (sourcePrice) this.priceEl.innerHTML = sourcePrice.innerHTML;
+          }
+
+          if (this.mediaEl && variant && variant.featured_image && variant.featured_image.src) {
+            const img = this.mediaEl.querySelector('img');
+            if (img) {
+              const src = variant.featured_image.src;
+              img.src = src.indexOf('?') > -1 ? `${src}&width=160` : `${src}?width=160`;
+            }
+          }
+
+          if (this.addButton) {
+            const isAvailable = !!(variant && variant.available);
+            this.addButton.disabled = !isAvailable;
+
+            if (this.buttonTextEl) {
+              this.buttonTextEl.textContent = !variant
+                ? this.dataset.unavailableLabel
+                : !isAvailable
+                ? this.dataset.soldOutLabel
+                : this.dataset.buttonLabel;
+            }
+          }
+        }
+      }
+
+      customElements.define('kb-sticky-checkout-bar', KbStickyCheckoutBar);
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Kanbae Sticky Bar",
+  "tag": "section",
+  "class": "section section-kanbae-sticky-checkout-bar",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show product image",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Add to cart button label",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "Sold Out"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_label",
+      "label": "Unavailable label",
+      "default": "Unavailable"
+    },
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_on_mobile",
+      "label": "Show on mobile & tablet",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_on_desktop",
+      "label": "Show on desktop",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "scroll_offset",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Reveal sensitivity",
+      "info": "Extra distance the original Add to Cart button must scroll out of view before the bar appears.",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#0b1f14"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Top border",
+      "default": "#a3ff9c"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text",
+      "default": "#082310"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae Sticky Bar"
+    }
+  ]
+}
+{% endschema %}
