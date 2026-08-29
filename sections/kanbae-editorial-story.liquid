@@ -1,0 +1,335 @@
+{{ 'section-kanbae-editorial-story.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign chapters = section.blocks | where: 'type', 'chapter'
+  assign chapter_count = chapters.size
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeEditorialStory-{{ section.id }} {
+    --kb-editorial-accent: {{ section.settings.accent_color }};
+    --kb-editorial-divider: {{ section.settings.divider_color }};
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  Premium editorial narrative: intro header, then chapters (image + copy) that
+  alternate sides automatically by index, magazine-style. Each chapter can
+  override its own side. Generous whitespace and a thin numbered marker carry
+  the "wellness editorial" tone rather than boxed cards.
+{%- endcomment -%}
+<div
+  id="KanbaeEditorialStory-{{ section.id }}"
+  class="kb-editorial color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-editorial__inner page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.intro != blank -%}
+      <div class="kb-editorial__intro{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-editorial__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-editorial__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <div class="kb-editorial__intro-text rte">
+            {{ section.settings.intro }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if chapter_count > 0 -%}
+      <div class="kb-editorial__chapters">
+        {%- for block in chapters -%}
+          {%- liquid
+            assign index_remainder = forloop.index0 | modulo: 2
+            assign is_odd = true
+            if index_remainder == 1
+              assign is_odd = false
+            endif
+
+            assign reverse = false
+            if block.settings.image_position == 'right' and is_odd
+              assign reverse = true
+            endif
+            if block.settings.image_position == 'left' and is_odd == false
+              assign reverse = true
+            endif
+            if block.settings.image_position == 'auto' and is_odd == false
+              assign reverse = true
+            endif
+
+            assign number = forloop.index | prepend: '0' | slice: -2, 2
+          -%}
+          <article
+            class="kb-editorial__chapter{% if reverse %} kb-editorial__chapter--reverse{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="kb-editorial__media">
+              <div class="kb-editorial__media-inner">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1600
+                    | image_tag:
+                      class: 'kb-editorial__image',
+                      sizes: '(min-width: 990px) 50vw, 100vw',
+                      widths: '400, 600, 800, 1100, 1500, 1600',
+                      loading: 'lazy',
+                      alt: block.settings.image.alt | default: block.settings.title
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'kb-editorial__image placeholder' }}
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="kb-editorial__content">
+              <span class="kb-editorial__number" aria-hidden="true">{{ number }}</span>
+
+              {%- if block.settings.label != blank -%}
+                <p class="kb-editorial__label caption-with-letter-spacing">{{ block.settings.label | escape }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="kb-editorial__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.body != blank -%}
+                <div class="kb-editorial__body rte">
+                  {{ block.settings.body }}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.highlight != blank -%}
+                <p class="kb-editorial__highlight">{{ block.settings.highlight | escape }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.link_label != blank -%}
+                <a
+                  {% if block.settings.link_url == blank %}
+                    role="link" aria-disabled="true"
+                  {% else %}
+                    href="{{ block.settings.link_url }}"
+                  {% endif %}
+                  class="kb-editorial__link link"
+                >
+                  <span>{{- block.settings.link_label | escape -}}</span>
+                  <span class="svg-wrapper kb-editorial__link-icon" aria-hidden="true">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                </a>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae editorial story",
+  "tag": "section",
+  "class": "section section-kanbae-editorial-story",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Intro"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Subtitle",
+      "default": "OUR JOURNEY"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A ritual built one honest night at a time"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro text",
+      "info": "Optional short paragraph under the heading. Leave blank to hide.",
+      "default": "<p>Kanbae wasn't born in a boardroom. It was born the morning after — and every chapter since has been about closing the gap between a great night and a great tomorrow.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Number / accent color",
+      "default": "#a3ff16"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider line color",
+      "default": "#e5e2da"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: tall lifestyle or editorial-style photo, portrait crop (about 4:5)."
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "info": "Auto alternates sides down the page. Left/right pins this chapter regardless of order.",
+          "options": [
+            { "value": "auto", "label": "Auto (alternate)" },
+            { "value": "left", "label": "Force image left" },
+            { "value": "right", "label": "Force image right" }
+          ],
+          "default": "auto"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Small caps label above the title, e.g. a chapter name or year.",
+          "default": "THE BEGINNING"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "One rough morning after"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "<p>It started with a founder who loved going out but hated what came after. No product on the shelf actually protected the body before the drinking started — so we set out to build one.</p>"
+        },
+        {
+          "type": "text",
+          "id": "highlight",
+          "label": "Pull quote (optional)",
+          "info": "Short standout line, styled larger. Leave blank to hide.",
+          "default": "\"Protection should start before the first drink, not after the damage is done.\""
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label (optional)",
+          "info": "Leave blank to hide the link."
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae editorial story",
+      "blocks": [
+        {
+          "type": "chapter",
+          "settings": {
+            "image_position": "auto",
+            "label": "THE BEGINNING",
+            "title": "One rough morning after",
+            "highlight": "\"Protection should start before the first drink, not after the damage is done.\""
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "image_position": "auto",
+            "label": "THE SCIENCE",
+            "title": "Doses that actually work",
+            "body": "<p>We partnered with formulators to build a shot around clinically-studied DHM and liver-supporting botanicals — full, published doses, not a proprietary blend hiding the fine print.</p>",
+            "highlight": ""
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "image_position": "auto",
+            "label": "TODAY",
+            "title": "A ritual, not a remedy",
+            "body": "<p>Kanbae now rides along before happy hours, dinners, and everything after — a small habit that changes how the whole next day feels.</p>",
+            "highlight": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
