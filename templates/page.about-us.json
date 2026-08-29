@@ -175,70 +175,11 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
-    },
-    "kanbae_judgeme_reviews_WzJiG6": {
-      "type": "kanbae-judgeme-reviews",
-      "blocks": {
-        "judge_me_reviews_cards_carousel_CkT3nV": {
-          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "show_sample_reviews": true,
-            "reviews_selection": "custom_products",
-            "products": [
-              "complete-alcohol-defense"
-            ],
-            "filter_pinned": false,
-            "filter_featured": false,
-            "filter_custom_tags": "",
-            "star_rating": "all",
-            "show_review_media": true,
-            "display_order": "media_first",
-            "no_image_fallback": "review_text_only",
-            "max_reviews": 20,
-            "review_length": "medium",
-            "text_size": "medium",
-            "image_ratio": "1",
-            "reviews_shown": 4,
-            "show_reviewer_name": true,
-            "show_product_name": true,
-            "hide_arrows_mobile": true,
-            "arrows_position": "sides",
-            "max_width": 1100,
-            "corner_styling": "round",
-            "header_text_color": "#0F3B2E",
-            "text_color": "#0F3B2E",
-            "card_color": "#CBFFDA",
-            "stars_color": "",
-            "arrows_color": "#000000",
-            "transition_speed": 5,
-            "header_text": "",
-            "show_average_rating": true,
-            "rating_display": "default"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_cards_carousel_CkT3nV"
-      ],
-      "name": "Kanbae Reviews (Judge.me)",
-      "settings": {
-        "eyebrow": "SOCIAL PROOF",
-        "heading": "Verified reviews",
-        "heading_size": "h0",
-        "color_scheme": "",
-        "star_color": "#C9A24B",
-        "heading_color": "#14251A",
-        "background_color": "#FFFFFF99",
-        "border_color": "#0F2B1D14",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
     }
   },
   "order": [
     "main",
     "kanbae_ingredients_explorer_DQagxm",
-    "kanbae_faq_KhBEQj",
-    "kanbae_judgeme_reviews_WzJiG6"
+    "kanbae_faq_KhBEQj"
   ]
 }

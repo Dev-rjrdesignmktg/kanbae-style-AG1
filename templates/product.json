@@ -583,23 +583,21 @@
         "padding_bottom": 80
       }
     },
-    "17877833689052b9fd": {
-      "type": "apps",
+    "kanbae_judgeme_reviews_qpqd3g": {
+      "type": "kanbae-judgeme-reviews",
       "blocks": {
-        "judge_me_reviews_review_snippet_widget_wRp8TG": {
+        "judge_me_reviews_review_snippet_widget_H4Jbea": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "reviews_selection": "current_product",
-            "products": [
-              "complete-alcohol-defense"
-            ],
+            "reviews_selection": "auto",
+            "products": [],
             "filter_pinned": false,
             "filter_featured": false,
             "filter_custom_tags": "",
-            "min_star_rating": "4",
+            "min_star_rating": "5",
             "show_review_media": true,
             "max_reviews": 5,
-            "review_length": "large",
+            "review_length": "medium",
             "text_size": "medium",
             "max_width": 1100,
             "max_image_size": "small",
@@ -607,26 +605,13 @@
             "transition_speed": 5,
             "corner_styling": "round",
             "text_color": "",
-            "card_color": "#cbffda",
-            "stars_color": "#0f3b2e",
-            "arrows_color": "#9cff1b",
-            "arrows_background_color": "#0f3b2e"
+            "card_color": "#CBFFDA",
+            "stars_color": "#FFD700",
+            "arrows_color": "#9CFF1B",
+            "arrows_background_color": "#0F3B2E"
           }
         },
-        "judge_me_reviews_trust_badge_tLcUgz": {
-          "type": "shopify://apps/judge-me-reviews/blocks/trust_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "structure": "default",
-            "color": "default",
-            "star": "default",
-            "alignment": "left"
-          }
-        },
-        "judge_me_reviews_medals_bNYadi": {
-          "type": "shopify://apps/judge-me-reviews/blocks/medals/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {}
-        },
-        "judge_me_reviews_review_widget_gB4tNK": {
+        "judge_me_reviews_review_widget_qqaNrE": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "real_data",
@@ -637,13 +622,21 @@
         }
       },
       "block_order": [
-        "judge_me_reviews_review_snippet_widget_wRp8TG",
-        "judge_me_reviews_trust_badge_tLcUgz",
-        "judge_me_reviews_medals_bNYadi",
-        "judge_me_reviews_review_widget_gB4tNK"
+        "judge_me_reviews_review_snippet_widget_H4Jbea",
+        "judge_me_reviews_review_widget_qqaNrE"
       ],
+      "name": "Kanbae Reviews (Judge.me)",
       "settings": {
-        "include_margins": true
+        "eyebrow": "SOCIAL PROOF",
+        "heading": "Verified reviews",
+        "heading_size": "h0",
+        "color_scheme": "scheme-1",
+        "star_color": "#CBFFDA",
+        "heading_color": "#14251A",
+        "background_color": "#FFFFFF",
+        "border_color": "#FFFFFF",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     }
   },
@@ -656,6 +649,6 @@
     "kanbae_ingredients_grid_VgjEP8",
     "kanbae_faq_3Ba8tn",
     "kanbae_pdp_final_cta",
-    "17877833689052b9fd"
+    "kanbae_judgeme_reviews_qpqd3g"
   ]
 }
