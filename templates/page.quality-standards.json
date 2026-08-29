@@ -82,10 +82,89 @@
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "kanbae_wide_marquee_zE7n9i": {
+      "type": "kanbae-wide-marquee",
+      "blocks": {
+        "item_9NYDnK": {
+          "type": "item",
+          "settings": {
+            "text": "DHM PODEROSO",
+            "icon_type": "image",
+            "icon_image": "shopify://shop_images/Vegan_Friendly_Green.png",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='currentColor'><path d='M13 2 3 14h7l-1 8 11-14h-7l1-6z'/></svg>"
+          }
+        },
+        "item_U3QKEX": {
+          "type": "item",
+          "settings": {
+            "text": "NON GMO",
+            "icon_type": "image",
+            "icon_image": "shopify://shop_images/Non-GMO.png",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z'/></svg>"
+          }
+        },
+        "item_qXkDnb": {
+          "type": "item",
+          "settings": {
+            "text": "GMP Certified",
+            "icon_type": "image",
+            "icon_image": "shopify://shop_images/GMP_Certified.png",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2s7 7.5 7 12a7 7 0 1 1-14 0c0-4.5 7-12 7-12z'/></svg>"
+          }
+        },
+        "item_DPce78": {
+          "type": "item",
+          "settings": {
+            "text": "FDA Registered",
+            "icon_type": "image",
+            "icon_image": "shopify://shop_images/FDA_Registered.png",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/></svg>"
+          }
+        },
+        "item_NqpLQL": {
+          "type": "item",
+          "settings": {
+            "text": "THIRD PARTY TESTED",
+            "icon_type": "image",
+            "icon_image": "shopify://shop_images/Third_Party_Tested_Green.png",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>"
+          }
+        }
+      },
+      "block_order": [
+        "item_9NYDnK",
+        "item_U3QKEX",
+        "item_qXkDnb",
+        "item_DPce78",
+        "item_NqpLQL"
+      ],
+      "name": "Kanbae wide marquee",
+      "settings": {
+        "aria_label": "Vegan Friendly",
+        "font_size": 24,
+        "font_weight": "800",
+        "uppercase": true,
+        "icon_scale": 2,
+        "show_divider": true,
+        "divider_symbol": "•",
+        "divider_color": "",
+        "speed": 28,
+        "direction": "left",
+        "pause_on_hover": true,
+        "item_gap": 72,
+        "padding_block": 20,
+        "outer_spacing": 0,
+        "edge_fade": true,
+        "bg_color": "#0F3B2E",
+        "text_color": "#CBFFDA",
+        "icon_color": "#FFFFFF"
+      }
     }
   },
   "order": [
     "main",
-    "kanbae_sidebar_guide_kMLhdC"
+    "kanbae_sidebar_guide_kMLhdC",
+    "kanbae_wide_marquee_zE7n9i"
   ]
 }
