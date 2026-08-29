@@ -17,72 +17,6 @@
         "padding_bottom": 28
       }
     },
-    "kanbae_sidebar_guide_kMLhdC": {
-      "type": "kanbae-sidebar-guide",
-      "blocks": {
-        "panel_zhmNd3": {
-          "type": "panel",
-          "settings": {
-            "number": "01",
-            "nav_label": "Liver & Cellular Defense",
-            "heading": "Liver & Cellular Defense",
-            "body": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>",
-            "image_position": "right"
-          }
-        },
-        "panel_LRTzn7": {
-          "type": "panel",
-          "settings": {
-            "number": "02",
-            "nav_label": "Hydration & Electrolytes",
-            "heading": "Hydration & Electrolytes",
-            "body": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
-            "image_position": "left"
-          }
-        },
-        "panel_8C9GtA": {
-          "type": "panel",
-          "settings": {
-            "number": "03",
-            "nav_label": "Digestive Comfort",
-            "heading": "Digestive Comfort & Prebiotics",
-            "body": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
-            "image_position": "right"
-          }
-        },
-        "panel_tPiQ3c": {
-          "type": "panel",
-          "settings": {
-            "number": "04",
-            "nav_label": "Absorption",
-            "heading": "Advanced Absorption",
-            "body": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
-            "image_position": "left"
-          }
-        }
-      },
-      "block_order": [
-        "panel_zhmNd3",
-        "panel_LRTzn7",
-        "panel_8C9GtA",
-        "panel_tPiQ3c"
-      ],
-      "name": "Kanbae Sidebar Guide",
-      "settings": {
-        "eyebrow": "HOW IT WORKS",
-        "title": "Everything Your Body Needs, In Order",
-        "heading_size": "h0",
-        "paragraph": "<p>Scroll through the science, or jump straight to what matters to you using the navigation.</p>",
-        "accent_color": "#082310",
-        "nav_text_color": "#082310",
-        "nav_muted_text_color": "rgba(8, 35, 16, 0.4)",
-        "nav_active_text_color": "#0F3B2E",
-        "nav_active_background": "#9CFF1B",
-        "color_scheme": "",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
     "kanbae_wide_marquee_zE7n9i": {
       "type": "kanbae-wide-marquee",
       "blocks": {
@@ -156,15 +90,114 @@
         "padding_block": 20,
         "outer_spacing": 0,
         "edge_fade": true,
-        "bg_color": "#0F3B2E",
-        "text_color": "#CBFFDA",
-        "icon_color": "#FFFFFF"
+        "bg_color": "#0f3b2e",
+        "text_color": "#cbffda",
+        "icon_color": "#ffffff"
+      }
+    },
+    "kanbae_sidebar_guide_hk6rpd": {
+      "type": "kanbae-sidebar-guide",
+      "blocks": {
+        "panel_L7kA9M": {
+          "type": "panel",
+          "settings": {
+            "number": "01",
+            "nav_label": "Safety",
+            "heading": "Safety",
+            "body": "<p>Every formula is built on ingredients backed by real research and manufactured in cGMP-certified facilities, so what helps you the morning after never puts your body at risk.</p>",
+            "image_position": "right"
+          }
+        },
+        "panel_wLnJcb": {
+          "type": "panel",
+          "settings": {
+            "number": "02",
+            "nav_label": "Testing",
+            "heading": "Third-Party Testing",
+            "body": "<p>Every batch is sent to independent, third-party labs for testing — checked for potency, purity, and contaminants before it ever reaches your door.</p>",
+            "image_position": "left"
+          }
+        },
+        "panel_atWnjC": {
+          "type": "panel",
+          "settings": {
+            "number": "03",
+            "nav_label": "Integrity",
+            "heading": "Integrity",
+            "body": "<p>No proprietary blends, no filler doses hiding behind a label. What you read on the pouch is exactly what's inside it.</p>",
+            "image_position": "right"
+          }
+        },
+        "panel_7LdCAH": {
+          "type": "panel",
+          "settings": {
+            "number": "04",
+            "nav_label": "Transparency",
+            "heading": "Transparency",
+            "body": "<p>Full visibility into where every ingredient is sourced and how much of it you're actually getting, because you deserve to know what you're putting in your body before a night out.</p>",
+            "image_position": "left"
+          }
+        },
+        "panel_3GxJn3": {
+          "type": "panel",
+          "settings": {
+            "number": "05",
+            "nav_label": "Potency",
+            "heading": "Potency",
+            "body": "<p>Every active ingredient is dosed at clinically studied levels, not sprinkled in just to make the label, so it actually does the job it's there for.</p>",
+            "image_position": "right"
+          }
+        },
+        "panel_c788VL": {
+          "type": "panel",
+          "settings": {
+            "number": "06",
+            "nav_label": "Experience",
+            "heading": "Experience",
+            "body": "<p>Formulated and refined around real recovery, not guesswork, built from the feedback of people who actually needed it to work the next morning.</p>",
+            "image_position": "left"
+          }
+        },
+        "panel_bcBa9G": {
+          "type": "panel",
+          "settings": {
+            "number": "07",
+            "nav_label": "Allergen Screening",
+            "heading": "Allergen Screening",
+            "body": "<p>Screened for major allergens and produced in an allergen-controlled facility, so you can take it with confidence no matter your sensitivities.</p>",
+            "image_position": "right"
+          }
+        }
+      },
+      "block_order": [
+        "panel_L7kA9M",
+        "panel_wLnJcb",
+        "panel_atWnjC",
+        "panel_7LdCAH",
+        "panel_3GxJn3",
+        "panel_c788VL",
+        "panel_bcBa9G"
+      ],
+      "name": "Kanbae Sidebar Guide",
+      "settings": {
+        "eyebrow": "OUR STANDARDS",
+        "title": "The Standards Behind Every Pouch",
+        "heading_size": "h0",
+        "paragraph": "<p>From the lab to the pouch, every standard exists for one reason: helping your body recover from alcohol the next morning, safely and without compromise.</p>",
+        "accent_color": "#082310",
+        "nav_text_color": "#082310",
+        "nav_muted_text_color": "rgba(8, 35, 16, 0.4)",
+        "nav_active_text_color": "#082310",
+        "nav_active_background": "rgba(8, 35, 16, 0.06)",
+        "color_scheme": "",
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     }
   },
   "order": [
     "main",
-    "kanbae_sidebar_guide_kMLhdC",
+    "kanbae_sidebar_guide_hk6rpd",
     "kanbae_wide_marquee_zE7n9i"
   ]
 }
