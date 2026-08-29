@@ -1,0 +1,293 @@
+{{ 'section-kanbae-story-pillars.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign pillars = section.blocks | where: 'type', 'pillar'
+  assign pillar_count = pillars.size
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeStoryPillars-{{ section.id }} {
+    --kb-story-card-background: {{ section.settings.card_background }};
+    --kb-story-card-border: {{ section.settings.card_border_color }};
+    --kb-story-card-icon-background: {{ section.settings.card_icon_background }};
+    --kb-story-card-icon-color: {{ section.settings.card_icon_color }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeStoryPillars-{{ section.id }}"
+  class="kb-story-pillars color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-story-pillars__inner page-width">
+    <div class="kb-story-pillars__grid">
+      <div class="kb-story-pillars__story{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-story-pillars__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="kb-story-pillars__heading inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <div class="kb-story-pillars__description rte">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if pillar_count > 0 -%}
+        <ul
+          class="kb-story-pillars__cards{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+          role="list"
+        >
+          {%- for block in pillars -%}
+            {%- liquid
+              assign icon_file = 'icon-leaf.svg'
+              case block.settings.icon
+                when 'leaf'
+                  assign icon_file = 'icon-leaf.svg'
+                when 'lightning-bolt'
+                  assign icon_file = 'icon-lightning-bolt.svg'
+                when 'lock'
+                  assign icon_file = 'icon-padlock.svg'
+                when 'heart'
+                  assign icon_file = 'icon-heart.svg'
+                when 'checkmark'
+                  assign icon_file = 'icon-checkmark.svg'
+                when 'stopwatch'
+                  assign icon_file = 'icon-stopwatch.svg'
+                when 'fire'
+                  assign icon_file = 'icon-fire.svg'
+                when 'snowflake'
+                  assign icon_file = 'icon-snowflake.svg'
+              endcase
+            -%}
+            <li class="kb-story-pillars__card" {{ block.shopify_attributes }}>
+              <span class="kb-story-pillars__card-icon">
+                {%- if block.settings.custom_icon != blank -%}
+                  {{
+                    block.settings.custom_icon
+                    | image_url: width: 80
+                    | image_tag: width: 28, height: 28, loading: 'lazy', alt: ''
+                  }}
+                {%- else -%}
+                  <span class="svg-wrapper">{{- icon_file | inline_asset_content -}}</span>
+                {%- endif -%}
+              </span>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="kb-story-pillars__card-title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <p class="kb-story-pillars__card-description">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae story & pillars",
+  "tag": "section",
+  "class": "section section-kanbae-story-pillars",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Story"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Subtitle",
+      "info": "Shown above the heading, in uppercase.",
+      "default": "WHO WE ARE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "More Than a Supplement — A Promise for Your Mornings"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Kanbae exists because one too many mornings were wasted on regret. We build science-backed, pre-drink protection — real doses of DHM and liver-supporting botanicals, tested and dosed to actually work — so a great night out doesn't have to cost you the next day.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Pillar cards"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e5e2da"
+    },
+    {
+      "type": "color",
+      "id": "card_icon_background",
+      "label": "Icon background",
+      "default": "#f3ffe0"
+    },
+    {
+      "type": "color",
+      "id": "card_icon_color",
+      "label": "Icon color",
+      "default": "#082310"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "leaf", "label": "Leaf (natural)" },
+            { "value": "lightning-bolt", "label": "Lightning bolt (fast-acting)" },
+            { "value": "lock", "label": "Lock (protection)" },
+            { "value": "heart", "label": "Heart (care)" },
+            { "value": "checkmark", "label": "Checkmark (trust)" },
+            { "value": "stopwatch", "label": "Stopwatch (science)" },
+            { "value": "fire", "label": "Fire (energy)" },
+            { "value": "snowflake", "label": "Snowflake (recovery)" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon (optional)",
+          "info": "Overrides the icon selected above."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Science-Backed, Not Hype"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Clinically-studied doses of DHM and liver-supporting botanicals — not proprietary blends hiding under-dosed ingredients."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae story & pillars",
+      "blocks": [
+        {
+          "type": "pillar",
+          "settings": {
+            "icon": "leaf",
+            "title": "Science-Backed, Not Hype",
+            "description": "Clinically-studied doses of DHM and liver-supporting botanicals — not proprietary blends hiding under-dosed ingredients."
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "icon": "lightning-bolt",
+            "title": "Built for the Night, Not the Morning",
+            "description": "Take it before your first drink. Protection starts while you're still out, not after the damage is done."
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "icon": "lock",
+            "title": "Real Liver Protection",
+            "description": "Formulated to support your liver through alcohol, so mornings after are about plans, not regret."
+          }
+        },
+        {
+          "type": "pillar",
+          "settings": {
+            "icon": "heart",
+            "title": "Radical Transparency",
+            "description": "Every ingredient and dose listed on the label — nothing hidden, nothing to guess about."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
