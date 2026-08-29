@@ -1,0 +1,360 @@
+{{ 'section-kanbae-sidebar-guide.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign panels = section.blocks | where: 'type', 'panel'
+  assign panel_count = panels.size
+-%}
+
+{%- if panel_count > 1 -%}
+  <script src="{{ 'kanbae-sidebar-guide.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KbSidebarGuide-{{ section.id }} {
+    --kb-sg-accent: {{ section.settings.accent_color }};
+    --kb-sg-nav-text: {{ section.settings.nav_text_color }};
+    --kb-sg-nav-muted: {{ section.settings.nav_muted_text_color }};
+    --kb-sg-nav-active-text: {{ section.settings.nav_active_text_color }};
+    --kb-sg-nav-active-bg: {{ section.settings.nav_active_background }};
+  }
+{%- endstyle -%}
+
+<div
+  id="KbSidebarGuide-{{ section.id }}"
+  class="kb-sg color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  <div class="kb-sg__inner page-width">
+    {%- if section.settings.eyebrow != blank or section.settings.title != blank or section.settings.paragraph != blank -%}
+      <div class="kb-sg__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="kb-sg__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="kb-sg__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.paragraph != blank -%}
+          <div class="kb-sg__paragraph rte">
+            {{ section.settings.paragraph }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if panel_count > 0 -%}
+      <div class="kb-sg__layout">
+        <div class="kb-sg__sidebar">
+          <nav
+            id="KbSgNav-{{ section.id }}"
+            class="kb-sg__nav"
+            data-kb-sg-nav
+            aria-label="{{ section.settings.title | strip_html | default: 'Section navigation' | escape }}"
+          >
+            {%- if panel_count > 1 -%}
+              <span class="kb-sg__nav-indicator" data-kb-sg-indicator aria-hidden="true"></span>
+            {%- endif -%}
+            {%- for block in panels -%}
+              {%- liquid
+                assign panel_id = 'KbSgPanel-' | append: section.id | append: '-' | append: forloop.index0
+                assign is_active = false
+                if forloop.first
+                  assign is_active = true
+                endif
+              -%}
+              <a
+                href="#{{ panel_id }}"
+                class="kb-sg__nav-link{% if is_active %} is-active{% endif %}"
+                data-kb-sg-link
+                {% if is_active %}
+                  aria-current="true"
+                {% endif %}
+                {{ block.shopify_attributes }}
+              >
+                {%- if block.settings.number != blank -%}
+                  <span class="kb-sg__nav-link-number">{{ block.settings.number | escape }}</span>
+                {%- endif -%}
+                <span class="kb-sg__nav-link-label">{{ block.settings.nav_label | escape }}</span>
+              </a>
+            {%- endfor -%}
+          </nav>
+        </div>
+
+        <div class="kb-sg__content">
+          {%- for block in panels -%}
+            {%- liquid
+              assign panel_id = 'KbSgPanel-' | append: section.id | append: '-' | append: forloop.index0
+              assign image_alt = block.settings.image.alt | default: block.settings.heading
+              assign media_class = ''
+              if block.settings.image_position == 'left'
+                assign media_class = ' kb-sg__panel--media-left'
+              endif
+            -%}
+            <div
+              id="{{ panel_id }}"
+              class="kb-sg__panel{{ media_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+              data-kb-sg-panel
+              {{ block.shopify_attributes }}
+            >
+              <div class="kb-sg__panel-grid">
+                <div class="kb-sg__panel-text">
+                  {%- if block.settings.number != blank -%}
+                    <span class="kb-sg__panel-eyebrow">{{ block.settings.number | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.heading != blank -%}
+                    <h3 class="kb-sg__panel-title inline-richtext">{{ block.settings.heading }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.body != blank -%}
+                    <div class="kb-sg__panel-body rte">
+                      {{ block.settings.body }}
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                <div class="kb-sg__panel-media">
+                  <div class="kb-sg__panel-media-inner">
+                    {%- if block.settings.image != blank -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 1600
+                        | image_tag:
+                          class: 'kb-sg__panel-image',
+                          sizes: '(min-width: 990px) 58vw, 92vw',
+                          widths: '400, 550, 700, 900, 1100, 1300, 1600',
+                          loading: 'lazy',
+                          alt: image_alt
+                      }}
+                    {%- else -%}
+                      {{ 'product-2' | placeholder_svg_tag: 'kb-sg__panel-image placeholder' }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae Sidebar Guide",
+  "tag": "section",
+  "class": "section section-kanbae-sidebar-guide",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "HOW IT WORKS"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "Everything Your Body Needs, In Order"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "info": "Optional. Leave blank to hide.",
+      "default": "<p>Scroll through the science, or jump straight to what matters to you using the navigation.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar appearance"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for the sliding active indicator and section numbers.",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "nav_text_color",
+      "label": "Link color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "nav_muted_text_color",
+      "label": "Inactive number color",
+      "default": "rgba(8, 35, 16, 0.4)"
+    },
+    {
+      "type": "color",
+      "id": "nav_active_text_color",
+      "label": "Active link color",
+      "default": "#082310"
+    },
+    {
+      "type": "color",
+      "id": "nav_active_background",
+      "label": "Active link background",
+      "default": "rgba(8, 35, 16, 0.06)"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Panel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number label",
+          "info": "e.g. 01. Optional — leave blank to hide.",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "nav_label",
+          "label": "Sidebar label",
+          "info": "Short name shown in the navigation.",
+          "default": "Liver & Cellular Defense"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Panel heading",
+          "default": "Liver & Cellular Defense"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Description",
+          "default": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: clean macro or studio shot, landscape crop (about 4:3)."
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left", "label": "Left" }
+          ],
+          "default": "right"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae Sidebar Guide",
+      "blocks": [
+        {
+          "type": "panel",
+          "settings": {
+            "number": "01",
+            "nav_label": "Liver & Cellular Defense",
+            "heading": "Liver & Cellular Defense",
+            "image_position": "right"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "number": "02",
+            "nav_label": "Hydration & Electrolytes",
+            "heading": "Hydration & Electrolytes",
+            "body": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
+            "image_position": "left"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "number": "03",
+            "nav_label": "Digestive Comfort",
+            "heading": "Digestive Comfort & Prebiotics",
+            "body": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
+            "image_position": "right"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "number": "04",
+            "nav_label": "Absorption",
+            "heading": "Advanced Absorption",
+            "body": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
+            "image_position": "left"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
