@@ -91,6 +91,30 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_TyKq6b": {
+          "type": "mega_menu",
+          "settings": {
+            "nav_handle": "Science",
+            "item_1_image": "shopify://shop_images/Sachet_with_Fruits_182a24db-afa4-4b84-84ba-e3a599d4433b.png",
+            "item_1_title": "Ingredients",
+            "item_1_description": "",
+            "item_1_link": "shopify://pages/ingredients",
+            "item_2_image": "shopify://shop_images/As_seen_in_press1.png",
+            "item_2_title": "Quality Standards",
+            "item_2_description": "",
+            "item_2_link": "shopify://pages/quality-standards",
+            "item_3_title": "",
+            "item_3_description": "",
+            "item_3_link": "",
+            "item_4_title": "",
+            "item_4_description": "",
+            "item_4_link": "",
+            "panel_link_1": "",
+            "panel_link_2": "",
+            "panel_link_3": "",
+            "panel_link_4": ""
+          }
+        },
         "mega_menu_aqxwa9": {
           "type": "mega_menu",
           "settings": {
@@ -116,12 +140,13 @@
         }
       },
       "block_order": [
+        "mega_menu_TyKq6b",
         "mega_menu_aqxwa9"
       ],
       "settings": {
         "logo_position": "middle-left",
         "mobile_logo_position": "center",
-        "menu": "menu-header",
+        "menu": "main-menu-footer",
         "menu_type_desktop": "mega",
         "mega_menu_open_on_hover": true,
         "sticky_header_type": "on-scroll-up",
