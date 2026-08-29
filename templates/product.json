@@ -332,10 +332,10 @@
           "type": "comparison_row",
           "settings": {
             "attribute": "Developed in House (no OEM)",
-            "kanbae_icon": "cross",
-            "kanbae_text": "None",
-            "competitor_a_icon": "check",
-            "competitor_a_text": "Often included",
+            "kanbae_icon": "check",
+            "kanbae_text": "",
+            "competitor_a_icon": "cross",
+            "competitor_a_text": "",
             "competitor_b_icon": "cross",
             "competitor_b_text": ""
           }
@@ -605,10 +605,10 @@
             "transition_speed": 5,
             "corner_styling": "round",
             "text_color": "",
-            "card_color": "#CBFFDA",
-            "stars_color": "#FFD700",
-            "arrows_color": "#9CFF1B",
-            "arrows_background_color": "#0F3B2E"
+            "card_color": "#cbffda",
+            "stars_color": "#ffd700",
+            "arrows_color": "#9cff1b",
+            "arrows_background_color": "#0f3b2e"
           }
         },
         "judge_me_reviews_review_widget_qqaNrE": {
@@ -631,10 +631,10 @@
         "heading": "Verified reviews",
         "heading_size": "h0",
         "color_scheme": "scheme-1",
-        "star_color": "#CBFFDA",
-        "heading_color": "#14251A",
-        "background_color": "#FFFFFF",
-        "border_color": "#FFFFFF",
+        "star_color": "#cbffda",
+        "heading_color": "#14251a",
+        "background_color": "#ffffff",
+        "border_color": "#ffffff",
         "padding_top": 64,
         "padding_bottom": 64
       }
