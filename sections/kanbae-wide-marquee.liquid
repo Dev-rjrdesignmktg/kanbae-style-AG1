@@ -1,0 +1,494 @@
+{%- comment -%}
+  Kanbae Wide Marquee
+  Full-bleed, oversized-type marquee with per-block icon (image or custom SVG).
+  Self-contained: markup, styles and animation all live in this single file.
+{%- endcomment -%}
+
+{%- liquid
+  assign direction = 'normal'
+  if section.settings.direction == 'right'
+    assign direction = 'reverse'
+  endif
+
+  assign item_count = 0
+  for block in section.blocks
+    if block.type == 'item'
+      assign item_count = item_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- style -%}
+  #KanbaeWideMarquee-{{ section.id }} {
+    --kbwm-bg: {{ section.settings.bg_color }};
+    --kbwm-color: {{ section.settings.text_color }};
+    --kbwm-icon-color: {{ section.settings.icon_color | default: section.settings.text_color }};
+    --kbwm-divider-color: {{ section.settings.divider_color | default: section.settings.text_color }};
+    --kbwm-font-size: {{ section.settings.font_size }}px;
+    --kbwm-font-weight: {{ section.settings.font_weight }};
+    --kbwm-icon-scale: {{ section.settings.icon_scale }};
+    --kbwm-gap: {{ section.settings.item_gap }}px;
+    --kbwm-duration: {{ section.settings.speed }}s;
+    --kbwm-direction: {{ direction }};
+    --kbwm-padding-block: {{ section.settings.padding_block }}px;
+    --kbwm-margin-block: {{ section.settings.outer_spacing }}px;
+  }
+{%- endstyle -%}
+
+<div
+  id="KanbaeWideMarquee-{{ section.id }}"
+  class="kbwm{% if section.settings.pause_on_hover %} kbwm--pause-hover{% endif %}{% if section.settings.uppercase %} kbwm--uppercase{% endif %}{% if section.settings.edge_fade %} kbwm--edge-fade{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  role="region"
+  aria-label="{{ section.settings.aria_label | default: 'Kanbae highlights' | escape }}"
+>
+  {%- if item_count > 0 -%}
+    <div class="kbwm__track-wrapper">
+      <div class="kbwm__track">
+        {%- comment -%} Real copy: read by screen readers. {%- endcomment -%}
+        <ul class="kbwm__list" aria-hidden="false">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'item' -%}
+              <li class="kbwm__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon_type == 'image' and block.settings.icon_image != blank -%}
+                  <span class="kbwm__icon">
+                    {{
+                      block.settings.icon_image
+                      | image_url: width: 400
+                      | image_tag: loading: 'lazy', alt: '', widths: '100,200,400', class: 'kbwm__icon-image'
+                    }}
+                  </span>
+                {%- elsif block.settings.icon_type == 'custom_svg' and block.settings.custom_svg != blank -%}
+                  <span class="kbwm__icon kbwm__icon--svg">{{ block.settings.custom_svg }}</span>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <span class="kbwm__text">{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+                {%- if section.settings.show_divider -%}
+                  <span class="kbwm__divider" aria-hidden="true">{{ section.settings.divider_symbol | default: '•' }}</span>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+        {%- comment -%} Duplicate copy: creates the seamless infinite loop, hidden from assistive tech. {%- endcomment -%}
+        <ul class="kbwm__list" aria-hidden="true">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'item' -%}
+              <li class="kbwm__item">
+                {%- if block.settings.icon_type == 'image' and block.settings.icon_image != blank -%}
+                  <span class="kbwm__icon">
+                    {{
+                      block.settings.icon_image
+                      | image_url: width: 400
+                      | image_tag: loading: 'lazy', alt: '', widths: '100,200,400', class: 'kbwm__icon-image'
+                    }}
+                  </span>
+                {%- elsif block.settings.icon_type == 'custom_svg' and block.settings.custom_svg != blank -%}
+                  <span class="kbwm__icon kbwm__icon--svg">{{ block.settings.custom_svg }}</span>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <span class="kbwm__text">{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+                {%- if section.settings.show_divider -%}
+                  <span class="kbwm__divider" aria-hidden="true">{{ section.settings.divider_symbol | default: '•' }}</span>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<style>
+  #KanbaeWideMarquee-{{ section.id }} {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--kbwm-bg);
+    color: var(--kbwm-color);
+    margin-block: var(--kbwm-margin-block);
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__track-wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    padding-block: var(--kbwm-padding-block);
+  }
+
+  /* Feathers both edges so items appear to fade in/out rather than cut off abruptly. */
+  #KanbaeWideMarquee-{{ section.id }}.kbwm--edge-fade .kbwm__track-wrapper {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation-name: kbwm-scroll-{{ section.id }};
+    animation-duration: var(--kbwm-duration, 30s);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: var(--kbwm-direction, normal);
+  }
+
+  #KanbaeWideMarquee-{{ section.id }}.kbwm--pause-hover .kbwm__track-wrapper:hover .kbwm__track {
+    animation-play-state: paused;
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__list {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--kbwm-gap, 64px);
+    margin: 0;
+    padding-inline-end: var(--kbwm-gap, 64px);
+    list-style: none;
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__item {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__text {
+    font-size: var(--kbwm-font-size, 56px);
+    font-weight: var(--kbwm-font-weight, 800);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  #KanbaeWideMarquee-{{ section.id }}.kbwm--uppercase .kbwm__text {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* Icon scales off the same font-size variable so it always tracks the text's visual weight. */
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--kbwm-font-size, 56px) * var(--kbwm-icon-scale, 1));
+    height: calc(var(--kbwm-font-size, 56px) * var(--kbwm-icon-scale, 1));
+    color: var(--kbwm-icon-color);
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__icon-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__icon--svg svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #KanbaeWideMarquee-{{ section.id }} .kbwm__divider {
+    font-size: calc(var(--kbwm-font-size, 56px) * 0.4);
+    line-height: 1;
+    color: var(--kbwm-divider-color);
+    opacity: 0.6;
+  }
+
+  @keyframes kbwm-scroll-{{ section.id }} {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Scales the whole thing down on small screens so oversized type stays legible without breaking the layout. */
+  @media screen and (max-width: 749px) {
+    #KanbaeWideMarquee-{{ section.id }} {
+      --kbwm-font-size: calc({{ section.settings.font_size }}px * 0.55);
+      --kbwm-gap: calc({{ section.settings.item_gap }}px * 0.6);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #KanbaeWideMarquee-{{ section.id }} .kbwm__track {
+      animation-duration: calc(var(--kbwm-duration, 30s) * 3);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Kanbae wide marquee",
+  "tag": "section",
+  "class": "section section-kanbae-wide-marquee",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Accessibility"
+    },
+    {
+      "type": "text",
+      "id": "aria_label",
+      "label": "Region label (screen readers)",
+      "default": "Kanbae highlights"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Text size",
+      "min": 24,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra bold" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "800"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase text",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "range",
+      "id": "icon_scale",
+      "label": "Icon size",
+      "info": "Relative to the text size, so icons always stay in proportion.",
+      "min": 0.5,
+      "max": 2,
+      "step": 0.1,
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Separators"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider between items",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "divider_symbol",
+      "label": "Divider symbol",
+      "default": "•",
+      "visible_if": "{{ section.settings.show_divider }}"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "info": "Leave blank to match the text color.",
+      "visible_if": "{{ section.settings.show_divider }}"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Animation speed",
+      "info": "Time in seconds for one full loop. Lower is faster.",
+      "min": 8,
+      "max": 90,
+      "step": 2,
+      "unit": "s",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "left", "label": "Right to left" },
+        { "value": "right", "label": "Left to right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "info": "Recommended for accessibility, so text can be read on demand.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Space between items",
+      "min": 16,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_block",
+      "label": "Vertical padding (inside marquee)",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "outer_spacing",
+      "label": "Space around section",
+      "info": "Adds elegant separation from the sections above and below.",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "edge_fade",
+      "label": "Fade edges",
+      "info": "Feathers items in and out at the left and right edges of the screen.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#0B0B0B"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#F5F5F0"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon color",
+      "info": "Leave blank to match the text color. Only applies to custom SVG icons using currentColor."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Marquee item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "KANBAE PRE-GAME"
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "image", "label": "Upload image" },
+            { "value": "custom_svg", "label": "Custom SVG code" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon image",
+          "info": "A square SVG or PNG with a transparent background works best.",
+          "visible_if": "{{ block.settings.icon_type == 'image' }}"
+        },
+        {
+          "type": "liquid",
+          "id": "custom_svg",
+          "label": "Custom SVG code",
+          "info": "Paste a full <svg>...</svg> element. Use fill=\"currentColor\" or stroke=\"currentColor\" so it inherits the icon color above.",
+          "visible_if": "{{ block.settings.icon_type == 'custom_svg' }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae wide marquee",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "text": "DHM PODEROSO",
+            "icon_type": "custom_svg",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='currentColor'><path d='M13 2 3 14h7l-1 8 11-14h-7l1-6z'/></svg>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "PROTECCIÓN HEPÁTICA",
+            "icon_type": "custom_svg",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z'/></svg>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "HIDRATACIÓN RÁPIDA",
+            "icon_type": "custom_svg",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2s7 7.5 7 12a7 7 0 1 1-14 0c0-4.5 7-12 7-12z'/></svg>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "SIN CULPA AL DESPERTAR",
+            "icon_type": "custom_svg",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/></svg>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "text": "100% NATURAL",
+            "icon_type": "custom_svg",
+            "custom_svg": "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
