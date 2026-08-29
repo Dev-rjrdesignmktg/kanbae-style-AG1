@@ -446,7 +446,7 @@
         "heading_size": "h0",
         "paragraph": "",
         "view_all_label": "View All Ingredients",
-        "view_all_link": "",
+        "view_all_link": "shopify://pages/ingredients",
         "supplement_facts_label": "Supplement Facts",
         "facts_modal_title": "Supplement Facts",
         "cta_hover_background": "#a3ff16",
