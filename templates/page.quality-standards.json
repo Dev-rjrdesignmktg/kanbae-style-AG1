@@ -16,9 +16,76 @@
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "kanbae_sidebar_guide_kMLhdC": {
+      "type": "kanbae-sidebar-guide",
+      "blocks": {
+        "panel_zhmNd3": {
+          "type": "panel",
+          "settings": {
+            "number": "01",
+            "nav_label": "Liver & Cellular Defense",
+            "heading": "Liver & Cellular Defense",
+            "body": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>",
+            "image_position": "right"
+          }
+        },
+        "panel_LRTzn7": {
+          "type": "panel",
+          "settings": {
+            "number": "02",
+            "nav_label": "Hydration & Electrolytes",
+            "heading": "Hydration & Electrolytes",
+            "body": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
+            "image_position": "left"
+          }
+        },
+        "panel_8C9GtA": {
+          "type": "panel",
+          "settings": {
+            "number": "03",
+            "nav_label": "Digestive Comfort",
+            "heading": "Digestive Comfort & Prebiotics",
+            "body": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
+            "image_position": "right"
+          }
+        },
+        "panel_tPiQ3c": {
+          "type": "panel",
+          "settings": {
+            "number": "04",
+            "nav_label": "Absorption",
+            "heading": "Advanced Absorption",
+            "body": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
+            "image_position": "left"
+          }
+        }
+      },
+      "block_order": [
+        "panel_zhmNd3",
+        "panel_LRTzn7",
+        "panel_8C9GtA",
+        "panel_tPiQ3c"
+      ],
+      "name": "Kanbae Sidebar Guide",
+      "settings": {
+        "eyebrow": "HOW IT WORKS",
+        "title": "Everything Your Body Needs, In Order",
+        "heading_size": "h0",
+        "paragraph": "<p>Scroll through the science, or jump straight to what matters to you using the navigation.</p>",
+        "accent_color": "#082310",
+        "nav_text_color": "#082310",
+        "nav_muted_text_color": "rgba(8, 35, 16, 0.4)",
+        "nav_active_text_color": "#0F3B2E",
+        "nav_active_background": "#9CFF1B",
+        "color_scheme": "",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "kanbae_sidebar_guide_kMLhdC"
   ]
 }
