@@ -119,7 +119,7 @@
           "settings": {
             "heading": "Key Benefits",
             "icon": "heart",
-            "content": "<p><strong>CLEAR - </strong>Supports your body's natural breakdown of acetaldehyde, the toxic alcohol byproduct that causes rough mornings.</p><p><strong>PROTECT - </strong>Promotes liver health and supports your natural detox pathways during alcohol metabolism.</p><p><strong>RESTORE - </strong>Replenishes the glutathione, B vitamins, and antioxidants that alcohol directly depletes overnight.</p><p><strong>SHOW UP - </strong>So you wake up feeling balanced, clear, and ready for whatever the day holds.</p>",
+            "content": "<p><strong>CLEAR -&nbsp;</strong>Supports your body's natural breakdown of acetaldehyde, the toxic alcohol byproduct that causes rough mornings.</p><p><strong>PROTECT -&nbsp;</strong>Promotes liver health and supports your natural detox pathways during alcohol metabolism.</p><p><strong>RESTORE -&nbsp;</strong>Replenishes the glutathione, B vitamins, and antioxidants that alcohol directly depletes overnight.</p><p><strong>SHOW UP -&nbsp;</strong>So you wake up feeling balanced, clear, and ready for whatever the day holds.</p>",
             "page": ""
           }
         },
@@ -607,7 +607,7 @@
             "text_color": "",
             "card_color": "#cbffda",
             "stars_color": "#ffd700",
-            "arrows_color": "#9cff1b",
+            "arrows_color": "#9CFF1B",
             "arrows_background_color": "#0f3b2e"
           }
         },
@@ -650,7 +650,7 @@
         "enable_on_mobile": true,
         "enable_on_desktop": true,
         "scroll_offset": 0,
-        "background_color": "#0F3B2E",
+        "background_color": "#0f3b2e",
         "text_color": "#f7f6f2",
         "border_color": "#a3ff9c",
         "button_background": "#a3ff16",
