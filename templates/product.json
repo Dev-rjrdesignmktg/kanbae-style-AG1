@@ -536,6 +536,154 @@
         "padding_bottom": 96
       }
     },
+    "kanbae_product_quiz_iipN3U": {
+      "type": "kanbae-product-quiz",
+      "blocks": {
+        "question_DzCFzg": {
+          "type": "question",
+          "settings": {
+            "question": "How often do you drink?",
+            "helper": "Think about a typical month.",
+            "option_1_label": "Rarely",
+            "option_1_text": "Special occasions only",
+            "option_1_weight": 0,
+            "option_2_label": "A few times a month",
+            "option_2_text": "Dinners, the odd night out",
+            "option_2_weight": 1,
+            "option_3_label": "Every weekend",
+            "option_3_text": "Friday and Saturday are a ritual",
+            "option_3_weight": 2,
+            "option_4_label": "Several times a week",
+            "option_4_text": "Work events, social life, all of it",
+            "option_4_weight": 3
+          }
+        },
+        "question_KAXbXL": {
+          "type": "question",
+          "settings": {
+            "question": "How many drinks on a typical night?",
+            "helper": "",
+            "option_1_label": "1–2 drinks",
+            "option_1_text": "",
+            "option_1_weight": 0,
+            "option_2_label": "3–4 drinks",
+            "option_2_text": "",
+            "option_2_weight": 1,
+            "option_3_label": "5–6 drinks",
+            "option_3_text": "",
+            "option_3_weight": 2,
+            "option_4_label": "7 or more",
+            "option_4_text": "",
+            "option_4_weight": 3
+          }
+        },
+        "question_LDTLb8": {
+          "type": "question",
+          "settings": {
+            "question": "How do you usually feel the next morning?",
+            "helper": "",
+            "option_1_label": "Fresh",
+            "option_1_text": "I bounce back easily",
+            "option_1_weight": 0,
+            "option_2_label": "A bit slow",
+            "option_2_text": "Tired until lunch",
+            "option_2_weight": 1,
+            "option_3_label": "Rough",
+            "option_3_text": "Headache, foggy, thirsty",
+            "option_3_weight": 2,
+            "option_4_label": "Wiped out",
+            "option_4_text": "The whole day is gone",
+            "option_4_weight": 3
+          }
+        },
+        "question_Uw6XGh": {
+          "type": "question",
+          "settings": {
+            "question": "What are you looking for?",
+            "helper": "",
+            "option_1_label": "Try it once",
+            "option_1_text": "See how it works for me",
+            "option_1_weight": 0,
+            "option_2_label": "Cover a big event",
+            "option_2_text": "Wedding, trip or festival",
+            "option_2_weight": 1,
+            "option_3_label": "A regular routine",
+            "option_3_text": "Always have it before going out",
+            "option_3_weight": 2,
+            "option_4_label": "Stock up and save",
+            "option_4_text": "Best price per night",
+            "option_4_weight": 3
+          }
+        },
+        "result_DF9WYH": {
+          "type": "result",
+          "settings": {
+            "min_score": 0,
+            "variant_match": "1 Box",
+            "title": "The Starter Box",
+            "badge": "",
+            "text": "<p>You drink occasionally, so one box covers your next few nights out. Take Kanbae before your first drink and wake up ready for the day.</p>",
+            "button_label": "Choose 1 Box"
+          }
+        },
+        "result_qHw89N": {
+          "type": "result",
+          "settings": {
+            "min_score": 40,
+            "variant_match": "3 Boxes",
+            "title": "The Weekend Pack",
+            "badge": "Most popular",
+            "text": "<p>Your weekends are social. Three boxes keep you covered for the month ahead, so every Saturday comes with a clear Sunday.</p>",
+            "button_label": "Choose 3 Boxes"
+          }
+        },
+        "result_exT4qB": {
+          "type": "result",
+          "settings": {
+            "min_score": 70,
+            "variant_match": "6 Boxes",
+            "title": "The Social Calendar",
+            "badge": "Best value",
+            "text": "<p>You're out often and your mornings matter. Six boxes give you the lowest price per night and you never run out before the next plan.</p>",
+            "button_label": "Choose 6 Boxes"
+          }
+        }
+      },
+      "block_order": [
+        "question_DzCFzg",
+        "question_KAXbXL",
+        "question_LDTLb8",
+        "question_Uw6XGh",
+        "result_DF9WYH",
+        "result_qHw89N",
+        "result_exT4qB"
+      ],
+      "name": "Kanbae product quiz",
+      "settings": {
+        "eyebrow": "60-second quiz",
+        "title": "Find your ideal Kanbae pack",
+        "subtitle": "<p>Answer 4 quick questions about how you drink and we'll match you with the pack that keeps your mornings clear.</p>",
+        "product": "complete-alcohol-defense",
+        "step_label": "Question [current] of [total]",
+        "back_label": "Back",
+        "loading_messages": "Analyzing your profile...|Matching your drinking rhythm...|Preparing your recommendation...",
+        "loader_duration": 2,
+        "result_eyebrow": "Your ideal match",
+        "show_price": true,
+        "applied_label": "Selected — ready to add to cart",
+        "restart_label": "Retake the quiz",
+        "footnote": "Recommendation based on your answers. Always drink responsibly.",
+        "background_color": "#f7f6f2",
+        "card_background": "#ffffff",
+        "option_background": "#f7f6f2",
+        "text_color": "#14251a",
+        "accent_color": "#0f2b1d",
+        "accent_text_color": "#cbffda",
+        "corner_radius": 24,
+        "padding_top": 120,
+        "padding_bottom": 120
+      }
+    },
     "kanbae_pdp_final_cta": {
       "type": "kanbae-pdp-final-cta",
       "blocks": {
@@ -607,7 +755,7 @@
             "text_color": "",
             "card_color": "#cbffda",
             "stars_color": "#ffd700",
-            "arrows_color": "#9CFF1B",
+            "arrows_color": "#9cff1b",
             "arrows_background_color": "#0f3b2e"
           }
         },
@@ -668,6 +816,7 @@
     "kanbae_vs_competitors_fqx7Td",
     "kanbae_ingredients_grid_VgjEP8",
     "kanbae_faq_3Ba8tn",
+    "kanbae_product_quiz_iipN3U",
     "kanbae_pdp_final_cta",
     "kanbae_judgeme_reviews_qpqd3g",
     "kanbae_sticky_checkout_bar_jQbRHm"
