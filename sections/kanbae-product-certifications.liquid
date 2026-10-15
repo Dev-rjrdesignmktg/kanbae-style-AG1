@@ -1,0 +1,504 @@
+{% comment %}
+  Kanbae Product Certifications
+  ------------------------------------------------------------------
+  Editorial grid of glassmorphism cards highlighting certifications,
+  lab testing and quality seals.
+
+  - Each "certification" block: icon (SVG code > image > default shield),
+    title, optional status pill, short description and optional link.
+  - Desktop: 2–4 columns. Mobile: 1 column, 2 columns or a scroll-snap
+    slider with pagination dots.
+  - Colors come from the theme color scheme (--color-foreground /
+    --color-background) plus an accent color used for glows and pills.
+  - Styles: assets/section-kanbae-product-certifications.css
+  - Script: assets/kanbae-product-certifications.js
+{% endcomment %}
+
+{{ 'section-kanbae-product-certifications.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kanbae-product-certifications.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign glass_alpha = section.settings.glass_opacity | divided_by: 100.0
+  assign heading_tag = 'h2'
+  if section.settings.heading_size == 'hxl'
+    assign heading_tag = 'h1'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KanbaeCerts-{{ section.id }} {
+    --kb-certs-accent: {{ section.settings.accent_color }};
+    --kb-certs-glass: {{ glass_alpha }};
+    --kb-certs-blur: {{ section.settings.glass_blur }}px;
+    --kb-certs-icon-size: {{ section.settings.icon_size }}px;
+    --kb-certs-columns: {{ section.settings.columns_desktop }};
+    {%- if section.settings.section_background != blank %}
+      {%- assign bg = section.settings.section_background %}
+      --color-background: {{ bg.red }}, {{ bg.green }}, {{ bg.blue }};
+      --gradient-background: {{ bg }};
+    {%- endif %}
+    {%- if section.settings.card_background != blank %}
+      {%- assign card_bg = section.settings.card_background %}
+      --kb-certs-card-rgb: {{ card_bg.red }}, {{ card_bg.green }}, {{ card_bg.blue }};
+    {%- endif %}
+  }
+
+  {%- if section.settings.card_text_color != blank %}
+    {%- assign card_text = section.settings.card_text_color %}
+    #KanbaeCerts-{{ section.id }} .kb-certs__card {
+      --color-foreground: {{ card_text.red }}, {{ card_text.green }}, {{ card_text.blue }};
+      color: rgb(var(--color-foreground));
+    }
+  {%- endif %}
+{%- endstyle -%}
+
+<kanbae-certifications
+  id="KanbaeCerts-{{ section.id }}"
+  class="kb-certs color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding kb-certs--mobile-{{ section.settings.mobile_layout }} kb-certs--align-{{ section.settings.card_alignment }}"
+>
+  {%- if section.settings.show_glow -%}
+    <div class="kb-certs__ambient" aria-hidden="true">
+      <span class="kb-certs__orb kb-certs__orb--one"></span>
+      <span class="kb-certs__orb kb-certs__orb--two"></span>
+    </div>
+  {%- endif -%}
+
+  <div class="kb-certs__inner page-width">
+    {%- comment -%} Header: badge + title + subtitle {%- endcomment -%}
+    {%- if section.settings.badge != blank
+      or section.settings.heading != blank
+      or section.settings.subheading != blank
+    -%}
+      <header class="kb-certs__header kb-certs__header--{{ section.settings.text_alignment }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if section.settings.badge != blank -%}
+          <p class="kb-certs__badge caption-with-letter-spacing">{{ section.settings.badge | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <{{ heading_tag }} class="kb-certs__heading inline-richtext {{ section.settings.heading_size }}">
+            {{- section.settings.heading -}}
+          </{{ heading_tag }}>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != blank -%}
+          <div class="kb-certs__subheading rte">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- comment -%} Certification cards {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <ul
+        class="kb-certs__grid list-unstyled"
+        role="list"
+        data-certs-track
+        {% if section.settings.mobile_layout == 'slider' %}
+          tabindex="0" aria-label="{{ section.settings.heading | strip_html | default: 'Certifications' | escape }}"
+        {% endif %}
+      >
+        {%- for block in section.blocks -%}
+          <li
+            class="kb-certs__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <article class="kb-certs__card">
+              <span class="kb-certs__spotlight" aria-hidden="true"></span>
+
+              <div class="kb-certs__card-top">
+                <div class="kb-certs__icon" aria-hidden="true">
+                  {%- if block.settings.icon_svg != blank -%}
+                    {{ block.settings.icon_svg }}
+                  {%- elsif block.settings.icon_image != blank -%}
+                    {{
+                      block.settings.icon_image
+                      | image_url: width: 240
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '80, 160, 240',
+                        sizes: '80px',
+                        alt: ''
+                    }}
+                  {%- else -%}
+                    {%- comment -%} Default seal: shield + check {%- endcomment -%}
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M24 4.5 39 10v12.2c0 9.6-6.3 18.1-15 21.3-8.7-3.2-15-11.7-15-21.3V10l15-5.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                      <path d="m17 24.5 5 5 9.5-10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- endif -%}
+                </div>
+
+                {%- if block.settings.status != blank -%}
+                  <span class="kb-certs__status">
+                    {%- if section.settings.show_status_icon -%}
+                      <svg class="kb-certs__status-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <path d="m3.5 8.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    {%- endif -%}
+                    {{- block.settings.status | escape -}}
+                  </span>
+                {%- endif -%}
+              </div>
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="kb-certs__title h4">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <div class="kb-certs__text rte">{{ block.settings.description }}</div>
+              {%- endif -%}
+
+              {%- if block.settings.link != blank and block.settings.link_label != blank -%}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="kb-certs__link link"
+                  {% if block.settings.link_new_tab %}
+                    target="_blank" rel="noopener"
+                  {% endif %}
+                >
+                  <span>{{ block.settings.link_label | escape }}</span>
+                  <span class="kb-certs__link-arrow" aria-hidden="true">&rarr;</span>
+                </a>
+              {%- endif -%}
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- comment -%} Pagination dots (mobile slider only) {%- endcomment -%}
+      {%- if section.settings.mobile_layout == 'slider' and section.blocks.size > 1 -%}
+        <div class="kb-certs__dots">
+          {%- for block in section.blocks -%}
+            <button
+              type="button"
+              class="kb-certs__dot"
+              data-certs-dot
+              aria-label="Go to certification {{ forloop.index }}"
+              {% if forloop.first %}
+                aria-current="true"
+              {% endif %}
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</kanbae-certifications>
+
+{% schema %}
+{
+  "name": "Kanbae certifications",
+  "tag": "section",
+  "class": "section section-kanbae-product-certifications",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge",
+      "default": "✦ Quality guarantee"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Use italics to highlight words in the accent color.",
+      "default": "Tested so your <em>morning after</em> doesn't have to be"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Every batch of Kanbae is made in certified facilities and independently tested, so what's on the label is exactly what supports your liver and helps you bounce back.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Header alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "stack", "label": "1 column" },
+        { "value": "grid_2", "label": "2 columns" },
+        { "value": "slider", "label": "Horizontal slider" }
+      ],
+      "default": "slider"
+    },
+    {
+      "type": "select",
+      "id": "card_alignment",
+      "label": "Card content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for icons, status pills, hover glow and highlighted heading text.",
+      "default": "#3F7D4E"
+    },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "label": "Card background opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Card background blur",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 24,
+      "max": 72,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "checkbox",
+      "id": "show_status_icon",
+      "label": "Show checkmark in status pills",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_glow",
+      "label": "Show ambient background glow",
+      "info": "Soft accent-colored light behind the cards that enhances the glass effect.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "section_background",
+      "label": "Section background",
+      "info": "Leave empty to use the color scheme background."
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "info": "Leave empty to use the section background. Transparency is set with \"Card background opacity\"."
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card text color",
+      "info": "Leave empty to use the color scheme text color."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "certification",
+      "name": "Certification",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Icon"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon or seal image",
+          "info": "PNG or SVG with transparent background works best."
+        },
+        {
+          "type": "html",
+          "id": "icon_svg",
+          "label": "Icon SVG code",
+          "info": "Paste inline <svg> code. Takes priority over the image. Use stroke=\"currentColor\" or fill=\"currentColor\" to inherit the accent color."
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Third-Party Lab Tested"
+        },
+        {
+          "type": "text",
+          "id": "status",
+          "label": "Status label",
+          "info": "Optional pill, e.g. \"Verified\" or \"100% Clean\".",
+          "default": "Verified"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Each batch is independently tested for potency, heavy metals and microbial contaminants.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Link (optional)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "E.g. a certificate of analysis PDF."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "View certificate"
+        },
+        {
+          "type": "checkbox",
+          "id": "link_new_tab",
+          "label": "Open link in a new tab",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae certifications",
+      "blocks": [
+        {
+          "type": "certification",
+          "settings": {
+            "title": "GMP Certified Facility",
+            "status": "Verified",
+            "description": "<p>Made under current Good Manufacturing Practices, with strict controls on purity, potency and consistency in every serving.</p>"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "title": "Third-Party Lab Tested",
+            "status": "Independent",
+            "description": "<p>Our DHM and botanical extracts are tested by an independent lab for potency, heavy metals and microbial contaminants.</p>"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "title": "Clean Label Formula",
+            "status": "100% Clean",
+            "description": "<p>No artificial colors, fillers or hidden sugars — just the ingredients that help your body process alcohol and rehydrate.</p>"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "title": "Vegan & Gluten-Free",
+            "status": "Plant-based",
+            "description": "<p>Plant-based and free from gluten and common allergens, so your pre-game ritual fits any lifestyle.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
