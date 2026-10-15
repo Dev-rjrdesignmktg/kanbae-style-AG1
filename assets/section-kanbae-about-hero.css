@@ -1,0 +1,218 @@
+.kb-about-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: calc(var(--kb-about-hero-height-vh, 60) * 1vh);
+  overflow: hidden;
+  border-radius: var(--kb-about-hero-radius, 0);
+  isolation: isolate;
+}
+
+/* Background media */
+
+.kb-about-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.kb-about-hero__image {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kb-about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.72) 45%, rgba(0, 0, 0, 0.42) 100%);
+  opacity: 0.4;
+}
+
+/* Content */
+
+.kb-about-hero__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.kb-about-hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+  color: var(--kb-about-hero-text-color, #ffffff);
+}
+
+.kb-about-hero__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  color: var(--kb-about-hero-eyebrow-color, #a3ff16);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.kb-about-hero__heading {
+  margin: 0;
+  max-width: 560px;
+  color: currentColor;
+  line-height: 1.1;
+  text-wrap: balance;
+  font-size: clamp(3rem, 4vw, 4.8rem);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.kb-about-hero__description {
+  margin: 0;
+  max-width: 560px;
+  color: currentColor;
+  opacity: 0.9;
+  line-height: 1.6;
+  font-size: 1.6rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.kb-about-hero__description > * {
+  margin: 0;
+}
+
+/* Trust badges */
+/* Mobile (<768px): stacked single column, hugging its own content — no horizontal
+   scroll, so nothing gets clipped by the hero's overflow:hidden edge. */
+
+.kb-about-hero__badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  list-style: none;
+  width: auto;
+  max-width: 100%;
+  margin: 1.2rem 0 0;
+  padding: 1.2rem 1.6rem;
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.1rem solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.kb-about-hero__badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
+  color: currentColor;
+  opacity: 0.95;
+}
+
+.kb-about-hero__badge-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.kb-about-hero__badge-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.kb-about-hero__badge-icon svg:not([stroke]) {
+  fill: currentColor;
+}
+
+.kb-about-hero--align-center .kb-about-hero__badges {
+  align-items: center;
+}
+
+.kb-about-hero--align-right .kb-about-hero__badges {
+  align-items: flex-end;
+}
+
+/* Tablet & up (>=768px): single horizontal pill, sized to fit its own content
+   (not stretched), with ✦ separators and a scroll fallback if it ever overflows. */
+@media screen and (min-width: 768px) {
+  .kb-about-hero__badges {
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    width: fit-content;
+    max-width: 100%;
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .kb-about-hero__badges::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kb-about-hero--align-left .kb-about-hero__badges {
+    align-self: flex-start;
+  }
+
+  .kb-about-hero--align-center .kb-about-hero__badges {
+    align-self: center;
+  }
+
+  .kb-about-hero--align-right .kb-about-hero__badges {
+    align-self: flex-end;
+  }
+
+  .kb-about-hero__badge {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 1.3rem;
+  }
+
+  .kb-about-hero__badge:not(:last-child) {
+    margin-right: 2.6rem;
+  }
+
+  .kb-about-hero__badge:not(:last-child)::after {
+    content: '\2726';
+    position: absolute;
+    right: -1.4rem;
+    font-size: 0.9rem;
+    opacity: 0.45;
+  }
+}
+
+/* Alignment */
+
+.kb-about-hero--align-left .kb-about-hero__inner {
+  align-items: flex-start;
+  text-align: left;
+  margin-inline: 0 auto;
+}
+
+.kb-about-hero--align-center .kb-about-hero__inner {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.kb-about-hero--align-right .kb-about-hero__inner {
+  align-items: flex-end;
+  text-align: right;
+  margin-inline: auto 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-about-hero {
+    scroll-behavior: auto;
+  }
+}

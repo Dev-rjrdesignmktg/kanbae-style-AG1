@@ -1,0 +1,311 @@
+{{ 'section-kanbae-about-hero.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  # Map the "size" selectors to real viewport-height values so height stays responsive
+  # without merchants having to guess pixel numbers.
+  assign height_map_full = 100
+  assign height_map_large = 78
+  assign height_map_medium = 60
+  assign height_map_small = 42
+
+  case section.settings.desktop_height
+    when 'full_screen'
+      assign desktop_height_vh = height_map_full
+    when 'large'
+      assign desktop_height_vh = height_map_large
+    when 'small'
+      assign desktop_height_vh = height_map_small
+    else
+      assign desktop_height_vh = height_map_medium
+  endcase
+
+  case section.settings.mobile_height
+    when 'full_screen'
+      assign mobile_height_vh = height_map_full
+    when 'large'
+      assign mobile_height_vh = height_map_large
+    when 'small'
+      assign mobile_height_vh = height_map_small
+    else
+      assign mobile_height_vh = height_map_medium
+  endcase
+
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+{%- style -%}
+  #AboutHero-{{ section.id }} {
+    --kb-about-hero-height-vh: {{ mobile_height_vh }};
+    --kb-about-hero-radius: {{ section.settings.corner_radius }}px;
+    --kb-about-hero-text-color: {{ section.settings.text_color }};
+    --kb-about-hero-eyebrow-color: {{ section.settings.eyebrow_color }};
+  }
+
+  #AboutHero-{{ section.id }} .kb-about-hero__overlay {
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+
+  @media screen and (min-width: 750px) {
+    #AboutHero-{{ section.id }} {
+      --kb-about-hero-height-vh: {{ desktop_height_vh }};
+    }
+  }
+{%- endstyle -%}
+
+{%- comment -%}
+  Immersive About Us hero: full-bleed background image, dark overlay for legibility,
+  and a text stack (eyebrow / heading / richtext) aligned per merchant settings.
+{%- endcomment -%}
+<div
+  id="AboutHero-{{ section.id }}"
+  class="kb-about-hero kb-about-hero--align-{{ section.settings.text_alignment }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+>
+  <div class="kb-about-hero__media" aria-hidden="true">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image.width,
+          height: section.settings.image.height,
+          class: 'kb-about-hero__image',
+          sizes: '100vw',
+          widths: widths,
+          fetchpriority: fetch_priority,
+          loading: 'eager',
+          alt: section.settings.image.alt
+      }}
+    {%- else -%}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'kb-about-hero__image placeholder' }}
+    {%- endif -%}
+    <div class="kb-about-hero__overlay"></div>
+  </div>
+
+  <div class="kb-about-hero__content page-width">
+    <div class="kb-about-hero__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="kb-about-hero__eyebrow caption-with-letter-spacing">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="kb-about-hero__heading inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <div class="kb-about-hero__description rte">
+          {{ section.settings.description }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="kb-about-hero__badges" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'trust_badge' -%}
+              <li class="kb-about-hero__badge" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon != 'none' -%}
+                  <span class="svg-wrapper kb-about-hero__badge-icon">{{- block.settings.icon | append: '.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
+                <span>{{ block.settings.text | escape }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kanbae About hero",
+  "tag": "section",
+  "class": "section section-kanbae-about-hero",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Dark overlay opacity",
+      "info": "Darkens the image so the text stays readable regardless of the photo.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full_screen", "label": "Full screen" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full_screen", "label": "Full screen" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Subtitle",
+      "info": "Shown above the heading, in uppercase.",
+      "default": "OUR STORY"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Born from one rough morning after."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h1", "label": "Normal" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" },
+        { "value": "hxxl", "label": "Maximum" }
+      ],
+      "default": "hxl"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Kanbae started with a simple mission: help people enjoy the night before without dreading the morning after. Backed by science, built for real nights out — this is why we do what we do.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Subtitle accent color",
+      "default": "#a3ff16"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "icon-check-mark", "label": "Check" },
+            { "value": "icon-leaf", "label": "Leaf" },
+            { "value": "icon-heart", "label": "Heart" },
+            { "value": "icon-lock", "label": "Lock" },
+            { "value": "icon-star", "label": "Star" },
+            { "value": "icon-recycle", "label": "Recycle" },
+            { "value": "icon-fire", "label": "Fire" },
+            { "value": "icon-truck", "label": "Shipping" }
+          ],
+          "default": "icon-check-mark"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Clinically tested"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae About hero",
+      "settings": {
+        "eyebrow": "OUR STORY",
+        "heading": "Born from one rough morning after.",
+        "description": "<p>Kanbae started with a simple mission: help people enjoy the night before without dreading the morning after. Backed by science, built for real nights out — this is why we do what we do.</p>"
+      },
+      "blocks": [
+        {
+          "type": "trust_badge",
+          "settings": { "icon": "icon-check-mark", "text": "Clinically tested" }
+        },
+        {
+          "type": "trust_badge",
+          "settings": { "icon": "icon-leaf", "text": "Clean ingredients" }
+        },
+        {
+          "type": "trust_badge",
+          "settings": { "icon": "icon-star", "text": "100% natural" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
