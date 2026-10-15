@@ -75,9 +75,9 @@
         "paragraph": "<p>Scroll through the science, or jump straight to what matters to you using the navigation.</p>",
         "accent_color": "#082310",
         "nav_text_color": "#082310",
-        "nav_muted_text_color": "rgba(8, 35, 16, 0.4)",
+        "nav_muted_text_color": "#08231066",
         "nav_active_text_color": "#082310",
-        "nav_active_background": "rgba(8, 35, 16, 0.06)",
+        "nav_active_background": "#0823100f",
         "color_scheme": "",
         "padding_top": 96,
         "padding_bottom": 96
@@ -148,7 +148,7 @@
         "icon_scale": 1.3,
         "show_divider": true,
         "divider_symbol": "•",
-        "divider_color": "#CBFFDA",
+        "divider_color": "#cbffda",
         "speed": 36,
         "direction": "left",
         "pause_on_hover": true,
@@ -156,15 +156,116 @@
         "padding_block": 12,
         "outer_spacing": 0,
         "edge_fade": true,
-        "bg_color": "#0F3B2E",
-        "text_color": "#9CFF1B",
+        "bg_color": "#0f3b2e",
+        "text_color": "#9cff1b",
         "icon_color": ""
+      }
+    },
+    "kanbae_product_certifications_pMbK8a": {
+      "type": "kanbae-product-certifications",
+      "blocks": {
+        "certification_c7ryGV": {
+          "type": "certification",
+          "settings": {
+            "icon_image": "shopify://shop_images/FDA_Registered.png",
+            "icon_svg": "",
+            "title": "Third-Party Lab Tested",
+            "status": "Verified",
+            "description": "<p>Each batch is independently tested for potency, heavy metals and microbial contaminants.</p>",
+            "link": "",
+            "link_label": "View certificate",
+            "link_new_tab": true
+          }
+        },
+        "certification_gMEAgg": {
+          "type": "certification",
+          "settings": {
+            "icon_image": "shopify://shop_images/Non-GMO.png",
+            "icon_svg": "",
+            "title": "NON GMO",
+            "status": "Verified",
+            "description": "<p>Made under current Good Manufacturing Practices, with strict controls on purity, potency and consistency in every serving.</p>",
+            "link": "",
+            "link_label": "View certificate",
+            "link_new_tab": true
+          }
+        },
+        "certification_wbtcgM": {
+          "type": "certification",
+          "settings": {
+            "icon_image": "shopify://shop_images/Third_Party_Tested_Green.png",
+            "icon_svg": "",
+            "title": "Third-Party Lab Tested",
+            "status": "Independent",
+            "description": "<p>Our DHM and botanical extracts are tested by an independent lab for potency, heavy metals and microbial contaminants.</p>",
+            "link": "",
+            "link_label": "View certificate",
+            "link_new_tab": true
+          }
+        },
+        "certification_WEaXNL": {
+          "type": "certification",
+          "settings": {
+            "icon_image": "shopify://shop_images/GMP_Certified.png",
+            "icon_svg": "",
+            "title": "Clean Label Formula",
+            "status": "100% Clean",
+            "description": "<p>No artificial colors, fillers or hidden sugars — just the ingredients that help your body process alcohol and rehydrate.</p>",
+            "link": "",
+            "link_label": "View certificate",
+            "link_new_tab": true
+          }
+        },
+        "certification_eDPWGT": {
+          "type": "certification",
+          "settings": {
+            "icon_image": "shopify://shop_images/Vegan_Friendly_Green.png",
+            "icon_svg": "",
+            "title": "VEGAN & GLUTEN FREE",
+            "status": "Plant-based",
+            "description": "<p>Plant-based and free from gluten and common allergens, so your pre-game ritual fits any lifestyle.</p>",
+            "link": "",
+            "link_label": "View certificate",
+            "link_new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "certification_c7ryGV",
+        "certification_gMEAgg",
+        "certification_wbtcgM",
+        "certification_WEaXNL",
+        "certification_eDPWGT"
+      ],
+      "name": "Kanbae certifications",
+      "settings": {
+        "badge": "✦ Quality guarantee",
+        "heading": "Tested so your <em>morning after</em> doesn't have to be",
+        "heading_size": "h1",
+        "subheading": "<p>Every batch of Kanbae is made in certified facilities and independently tested, so what's on the label is exactly what supports your liver and helps you bounce back.</p>",
+        "text_alignment": "center",
+        "columns_desktop": 3,
+        "mobile_layout": "slider",
+        "card_alignment": "left",
+        "accent_color": "#3F7D4E",
+        "glass_opacity": 100,
+        "glass_blur": 18,
+        "icon_size": 36,
+        "show_status_icon": true,
+        "show_glow": true,
+        "color_scheme": "",
+        "section_background": "#FFFFFF",
+        "card_background": "#0F3B2E",
+        "card_text_color": "#CBFFDA",
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     }
   },
   "order": [
     "main",
     "kanbae_sidebar_guide_Gqnftq",
-    "kanbae_wide_marquee_DVmcwT"
+    "kanbae_wide_marquee_DVmcwT",
+    "kanbae_product_certifications_pMbK8a"
   ]
 }
