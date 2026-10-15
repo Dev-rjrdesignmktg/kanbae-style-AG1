@@ -17,6 +17,52 @@
         "padding_bottom": 28
       }
     },
+    "kanbae_about_hero_TQDaAN": {
+      "type": "kanbae-about-hero",
+      "blocks": {
+        "trust_badge_BqYNte": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "icon-check-mark",
+            "text": "Clinically tested"
+          }
+        },
+        "trust_badge_Ujh8an": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "icon-leaf",
+            "text": "Clean ingredients"
+          }
+        },
+        "trust_badge_BcbFXP": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "icon-star",
+            "text": "100% natural"
+          }
+        }
+      },
+      "block_order": [
+        "trust_badge_BqYNte",
+        "trust_badge_Ujh8an",
+        "trust_badge_BcbFXP"
+      ],
+      "name": "Kanbae About hero",
+      "settings": {
+        "image": "shopify://shop_images/4.png",
+        "overlay_opacity": 100,
+        "desktop_height": "large",
+        "mobile_height": "medium",
+        "corner_radius": 0,
+        "eyebrow": "OUR STORY",
+        "heading": "Born from one rough morning after.",
+        "heading_size": "hxl",
+        "description": "<p>Kanbae started with a simple mission: help people enjoy the night before without dreading the morning after. Backed by science, built for real nights out — this is why we do what we do.</p>",
+        "text_alignment": "center",
+        "text_color": "#ffffff",
+        "eyebrow_color": "#a3ff16"
+      }
+    },
     "kanbae_editorial_story_HaBdHV": {
       "type": "kanbae-editorial-story",
       "blocks": {
@@ -138,6 +184,7 @@
   },
   "order": [
     "main",
+    "kanbae_about_hero_TQDaAN",
     "kanbae_editorial_story_HaBdHV",
     "kanbae_story_pillars_DBm8KB"
   ]
