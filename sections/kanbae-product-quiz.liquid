@@ -1,0 +1,1583 @@
+{%- liquid
+  assign quiz_product = section.settings.product | default: product
+  assign question_blocks = section.blocks | where: 'type', 'question'
+  assign result_blocks = section.blocks | where: 'type', 'result'
+  assign question_total = question_blocks.size
+  assign letters = 'A,B,C,D' | split: ','
+
+  assign is_same_product = false
+  if product and quiz_product and product.id == quiz_product.id
+    assign is_same_product = true
+  endif
+
+  assign loading_messages = section.settings.loading_messages | split: '|'
+-%}
+
+{%- style -%}
+  #KanbaeQuiz-{{ section.id }} {
+    --kb-quiz-bg: {{ section.settings.background_color }};
+    --kb-quiz-card-bg: {{ section.settings.card_background }};
+    --kb-quiz-option-bg: {{ section.settings.option_background }};
+    --kb-quiz-text: {{ section.settings.text_color }};
+    --kb-quiz-accent: {{ section.settings.accent_color }};
+    --kb-quiz-accent-text: {{ section.settings.accent_text_color }};
+    --kb-quiz-radius: {{ section.settings.corner_radius }}px;
+    --kb-quiz-loader-ms: {{ section.settings.loader_duration | times: 1000 }}ms;
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #KanbaeQuiz-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div id="KanbaeQuiz-{{ section.id }}" class="kb-quiz">
+  <div class="page-width">
+    <div class="kb-quiz__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="kb-quiz__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="kb-quiz__title">{{ section.settings.title | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <div class="kb-quiz__subtitle">{{ section.settings.subtitle }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if question_total == 0 or result_blocks.size == 0 -%}
+      {%- if request.design_mode -%}
+        <div class="kb-quiz__card kb-quiz__empty">
+          Add at least one <strong>Question</strong> block and one <strong>Result</strong> block to activate the quiz.
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <kanbae-quiz
+        class="kb-quiz__card"
+        data-section-id="{{ section.id }}"
+        data-loader-duration="{{ section.settings.loader_duration | times: 1000 }}"
+        data-messages="{{ loading_messages | json | escape }}"
+        data-step-label="{{ section.settings.step_label | escape }}"
+      >
+        {%- comment -%} Progress: "Question 1 of 4" + bar. Driven by JS. {%- endcomment -%}
+        <div class="kb-quiz__progress">
+          <div class="kb-quiz__progress-row">
+            <button type="button" class="kb-quiz__back" data-quiz-back hidden>
+              <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{ section.settings.back_label | escape }}
+            </button>
+            <p class="kb-quiz__progress-label" data-quiz-progress-label aria-live="polite">
+              {{ section.settings.step_label | replace: '[current]', '1' | replace: '[total]', question_total | escape }}
+            </p>
+          </div>
+          <div class="kb-quiz__progress-track" aria-hidden="true">
+            <span class="kb-quiz__progress-fill" data-quiz-progress-fill></span>
+          </div>
+        </div>
+
+        <div class="kb-quiz__stage">
+          {%- comment -%} Questions {%- endcomment -%}
+          {%- assign q_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'question' -%}
+              <div
+                class="kb-quiz__step"
+                data-step="question"
+                data-index="{{ q_index }}"
+                data-block-id="{{ block.id }}"
+                {% unless q_index == 0 %}
+                  hidden
+                {% endunless %}
+                {{ block.shopify_attributes }}
+              >
+                <h3 class="kb-quiz__question" tabindex="-1">{{ block.settings.question | escape }}</h3>
+                {%- if block.settings.helper != blank -%}
+                  <p class="kb-quiz__helper">{{ block.settings.helper | escape }}</p>
+                {%- endif -%}
+
+                <div class="kb-quiz__options" role="group" aria-label="{{ block.settings.question | escape }}">
+                  {%- assign opt_count = 0 -%}
+                  {%- for i in (1..4) -%}
+                    {%- liquid
+                      assign label_key = 'option_' | append: i | append: '_label'
+                      assign text_key = 'option_' | append: i | append: '_text'
+                      assign weight_key = 'option_' | append: i | append: '_weight'
+                      assign opt_label = block.settings[label_key]
+                    -%}
+                    {%- if opt_label != blank -%}
+                      <button
+                        type="button"
+                        class="kb-quiz__option"
+                        data-weight="{{ block.settings[weight_key] }}"
+                        data-value="{{ opt_label | escape }}"
+                        aria-pressed="false"
+                      >
+                        <span class="kb-quiz__option-marker" aria-hidden="true">{{ letters[opt_count] }}</span>
+                        <span class="kb-quiz__option-body">
+                          <span class="kb-quiz__option-label">{{ opt_label | escape }}</span>
+                          {%- if block.settings[text_key] != blank -%}
+                            <span class="kb-quiz__option-text">{{ block.settings[text_key] | escape }}</span>
+                          {%- endif -%}
+                        </span>
+                        <span class="kb-quiz__option-check" aria-hidden="true">
+                          <svg viewBox="0 0 20 20" focusable="false">
+                            <path d="m5 10.5 3.2 3.2L15 6.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
+                      </button>
+                      {%- assign opt_count = opt_count | plus: 1 -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+              {%- assign q_index = q_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- comment -%} Loader {%- endcomment -%}
+          <div class="kb-quiz__step kb-quiz__loader" data-step="loader" hidden>
+            <div class="kb-quiz__loader-ring" aria-hidden="true"></div>
+            <p class="kb-quiz__loader-text" data-quiz-loader-text role="status" tabindex="-1">
+              {{ loading_messages.first | strip | escape }}
+            </p>
+            <div class="kb-quiz__loader-track" aria-hidden="true">
+              <span class="kb-quiz__loader-fill"></span>
+            </div>
+          </div>
+
+          {%- comment -%} Results: one panel per result block, JS reveals the match. {%- endcomment -%}
+          <div class="kb-quiz__step" data-step="result" hidden>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'result' -%}
+                {%- liquid
+                  assign match_value = block.settings.variant_match | strip | downcase
+                  assign result_variant = nil
+                  if match_value != blank and quiz_product
+                    for variant in quiz_product.variants
+                      assign v_id = variant.id | append: ''
+                      assign v_title = variant.title | downcase
+                      if v_id == match_value or v_title == match_value
+                        assign result_variant = variant
+                        break
+                      endif
+                      for opt in variant.options
+                        assign opt_down = opt | downcase
+                        if opt_down == match_value
+                          assign result_variant = variant
+                          break
+                        endif
+                      endfor
+                      if result_variant
+                        break
+                      endif
+                    endfor
+                  endif
+
+                  assign result_image = block.settings.image
+                  if result_image == blank and result_variant.featured_image
+                    assign result_image = result_variant.featured_image
+                  endif
+                  if result_image == blank and quiz_product
+                    assign result_image = quiz_product.featured_image
+                  endif
+                -%}
+                <div
+                  class="kb-quiz__result"
+                  data-result
+                  data-block-id="{{ block.id }}"
+                  data-min-score="{{ block.settings.min_score }}"
+                  {% if result_variant %}
+                    data-variant-id="{{ result_variant.id }}"
+                    data-variant-options="{{ result_variant.options | json | escape }}"
+                  {% endif %}
+                  hidden
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if result_image != blank -%}
+                    <div class="kb-quiz__result-media">
+                      {{
+                        result_image
+                        | image_url: width: 900
+                        | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 360px, 80vw', widths: '360, 540, 720, 900'
+                      }}
+                    </div>
+                  {%- endif -%}
+
+                  <div class="kb-quiz__result-body">
+                    {%- if section.settings.result_eyebrow != blank -%}
+                      <p class="kb-quiz__eyebrow kb-quiz__eyebrow--accent">{{ section.settings.result_eyebrow | escape }}</p>
+                    {%- endif -%}
+                    <h3 class="kb-quiz__result-title" tabindex="-1">
+                      {{ block.settings.title | escape }}
+                      {%- if block.settings.badge != blank -%}
+                        <span class="kb-quiz__badge">{{ block.settings.badge | escape }}</span>
+                      {%- endif -%}
+                    </h3>
+
+                    {%- if section.settings.show_price and result_variant -%}
+                      <p class="kb-quiz__price">
+                        <span class="kb-quiz__price-now">{{ result_variant.price | money }}</span>
+                        {%- if result_variant.compare_at_price > result_variant.price -%}
+                          <s class="kb-quiz__price-was">{{ result_variant.compare_at_price | money }}</s>
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
+
+                    {%- if block.settings.text != blank -%}
+                      <div class="kb-quiz__result-text">{{ block.settings.text }}</div>
+                    {%- endif -%}
+
+                    <div class="kb-quiz__actions">
+                      {%- if is_same_product -%}
+                        <button
+                          type="button"
+                          class="kb-quiz__cta"
+                          data-quiz-apply
+                          data-applied-label="{{ section.settings.applied_label | escape }}"
+                          data-variant-count="{{ quiz_product.variants.size }}"
+                          data-product-url="{{ quiz_product.url }}"
+                          {% if result_variant and result_variant.available == false %}
+                            disabled
+                          {% endif %}
+                        >
+                          <span data-quiz-cta-label>{{ block.settings.button_label | escape }}</span>
+                        </button>
+                      {%- elsif quiz_product -%}
+                        <a
+                          class="kb-quiz__cta"
+                          href="{{ quiz_product.url }}{% if result_variant %}?variant={{ result_variant.id }}{% endif %}"
+                        >
+                          {{ block.settings.button_label | escape }}
+                        </a>
+                      {%- endif -%}
+                      <button type="button" class="kb-quiz__restart" data-quiz-restart>
+                        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                          <path d="M4 10a6 6 0 1 0 1.8-4.3M4 4v3.5h3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        {{ section.settings.restart_label | escape }}
+                      </button>
+                    </div>
+
+                    {%- if section.settings.footnote != blank -%}
+                      <p class="kb-quiz__footnote">{{ section.settings.footnote | escape }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </kanbae-quiz>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ---------- Shell ---------- */
+  .kb-quiz {
+    --kb-quiz-muted: color-mix(in srgb, var(--kb-quiz-text) 64%, transparent);
+    --kb-quiz-line: color-mix(in srgb, var(--kb-quiz-text) 12%, transparent);
+    --kb-quiz-accent-soft: color-mix(in srgb, var(--kb-quiz-accent) 14%, transparent);
+    --kb-quiz-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    background: var(--kb-quiz-bg);
+    color: var(--kb-quiz-text);
+  }
+
+  .kb-quiz__header {
+    max-width: 64rem;
+    margin: 0 auto 3.2rem;
+    text-align: center;
+  }
+
+  .kb-quiz__eyebrow {
+    margin: 0 0 1.2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--kb-quiz-muted);
+  }
+
+  .kb-quiz__eyebrow--accent {
+    color: var(--kb-quiz-accent);
+    margin-bottom: 0.8rem;
+  }
+
+  .kb-quiz__title {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.8rem, 6vw, 4.4rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: inherit;
+  }
+
+  .kb-quiz__subtitle {
+    margin-top: 1.2rem;
+    font-size: 1.6rem;
+    line-height: 1.55;
+    color: var(--kb-quiz-muted);
+  }
+
+  .kb-quiz__subtitle > * {
+    margin: 0;
+  }
+
+  /* ---------- Card ---------- */
+  .kb-quiz__card {
+    display: block;
+    max-width: 108rem;
+    margin: 0 auto;
+    padding: 2.4rem 2rem 2.8rem;
+    border-radius: var(--kb-quiz-radius);
+    background: var(--kb-quiz-card-bg);
+    border: 0.1rem solid var(--kb-quiz-line);
+    box-shadow: 0 2.4rem 6rem -3rem rgba(15, 30, 20, 0.28);
+  }
+
+  .kb-quiz__empty {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--kb-quiz-muted);
+  }
+
+  /* ---------- Progress ---------- */
+  .kb-quiz__progress {
+    margin-bottom: 2.8rem;
+  }
+
+  .kb-quiz__progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .kb-quiz__progress-label {
+    margin: 0 0 0 auto;
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+    color: var(--kb-quiz-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kb-quiz__progress-track {
+    height: 0.4rem;
+    border-radius: 99rem;
+    background: var(--kb-quiz-line);
+    overflow: hidden;
+  }
+
+  .kb-quiz__progress-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: inherit;
+    background: var(--kb-quiz-accent);
+    transition: width 0.5s var(--kb-quiz-ease);
+  }
+
+  .kb-quiz__back,
+  .kb-quiz__restart {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 1.4rem;
+    color: var(--kb-quiz-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .kb-quiz__back[hidden] {
+    display: none;
+  }
+
+  .kb-quiz__back svg,
+  .kb-quiz__restart svg {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .kb-quiz__back:hover,
+  .kb-quiz__restart:hover {
+    color: var(--kb-quiz-text);
+  }
+
+  /* ---------- Steps + transitions ---------- */
+  .kb-quiz__step[hidden] {
+    display: none;
+  }
+
+  .kb-quiz__step.is-entering {
+    animation: kb-quiz-in 0.42s var(--kb-quiz-ease) both;
+  }
+
+  .kb-quiz__step.is-leaving {
+    animation: kb-quiz-out 0.22s ease-in both;
+    pointer-events: none;
+  }
+
+  @keyframes kb-quiz-in {
+    from {
+      opacity: 0;
+      transform: translateX(calc(var(--kb-quiz-dir, 1) * 2.4rem));
+    }
+  }
+
+  @keyframes kb-quiz-out {
+    to {
+      opacity: 0;
+      transform: translateX(calc(var(--kb-quiz-dir, 1) * -1.6rem));
+    }
+  }
+
+  .kb-quiz__question {
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.2rem, 4.6vw, 2.8rem);
+    line-height: 1.2;
+    color: inherit;
+    outline: none;
+  }
+
+  .kb-quiz__helper {
+    margin: 0.8rem 0 0;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--kb-quiz-muted);
+  }
+
+  /* ---------- Options ---------- */
+  .kb-quiz__options {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+  }
+
+  .kb-quiz__option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    width: 100%;
+    min-height: 6.4rem;
+    padding: 1.4rem 1.6rem;
+    border: 0.1rem solid var(--kb-quiz-line);
+    border-radius: calc(var(--kb-quiz-radius) * 0.6);
+    background: var(--kb-quiz-option-bg);
+    color: var(--kb-quiz-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s var(--kb-quiz-ease),
+      box-shadow 0.2s ease;
+  }
+
+  .kb-quiz__option:focus-visible {
+    outline: 0.2rem solid var(--kb-quiz-accent);
+    outline-offset: 0.3rem;
+  }
+
+  .kb-quiz__option:active {
+    transform: scale(0.985);
+  }
+
+  .kb-quiz__option[aria-pressed='true'] {
+    border-color: var(--kb-quiz-accent);
+    background: var(--kb-quiz-accent-soft);
+    box-shadow: 0 0 0 0.1rem var(--kb-quiz-accent);
+  }
+
+  .kb-quiz__option-marker {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    border: 0.1rem solid var(--kb-quiz-line);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--kb-quiz-muted);
+    transition: all 0.2s ease;
+  }
+
+  .kb-quiz__option[aria-pressed='true'] .kb-quiz__option-marker {
+    border-color: var(--kb-quiz-accent);
+    background: var(--kb-quiz-accent);
+    color: var(--kb-quiz-accent-text);
+  }
+
+  .kb-quiz__option-body {
+    flex: 1;
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .kb-quiz__option-label {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .kb-quiz__option-text {
+    font-size: 1.35rem;
+    line-height: 1.4;
+    color: var(--kb-quiz-muted);
+  }
+
+  .kb-quiz__option-check {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--kb-quiz-accent);
+    color: var(--kb-quiz-accent-text);
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.2s ease,
+      transform 0.3s var(--kb-quiz-ease);
+  }
+
+  .kb-quiz__option-check svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  .kb-quiz__option[aria-pressed='true'] .kb-quiz__option-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @media (hover: hover) {
+    .kb-quiz__option:hover {
+      border-color: color-mix(in srgb, var(--kb-quiz-accent) 55%, transparent);
+      transform: translateY(-0.1rem);
+    }
+  }
+
+  /* ---------- Loader ---------- */
+  .kb-quiz__loader {
+    display: grid;
+    justify-items: center;
+    gap: 2rem;
+    padding: 3.2rem 0 2rem;
+    text-align: center;
+  }
+
+  .kb-quiz__loader[hidden] {
+    display: none;
+  }
+
+  .kb-quiz__loader-ring {
+    width: 5.6rem;
+    height: 5.6rem;
+    border-radius: 50%;
+    border: 0.3rem solid var(--kb-quiz-line);
+    border-top-color: var(--kb-quiz-accent);
+    animation: kb-quiz-spin 0.9s linear infinite;
+  }
+
+  .kb-quiz__loader-text {
+    margin: 0;
+    min-height: 2.6rem;
+    font-family: var(--font-heading-family);
+    font-size: 1.9rem;
+    outline: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .kb-quiz__loader-text.is-swapping {
+    opacity: 0;
+  }
+
+  .kb-quiz__loader-track {
+    width: min(100%, 28rem);
+    height: 0.4rem;
+    border-radius: 99rem;
+    background: var(--kb-quiz-line);
+    overflow: hidden;
+  }
+
+  .kb-quiz__loader-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--kb-quiz-accent);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .kb-quiz__loader:not([hidden]) .kb-quiz__loader-fill {
+    animation: kb-quiz-fill var(--kb-quiz-loader-ms, 2000ms) var(--kb-quiz-ease) forwards;
+  }
+
+  @keyframes kb-quiz-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes kb-quiz-fill {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ---------- Result ---------- */
+  .kb-quiz__result {
+    display: grid;
+    gap: 2.4rem;
+  }
+
+  .kb-quiz__result[hidden] {
+    display: none;
+  }
+
+  .kb-quiz__result-media {
+    border-radius: calc(var(--kb-quiz-radius) * 0.75);
+    overflow: hidden;
+    background: var(--kb-quiz-option-bg);
+    aspect-ratio: 1 / 1;
+    max-width: 32rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .kb-quiz__result-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .kb-quiz__result-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1.2rem;
+    margin: 0;
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.6rem, 5vw, 3.4rem);
+    line-height: 1.15;
+    color: inherit;
+    outline: none;
+  }
+
+  .kb-quiz__badge {
+    padding: 0.4rem 1rem;
+    border-radius: 99rem;
+    background: var(--kb-quiz-accent-soft);
+    color: var(--kb-quiz-text);
+    font-family: var(--font-body-family);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .kb-quiz__price {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 1.2rem 0 0;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .kb-quiz__price-was {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--kb-quiz-muted);
+  }
+
+  .kb-quiz__result-text {
+    margin-top: 1.4rem;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    color: var(--kb-quiz-muted);
+  }
+
+  .kb-quiz__result-text > :first-child {
+    margin-top: 0;
+  }
+
+  .kb-quiz__result-text > :last-child {
+    margin-bottom: 0;
+  }
+
+  .kb-quiz__actions {
+    display: grid;
+    justify-items: center;
+    gap: 1.2rem;
+    margin-top: 2.4rem;
+  }
+
+  .kb-quiz__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 5.4rem;
+    padding: 1.4rem 2.8rem;
+    border: 0;
+    border-radius: 99rem;
+    background: var(--kb-quiz-accent);
+    color: var(--kb-quiz-accent-text);
+    font: inherit;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 0.2s var(--kb-quiz-ease),
+      box-shadow 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .kb-quiz__cta:hover {
+    transform: translateY(-0.1rem);
+    box-shadow: 0 1.2rem 2.4rem -1.2rem var(--kb-quiz-accent);
+  }
+
+  .kb-quiz__cta:focus-visible {
+    outline: 0.2rem solid var(--kb-quiz-accent);
+    outline-offset: 0.3rem;
+  }
+
+  .kb-quiz__cta[disabled],
+  .kb-quiz__cta[aria-busy='true'] {
+    opacity: 0.55;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .kb-quiz__footnote {
+    margin: 1.6rem 0 0;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--kb-quiz-muted);
+  }
+
+  /* ---------- Desktop ---------- */
+  @media screen and (min-width: 750px) {
+    .kb-quiz__header {
+      margin-bottom: 4.8rem;
+    }
+
+    .kb-quiz__card {
+      padding: 4.8rem 5.6rem 5.2rem;
+    }
+
+    .kb-quiz__options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.4rem;
+    }
+
+    .kb-quiz__result {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: center;
+      gap: 5.6rem;
+    }
+
+    .kb-quiz__result-media {
+      max-width: 44rem;
+    }
+
+    .kb-quiz__result:not(:has(.kb-quiz__result-media)) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .kb-quiz__actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1.6rem 3.2rem;
+    }
+
+    .kb-quiz__cta {
+      width: auto;
+    }
+
+    .kb-quiz__footnote {
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kb-quiz *,
+    .kb-quiz *::before,
+    .kb-quiz *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('kanbae-quiz')) {
+    class KanbaeQuiz extends HTMLElement {
+      connectedCallback() {
+        this.questions = Array.from(this.querySelectorAll('[data-step="question"]'));
+        this.loader = this.querySelector('[data-step="loader"]');
+        this.resultStep = this.querySelector('[data-step="result"]');
+        // Ascending by threshold so the last one that fits is the best match.
+        this.results = Array.from(this.querySelectorAll('[data-result]')).sort(
+          (a, b) => Number(a.dataset.minScore) - Number(b.dataset.minScore)
+        );
+        this.backButton = this.querySelector('[data-quiz-back]');
+        this.progressLabel = this.querySelector('[data-quiz-progress-label]');
+        this.progressFill = this.querySelector('[data-quiz-progress-fill]');
+        this.loaderText = this.querySelector('[data-quiz-loader-text]');
+
+        this.loaderDuration = Number(this.dataset.loaderDuration) || 2000;
+        this.stepLabel = this.dataset.stepLabel || '[current] / [total]';
+        try {
+          this.messages = JSON.parse(this.dataset.messages || '[]')
+            .map((m) => m.trim())
+            .filter(Boolean);
+        } catch (e) {
+          this.messages = [];
+        }
+
+        this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.answers = new Array(this.questions.length).fill(null);
+        this.index = 0;
+        this.current = this.questions[0];
+        this.timers = [];
+        this.transitionToken = 0;
+
+        this.onClick = this.onClick.bind(this);
+        this.onBlockSelect = this.onBlockSelect.bind(this);
+        this.addEventListener('click', this.onClick);
+        if (window.Shopify && Shopify.designMode) {
+          document.addEventListener('shopify:block:select', this.onBlockSelect);
+        }
+
+        this.updateChrome();
+      }
+
+      disconnectedCallback() {
+        this.removeEventListener('click', this.onClick);
+        document.removeEventListener('shopify:block:select', this.onBlockSelect);
+        this.clearTimers();
+      }
+
+      /* ---------- Events ---------- */
+
+      onClick(event) {
+        const option = event.target.closest('.kb-quiz__option');
+        if (option) return this.selectOption(option);
+        if (event.target.closest('[data-quiz-back]')) return this.goBack();
+        if (event.target.closest('[data-quiz-restart]')) return this.restart();
+        const apply = event.target.closest('[data-quiz-apply]');
+        if (apply) return this.applyRecommendation(apply);
+      }
+
+      // Theme editor: jump to whichever question/result block the merchant selects.
+      onBlockSelect(event) {
+        if (event.detail.sectionId !== this.dataset.sectionId) return;
+        const target = this.querySelector(`[data-block-id="${event.detail.blockId}"]`);
+        if (!target) return;
+        this.clearTimers();
+        if (target.dataset.step === 'question') {
+          this.index = Number(target.dataset.index);
+          this.showStep(target, 1, { animate: false });
+        } else if (target.hasAttribute('data-result')) {
+          this.revealResult(target);
+          this.showStep(this.resultStep, 1, { animate: false });
+        }
+      }
+
+      /* ---------- Flow ---------- */
+
+      selectOption(option) {
+        if (this.locked) return;
+        const step = option.closest('[data-step="question"]');
+        step.querySelectorAll('.kb-quiz__option').forEach((el) => {
+          el.setAttribute('aria-pressed', String(el === option));
+        });
+        this.answers[Number(step.dataset.index)] = {
+          question: step.querySelector('.kb-quiz__question').textContent.trim(),
+          answer: option.dataset.value,
+          weight: Number(option.dataset.weight) || 0,
+        };
+
+        // Short pause so the shopper sees their pick confirmed before auto-advancing.
+        this.locked = true;
+        this.later(() => {
+          this.locked = false;
+          if (this.index < this.questions.length - 1) {
+            this.index += 1;
+            this.showStep(this.questions[this.index], 1);
+          } else {
+            this.analyze();
+          }
+        }, this.reducedMotion ? 120 : 360);
+      }
+
+      goBack() {
+        if (this.locked || this.current.dataset.step !== 'question' || this.index === 0) return;
+        this.index -= 1;
+        this.showStep(this.questions[this.index], -1);
+      }
+
+      restart() {
+        this.clearTimers();
+        this.locked = false;
+        this.answers.fill(null);
+        this.index = 0;
+        this.querySelectorAll('.kb-quiz__option').forEach((el) => el.setAttribute('aria-pressed', 'false'));
+        this.querySelectorAll('[data-quiz-apply]').forEach((btn) => this.resetApplyButton(btn));
+        this.showStep(this.questions[0], -1);
+      }
+
+      analyze() {
+        this.showStep(this.loader, 1);
+
+        // Rotate the loader copy evenly across the loader duration.
+        if (this.messages.length > 1) {
+          const slot = this.loaderDuration / this.messages.length;
+          this.messages.slice(1).forEach((message, i) => {
+            this.later(() => this.swapLoaderText(message), slot * (i + 1));
+          });
+        }
+
+        const score = this.score();
+        const match = this.pickResult(score);
+        this.later(() => {
+          this.revealResult(match);
+          this.showStep(this.resultStep, 1);
+          this.dispatchEvent(
+            new CustomEvent('kanbae:quiz:complete', {
+              bubbles: true,
+              detail: { score, answers: this.answers, variantId: match.dataset.variantId || null },
+            })
+          );
+        }, this.loaderDuration);
+      }
+
+      // Picked weights as a % of the max weight available across all questions.
+      score() {
+        let total = 0;
+        let max = 0;
+        this.questions.forEach((question, i) => {
+          const weights = Array.from(question.querySelectorAll('.kb-quiz__option')).map(
+            (el) => Number(el.dataset.weight) || 0
+          );
+          max += Math.max(0, ...weights);
+          total += this.answers[i] ? this.answers[i].weight : 0;
+        });
+        return max ? Math.round((total / max) * 100) : 0;
+      }
+
+      pickResult(score) {
+        let match = this.results[0];
+        this.results.forEach((result) => {
+          if (score >= Number(result.dataset.minScore)) match = result;
+        });
+        return match;
+      }
+
+      revealResult(match) {
+        this.results.forEach((result) => {
+          result.hidden = result !== match;
+        });
+      }
+
+      swapLoaderText(message) {
+        if (!this.loaderText) return;
+        this.loaderText.classList.add('is-swapping');
+        this.later(() => {
+          this.loaderText.textContent = message;
+          this.loaderText.classList.remove('is-swapping');
+        }, 250);
+      }
+
+      /* ---------- Transitions ---------- */
+
+      showStep(next, direction = 1, { animate = true } = {}) {
+        const prev = this.current;
+        const token = ++this.transitionToken;
+        const useMotion = animate && !this.reducedMotion;
+        this.current = next;
+
+        const enter = () => {
+          if (token !== this.transitionToken) return;
+          this.querySelectorAll('[data-step]').forEach((step) => {
+            if (step !== next) step.hidden = true;
+            step.classList.remove('is-leaving', 'is-entering');
+          });
+          if (next === this.loader) this.resetLoader();
+          next.style.setProperty('--kb-quiz-dir', direction);
+          next.hidden = false;
+          if (useMotion) {
+            next.classList.add('is-entering');
+            next.addEventListener('animationend', () => next.classList.remove('is-entering'), { once: true });
+          }
+          this.updateChrome();
+          if (animate) this.focusStep(next);
+        };
+
+        if (prev && prev !== next && useMotion) {
+          prev.style.setProperty('--kb-quiz-dir', direction);
+          prev.classList.add('is-leaving');
+          this.later(enter, 220);
+        } else {
+          enter();
+        }
+      }
+
+      resetLoader() {
+        if (this.loaderText && this.messages.length) this.loaderText.textContent = this.messages[0];
+        // Restart the CSS fill animation from zero.
+        const fill = this.loader.querySelector('.kb-quiz__loader-fill');
+        if (fill) {
+          fill.style.animation = 'none';
+          void fill.offsetWidth;
+          fill.style.animation = '';
+        }
+      }
+
+      focusStep(step) {
+        const heading = step.querySelector('.kb-quiz__question, .kb-quiz__loader-text, [data-result]:not([hidden]) .kb-quiz__result-title');
+        if (heading) heading.focus({ preventScroll: true });
+
+        // On mobile the card can scroll out of view between steps; bring its top back.
+        const top = this.getBoundingClientRect().top;
+        if (top < 0) {
+          this.scrollIntoView({ behavior: this.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      }
+
+      updateChrome() {
+        const total = this.questions.length;
+        const isQuestion = this.current && this.current.dataset.step === 'question';
+        const current = isQuestion ? this.index + 1 : total;
+        const progress = isQuestion ? (this.index / total) * 100 : 100;
+
+        this.progressFill.style.width = `${progress}%`;
+        this.progressLabel.textContent = this.stepLabel
+          .replace('[current]', current)
+          .replace('[total]', total);
+        this.backButton.hidden = !isQuestion || this.index === 0;
+      }
+
+      /* ---------- Apply recommendation to the PDP ---------- */
+
+      async applyRecommendation(button) {
+        if (button.getAttribute('aria-busy') === 'true') return;
+        const panel = button.closest('[data-result]');
+        const variantId = panel.dataset.variantId;
+        let values = [];
+        try {
+          values = JSON.parse(panel.dataset.variantOptions || '[]');
+        } catch (e) {}
+
+        button.setAttribute('aria-busy', 'true');
+        const picker = this.findPicker();
+
+        if (picker && values.length) {
+          await this.selectVariant(values);
+        } else if (!picker && variantId && Number(button.dataset.variantCount) > 1) {
+          // No native picker on the page: load the PDP with the variant preselected.
+          window.location.href = `${button.dataset.productUrl}?variant=${variantId}`;
+          return;
+        }
+
+        button.removeAttribute('aria-busy');
+        const label = button.querySelector('[data-quiz-cta-label]');
+        if (label && button.dataset.appliedLabel) {
+          label.dataset.originalLabel = label.dataset.originalLabel || label.textContent;
+          label.textContent = button.dataset.appliedLabel;
+        }
+
+        const buyBox = document.querySelector('product-info') || document.querySelector('product-form');
+        if (buyBox) buyBox.scrollIntoView({ behavior: this.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }
+
+      resetApplyButton(button) {
+        button.removeAttribute('aria-busy');
+        const label = button.querySelector('[data-quiz-cta-label]');
+        if (label && label.dataset.originalLabel) label.textContent = label.dataset.originalLabel;
+      }
+
+      findPicker() {
+        return document.querySelector('product-info variant-selects') || document.querySelector('variant-selects');
+      }
+
+      // Changes one option at a time and waits for Dawn to re-render the picker
+      // (it swaps the DOM after each change) before touching the next option.
+      async selectVariant(values) {
+        for (let i = 0; i < values.length; i++) {
+          const picker = this.findPicker();
+          if (!picker) return;
+          const group = picker.querySelectorAll('fieldset, .product-form__input--dropdown')[i];
+          if (!group) continue;
+
+          let changed = false;
+          const select = group.querySelector('select');
+          if (select) {
+            const option = Array.from(select.options).find(
+              (o) => o.value === values[i] || o.textContent.trim() === values[i]
+            );
+            if (option && !option.selected) {
+              select.value = option.value;
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+              changed = true;
+            }
+          } else {
+            const input = Array.from(group.querySelectorAll('input[type="radio"]')).find(
+              (el) => el.value === values[i]
+            );
+            if (input && !input.checked) {
+              input.checked = true;
+              input.dispatchEvent(new Event('change', { bubbles: true }));
+              changed = true;
+            }
+          }
+          if (changed) await this.waitForVariantChange();
+        }
+      }
+
+      waitForVariantChange() {
+        return new Promise((resolve) => {
+          let unsubscribe;
+          const done = () => {
+            clearTimeout(timeout);
+            if (unsubscribe) unsubscribe();
+            resolve();
+          };
+          const timeout = setTimeout(done, 1500);
+          if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+            unsubscribe = subscribe(PUB_SUB_EVENTS.variantChange, done);
+          }
+        });
+      }
+
+      /* ---------- Timers ---------- */
+
+      later(fn, ms) {
+        const id = setTimeout(fn, ms);
+        this.timers.push(id);
+        return id;
+      }
+
+      clearTimers() {
+        this.timers.forEach(clearTimeout);
+        this.timers = [];
+      }
+    }
+
+    customElements.define('kanbae-quiz', KanbaeQuiz);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Kanbae product quiz",
+  "tag": "section",
+  "class": "section section-kanbae-product-quiz",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "60-second quiz"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Find your ideal Kanbae pack"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Answer 4 quick questions about how you drink and we'll match you with the pack that keeps your mornings clear.</p>"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Leave empty on product pages to use the current product."
+    },
+    {
+      "type": "header",
+      "content": "Quiz labels"
+    },
+    {
+      "type": "text",
+      "id": "step_label",
+      "label": "Progress label",
+      "info": "Use [current] and [total] as placeholders.",
+      "default": "Question [current] of [total]"
+    },
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "Back button",
+      "default": "Back"
+    },
+    {
+      "type": "text",
+      "id": "loading_messages",
+      "label": "Loading messages",
+      "info": "Separate messages with | — they rotate while the result is calculated.",
+      "default": "Analyzing your profile...|Matching your drinking rhythm...|Preparing your recommendation..."
+    },
+    {
+      "type": "range",
+      "id": "loader_duration",
+      "label": "Loading duration",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "unit": "s",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "result_eyebrow",
+      "label": "Result eyebrow",
+      "default": "Your ideal match"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show variant price on result",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "applied_label",
+      "label": "Button text after selecting",
+      "info": "Shown once the recommended variant is selected in the buy box.",
+      "default": "Selected — ready to add to cart"
+    },
+    {
+      "type": "text",
+      "id": "restart_label",
+      "label": "Retake button",
+      "default": "Retake the quiz"
+    },
+    {
+      "type": "text",
+      "id": "footnote",
+      "label": "Footnote",
+      "default": "Recommendation based on your answers. Always drink responsibly."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "option_background",
+      "label": "Option background",
+      "default": "#f7f6f2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#14251a"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent / active state",
+      "default": "#0f2b1d"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "label": "Text on accent",
+      "default": "#cbffda"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How often do you drink?"
+        },
+        {
+          "type": "text",
+          "id": "helper",
+          "label": "Helper text"
+        },
+        {
+          "type": "paragraph",
+          "content": "Weight = how strongly an answer pushes toward the larger packs (0 = lowest, 3 = highest). Leave an option label empty to hide it."
+        },
+        { "type": "header", "content": "Option A" },
+        { "type": "text", "id": "option_1_label", "label": "Label", "default": "Rarely" },
+        { "type": "text", "id": "option_1_text", "label": "Description" },
+        { "type": "range", "id": "option_1_weight", "label": "Weight", "min": 0, "max": 3, "step": 1, "default": 0 },
+        { "type": "header", "content": "Option B" },
+        { "type": "text", "id": "option_2_label", "label": "Label", "default": "A few times a month" },
+        { "type": "text", "id": "option_2_text", "label": "Description" },
+        { "type": "range", "id": "option_2_weight", "label": "Weight", "min": 0, "max": 3, "step": 1, "default": 1 },
+        { "type": "header", "content": "Option C" },
+        { "type": "text", "id": "option_3_label", "label": "Label", "default": "Every weekend" },
+        { "type": "text", "id": "option_3_text", "label": "Description" },
+        { "type": "range", "id": "option_3_weight", "label": "Weight", "min": 0, "max": 3, "step": 1, "default": 2 },
+        { "type": "header", "content": "Option D" },
+        { "type": "text", "id": "option_4_label", "label": "Label", "default": "Several times a week" },
+        { "type": "text", "id": "option_4_text", "label": "Description" },
+        { "type": "range", "id": "option_4_weight", "label": "Weight", "min": 0, "max": 3, "step": 1, "default": 3 }
+      ]
+    },
+    {
+      "type": "result",
+      "name": "Result",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "range",
+          "id": "min_score",
+          "label": "Minimum score",
+          "info": "Shown when the shopper's score (0–100%) reaches this value. Keep one result at 0%.",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "variant_match",
+          "label": "Variant match",
+          "info": "Variant ID, variant title (e.g. 3 Boxes) or an option value. Not case-sensitive.",
+          "default": "1 Box"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "The Starter Box"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>You drink occasionally, so one box covers your next few nights out. Take Kanbae before your first drink and wake up ready for the day.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Defaults to the matched variant's image."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Choose this pack"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae product quiz",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "How often do you drink?",
+            "helper": "Think about a typical month.",
+            "option_1_label": "Rarely",
+            "option_1_text": "Special occasions only",
+            "option_1_weight": 0,
+            "option_2_label": "A few times a month",
+            "option_2_text": "Dinners, the odd night out",
+            "option_2_weight": 1,
+            "option_3_label": "Every weekend",
+            "option_3_text": "Friday and Saturday are a ritual",
+            "option_3_weight": 2,
+            "option_4_label": "Several times a week",
+            "option_4_text": "Work events, social life, all of it",
+            "option_4_weight": 3
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How many drinks on a typical night?",
+            "option_1_label": "1–2 drinks",
+            "option_1_weight": 0,
+            "option_2_label": "3–4 drinks",
+            "option_2_weight": 1,
+            "option_3_label": "5–6 drinks",
+            "option_3_weight": 2,
+            "option_4_label": "7 or more",
+            "option_4_weight": 3
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How do you usually feel the next morning?",
+            "option_1_label": "Fresh",
+            "option_1_text": "I bounce back easily",
+            "option_1_weight": 0,
+            "option_2_label": "A bit slow",
+            "option_2_text": "Tired until lunch",
+            "option_2_weight": 1,
+            "option_3_label": "Rough",
+            "option_3_text": "Headache, foggy, thirsty",
+            "option_3_weight": 2,
+            "option_4_label": "Wiped out",
+            "option_4_text": "The whole day is gone",
+            "option_4_weight": 3
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What are you looking for?",
+            "option_1_label": "Try it once",
+            "option_1_text": "See how it works for me",
+            "option_1_weight": 0,
+            "option_2_label": "Cover a big event",
+            "option_2_text": "Wedding, trip or festival",
+            "option_2_weight": 1,
+            "option_3_label": "A regular routine",
+            "option_3_text": "Always have it before going out",
+            "option_3_weight": 2,
+            "option_4_label": "Stock up and save",
+            "option_4_text": "Best price per night",
+            "option_4_weight": 3
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "min_score": 0,
+            "variant_match": "1 Box",
+            "title": "The Starter Box",
+            "text": "<p>You drink occasionally, so one box covers your next few nights out. Take Kanbae before your first drink and wake up ready for the day.</p>",
+            "button_label": "Choose 1 Box"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "min_score": 40,
+            "variant_match": "3 Boxes",
+            "title": "The Weekend Pack",
+            "badge": "Most popular",
+            "text": "<p>Your weekends are social. Three boxes keep you covered for the month ahead, so every Saturday comes with a clear Sunday.</p>",
+            "button_label": "Choose 3 Boxes"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "min_score": 70,
+            "variant_match": "6 Boxes",
+            "title": "The Social Calendar",
+            "badge": "Best value",
+            "text": "<p>You're out often and your mornings matter. Six boxes give you the lowest price per night and you never run out before the next plan.</p>",
+            "button_label": "Choose 6 Boxes"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
