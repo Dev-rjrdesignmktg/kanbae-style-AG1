@@ -25,12 +25,12 @@
           "settings": {
             "number": "01",
             "icon": "shopify://shop_images/lemon_botanical_flat_lay.png",
-            "nav_label": "Liver & Cellular Defense",
-            "panel_heading": "Liver & Cellular Defense",
-            "description": "<p>A blend of DHM and botanical extracts that helps the body process acetaldehyde, the toxic byproduct of alcohol metabolism, so cellular stress is minimized before it builds up.</p>",
+            "nav_label": "Acetaldehyde Defense",
+            "panel_heading": "Acetaldehyde Defense",
+            "description": "<p>99% pure DHM from Japanese Raisin Tree and highly bioavailable S-Acetyl Glutathione work through two pathways to accelerate the breakdown of acetaldehyde, the toxic byproduct of alcohol metabolism.</p>",
             "spotlight_label": "Ingredient Spotlight",
-            "spotlight_text": "DHM, Milk Thistle, NAC",
-            "benefits": "Faster toxin clearance\nReduced next-day fatigue\nSupports cellular resilience overnight",
+            "spotlight_text": "DHM (Japanese Raisin Tree), S-Acetyl Glutathione",
+            "benefits": "Accelerates acetaldehyde breakdown\nTwo pathways to neutralize toxins\nLess nausea, headache and flushing",
             "image": "shopify://shop_images/lemon_botanical_flat_lay.png"
           }
         },
@@ -39,12 +39,12 @@
           "settings": {
             "number": "02",
             "icon": "shopify://shop_images/nuts_seeds_roots_wellness.png",
-            "nav_label": "Hydration & Electrolytes",
-            "panel_heading": "Hydration & Electrolytes",
-            "description": "<p>A clinically-studied electrolyte blend that restores what a night out depletes, replacing fluids and minerals faster than water alone.</p>",
+            "nav_label": "Liver Energy & Recovery",
+            "panel_heading": "Liver Energy & Recovery",
+            "description": "<p>Pyroglutamic Acid gives your liver the raw material to keep regenerating glutathione through the night, while Succinic Acid fuels liver-cell energy during detox, bypassing the mitochondrial blockage alcohol causes.</p>",
             "spotlight_label": "Ingredient Spotlight",
-            "spotlight_text": "Sodium, Potassium, Magnesium, Coconut Water Extract",
-            "benefits": "Rehydrates faster than water alone\nEases the morning-after headache\nRestores what alcohol depletes",
+            "spotlight_text": "Pyroglutamic Acid, Succinic Acid",
+            "benefits": "Keeps glutathione regenerating overnight\nFuels liver-cell energy during detox\nSupports a faster next-day recovery",
             "image": "shopify://shop_images/nuts_seeds_roots_wellness.png"
           }
         },
@@ -53,12 +53,12 @@
           "settings": {
             "number": "03",
             "icon": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg",
-            "nav_label": "Digestive Comfort",
-            "panel_heading": "Digestive Comfort & Prebiotics",
-            "description": "<p>Ginger root and a targeted prebiotic blend calm an unsettled stomach and support gut recovery while you sleep.</p>",
+            "nav_label": "Vitamin Replenishment",
+            "panel_heading": "Vitamin Replenishment",
+            "description": "<p>Alcohol drains key vitamins. Thiamine (B1) restores a mitochondrial cofactor alcohol depletes, Vitamin B6 replenishes what acetaldehyde degrades, and Vitamin C reacts directly with acetaldehyde while helping regenerate glutathione.</p>",
             "spotlight_label": "Ingredient Spotlight",
-            "spotlight_text": "Ginger Root, ZingiBain, Prebiotic Fiber",
-            "benefits": "Less bloating and nausea\nCalms an unsettled stomach\nSupports gut recovery overnight",
+            "spotlight_text": "Vitamin C 15mg, Vitamin B1 10mg, Vitamin B6 5mg",
+            "benefits": "Replaces vitamins alcohol depletes\nSupports cellular energy\nExtra antioxidant support",
             "image": "shopify://shop_images/f3617857023edecea0f30d295049d691.jpg"
           }
         },
@@ -67,12 +67,12 @@
           "settings": {
             "number": "04",
             "icon": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg",
-            "nav_label": "Absorption",
-            "panel_heading": "Advanced Absorption",
-            "description": "<p>Black pepper extract works alongside every other ingredient to maximize how much your body actually absorbs, so nothing goes to waste.</p>",
+            "nav_label": "Comfort & Absorption",
+            "panel_heading": "Comfort & Absorption",
+            "description": "<p>Ginger Extract helps ease nausea and neuroinflammation for a faster return to clarity, while Black Pepper Extract inhibits the gut enzymes that degrade other ingredients, so more of every dose is absorbed.</p>",
             "spotlight_label": "Ingredient Spotlight",
-            "spotlight_text": "Black Pepper Extract (BioPerine)",
-            "benefits": "Maximizes nutrient uptake\nFaster-acting formula\nNothing wasted, nothing diluted",
+            "spotlight_text": "Ginger Extract, Black Pepper Extract",
+            "benefits": "Eases nausea and stomach discomfort\nSupports faster mental clarity\nMaximizes absorption of every ingredient",
             "image": "shopify://shop_images/eaefc05fc2aa06bcfc4ec5e7df327a64.jpg"
           }
         }
@@ -206,9 +206,9 @@
             "max_width": 1100,
             "corner_styling": "round",
             "header_text_color": "#0f3b2e",
-            "text_color": "#0F3B2E",
-            "card_color": "#CBFFDA",
-            "stars_color": "#FFD700",
+            "text_color": "#0f3b2e",
+            "card_color": "#cbffda",
+            "stars_color": "#ffd700",
             "arrows_color": "#000000",
             "transition_speed": 5,
             "header_text": "",
