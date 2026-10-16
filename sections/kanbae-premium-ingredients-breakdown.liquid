@@ -1,0 +1,994 @@
+{% comment %}
+  Kanbae Premium Ingredients Breakdown
+  ------------------------------------------------------------------
+  Interactive, dark glassmorphism breakdown of the formula's key
+  ingredients.
+
+  - Header: badge + editorial heading + subheading + "Supplement Facts"
+    button (opens a native <dialog> with an image, or links to a URL).
+  - Each "ingredient" block: name, dose, category, scientific name,
+    description, purity badges (comma separated), optional image used
+    as a large visual or as a small icon, optional study link.
+  - Desktop (>= 990px): side or top tabs + one focused card, with a
+    directional fade/slide/blur transition (Web Animations API).
+  - Tablet (750–989px): horizontal tabs above the card.
+  - Mobile (< 750px): fluid accordion or horizontal chip slider.
+  - Optional autoplay with a progress bar on the active tab; stops for
+    good as soon as the visitor interacts, pauses on hover/focus or
+    when off-screen, and is disabled with prefers-reduced-motion.
+  - Theme editor: selecting a block shows that ingredient.
+  - Styles: assets/section-kanbae-premium-ingredients-breakdown.css
+  - Script: assets/kanbae-premium-ingredients-breakdown.js
+{% endcomment %}
+
+{{ 'section-kanbae-premium-ingredients-breakdown.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kanbae-premium-ingredients-breakdown.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign glass_alpha = section.settings.glass_opacity | divided_by: 100.0
+  assign use_scheme = false
+  if section.settings.color_source == 'scheme'
+    assign use_scheme = true
+  endif
+
+  assign bg = section.settings.background_color | default: '#050D09'
+  assign text = section.settings.text_color | default: '#EEF2EC'
+  assign accent = section.settings.accent_color | default: '#A3FF16'
+  assign on_accent = section.settings.on_accent_color | default: '#050D09'
+  assign card = section.settings.card_color | default: '#0E1A14'
+  assign tab = section.settings.tab_color | default: card
+  assign line = section.settings.border_color | default: '#FFFFFF'
+  assign line_alpha = section.settings.border_opacity | divided_by: 100.0
+  assign glow = section.settings.glow_color | default: accent
+  assign facts_alt = section.settings.facts_image.alt | default: section.settings.facts_label
+
+  assign facts_mode = 'none'
+  if section.settings.facts_label != blank
+    if section.settings.facts_image != blank
+      assign facts_mode = 'dialog'
+    elsif section.settings.facts_link != blank
+      assign facts_mode = 'link'
+    endif
+  endif
+
+  assign autoplay_ms = 0
+  if section.settings.autoplay and section.blocks.size > 1
+    assign autoplay_ms = section.settings.autoplay_speed | times: 1000
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #KbIb-{{ section.id }} {
+    {%- if use_scheme %}
+      --kb-ib-bg: rgb(var(--color-background));
+      --kb-ib-surface: var(--gradient-background);
+      --kb-ib-text-rgb: var(--color-foreground);
+    {%- else %}
+      --kb-ib-bg: {{ bg }};
+      --kb-ib-text-rgb: {{ text | color_extract: 'red' }}, {{ text | color_extract: 'green' }}, {{ text | color_extract: 'blue' }};
+    {%- endif %}
+    --kb-ib-accent: {{ accent }};
+    --kb-ib-accent-rgb: {{ accent | color_extract: 'red' }}, {{ accent | color_extract: 'green' }}, {{ accent | color_extract: 'blue' }};
+    --kb-ib-on-accent: {{ on_accent }};
+    --kb-ib-glow-rgb: {{ glow | color_extract: 'red' }}, {{ glow | color_extract: 'green' }}, {{ glow | color_extract: 'blue' }};
+    --kb-ib-card-rgb: {{ card | color_extract: 'red' }}, {{ card | color_extract: 'green' }}, {{ card | color_extract: 'blue' }};
+    --kb-ib-tab-rgb: {{ tab | color_extract: 'red' }}, {{ tab | color_extract: 'green' }}, {{ tab | color_extract: 'blue' }};
+    --kb-ib-line-rgb: {{ line | color_extract: 'red' }}, {{ line | color_extract: 'green' }}, {{ line | color_extract: 'blue' }};
+    --kb-ib-line-alpha: {{ line_alpha }};
+    --kb-ib-glass: {{ glass_alpha }};
+    --kb-ib-blur: {{ section.settings.glass_blur }}px;
+    --kb-ib-sticky-top: {{ section.settings.sticky_offset }}px;
+    {%- if section.settings.heading_color != blank %}
+      --kb-ib-heading: {{ section.settings.heading_color }};
+    {%- endif %}
+    {%- if section.settings.muted_color != blank %}
+      {%- assign muted = section.settings.muted_color %}
+      --kb-ib-muted: {{ muted }};
+      --kb-ib-faint: rgba({{ muted | color_extract: 'red' }}, {{ muted | color_extract: 'green' }}, {{ muted | color_extract: 'blue' }}, 0.7);
+    {%- endif %}
+    {%- if section.settings.pill_bg_color != blank %}
+      --kb-ib-pill-bg: {{ section.settings.pill_bg_color }};
+    {%- endif %}
+    {%- if section.settings.pill_text_color != blank %}
+      --kb-ib-pill-text: {{ section.settings.pill_text_color }};
+    {%- endif %}
+  }
+{%- endstyle -%}
+
+<kanbae-ingredients-breakdown
+  id="KbIb-{{ section.id }}"
+  class="kb-ib{% if use_scheme %} color-{{ section.settings.color_scheme }}{% endif %} section-{{ section.id }}-padding kb-ib--tabs-{{ section.settings.tabs_position }} kb-ib--m-{{ section.settings.mobile_layout }}{% if section.settings.sticky_card %} kb-ib--sticky{% endif %}"
+  data-mobile-layout="{{ section.settings.mobile_layout }}"
+  data-tabs-position="{{ section.settings.tabs_position }}"
+  {% if autoplay_ms > 0 %}
+    data-autoplay="{{ autoplay_ms }}"
+  {% endif %}
+>
+  {%- if section.settings.show_glow -%}
+    <div class="kb-ib__ambient" aria-hidden="true">
+      <span class="kb-ib__orb kb-ib__orb--one"></span>
+      <span class="kb-ib__orb kb-ib__orb--two"></span>
+      <span class="kb-ib__grain"></span>
+    </div>
+  {%- endif -%}
+
+  <div class="kb-ib__inner page-width">
+    {%- comment -%} ===== Editorial header ===== {%- endcomment -%}
+    {%- if section.settings.badge != blank
+      or section.settings.heading != blank
+      or section.settings.subheading != blank
+      or facts_mode != 'none'
+    -%}
+      <header class="kb-ib__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="kb-ib__header-copy">
+          {%- if section.settings.badge != blank -%}
+            <p class="kb-ib__badge">{{ section.settings.badge | escape }}</p>
+          {%- endif -%}
+
+          {%- if section.settings.heading != blank -%}
+            <h2 class="kb-ib__heading {{ section.settings.heading_size }}">
+              {{- section.settings.heading -}}
+            </h2>
+          {%- endif -%}
+
+          {%- if section.settings.subheading != blank -%}
+            <div class="kb-ib__subheading rte">{{ section.settings.subheading }}</div>
+          {%- endif -%}
+        </div>
+
+        {%- capture facts_inner -%}
+          <svg class="kb-ib__facts-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <rect x="3.5" y="2.5" width="13" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6.5 6.5h7M6.5 10h7M6.5 13.5h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>{{ section.settings.facts_label | escape }}</span>
+          <span class="kb-ib__facts-arrow" aria-hidden="true">&rarr;</span>
+        {%- endcapture -%}
+
+        {%- if facts_mode == 'dialog' -%}
+          <button type="button" class="kb-ib__facts-btn" data-kb-ib-facts-open aria-haspopup="dialog">
+            {{- facts_inner -}}
+          </button>
+        {%- elsif facts_mode == 'link' -%}
+          <a
+            href="{{ section.settings.facts_link }}"
+            class="kb-ib__facts-btn"
+            {% if section.settings.facts_new_tab %}
+              target="_blank" rel="noopener"
+            {% endif %}
+          >
+            {{- facts_inner -}}
+          </a>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- comment -%} ===== Interactive breakdown ===== {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="kb-ib__layout{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {%- comment -%} Tabs (desktop / tablet, and mobile "chips" layout) {%- endcomment -%}
+        <div
+          class="kb-ib__tablist"
+          role="tablist"
+          aria-label="{{ section.settings.tabs_aria_label | default: 'Ingredients' | escape }}"
+          aria-orientation="{% if section.settings.tabs_position == 'left' %}vertical{% else %}horizontal{% endif %}"
+          data-kb-ib-tablist
+        >
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign idx = forloop.index
+              if idx < 10
+                assign idx = '0' | append: idx
+              endif
+            -%}
+            {%- capture block_accent -%}
+              {%- if block.settings.accent_color != blank -%}
+                {%- assign ba = block.settings.accent_color -%}
+                --kb-ib-accent: {{ ba }}; --kb-ib-accent-rgb: {{ ba | color_extract: 'red' }}, {{ ba | color_extract: 'green' }}, {{ ba | color_extract: 'blue' }};
+              {%- endif -%}
+            {%- endcapture -%}
+            <button
+              type="button"
+              id="KbIb-{{ section.id }}-tab-{{ forloop.index }}"
+              class="kb-ib__tab"
+              role="tab"
+              {% if block_accent != blank %}
+                style="{{ block_accent }}"
+              {% endif %}
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-controls="KbIb-{{ section.id }}-panel-{{ forloop.index }}"
+              tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+              data-kb-ib-tab
+            >
+              {%- if section.settings.show_index -%}
+                <span class="kb-ib__tab-index" aria-hidden="true">{{ idx }}</span>
+              {%- endif -%}
+              <span class="kb-ib__tab-body">
+                <span class="kb-ib__tab-name">{{ block.settings.name | escape }}</span>
+                {%- if block.settings.category != blank -%}
+                  <span class="kb-ib__tab-category">{{ block.settings.category | escape }}</span>
+                {%- endif -%}
+              </span>
+              {%- if block.settings.dose != blank -%}
+                <span class="kb-ib__tab-dose">{{ block.settings.dose | escape }}</span>
+              {%- endif -%}
+              <span class="kb-ib__progress" aria-hidden="true" data-kb-ib-progress></span>
+            </button>
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Stage: one item per ingredient (accordion trigger + card) {%- endcomment -%}
+        <div class="kb-ib__stage" data-kb-ib-stage>
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign idx = forloop.index
+              if idx < 10
+                assign idx = '0' | append: idx
+              endif
+              assign has_image = false
+              if block.settings.image != blank
+                assign has_image = true
+              endif
+              assign show_visual = false
+              if has_image and block.settings.image_display == 'visual'
+                assign show_visual = true
+              elsif has_image == false and section.settings.show_default_visual
+                assign show_visual = true
+              endif
+              assign show_icon = false
+              if has_image and block.settings.image_display == 'icon'
+                assign show_icon = true
+              endif
+            -%}
+            {%- capture block_accent -%}
+              {%- if block.settings.accent_color != blank -%}
+                {%- assign ba = block.settings.accent_color -%}
+                --kb-ib-accent: {{ ba }}; --kb-ib-accent-rgb: {{ ba | color_extract: 'red' }}, {{ ba | color_extract: 'green' }}, {{ ba | color_extract: 'blue' }};
+              {%- endif -%}
+            {%- endcapture -%}
+
+            <div
+              class="kb-ib__item{% if forloop.first %} is-active{% endif %}"
+              data-kb-ib-item
+              {% if block_accent != blank %}
+                style="{{ block_accent }}"
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
+              {%- comment -%} Mobile accordion trigger (hidden in tab mode) {%- endcomment -%}
+              <button
+                type="button"
+                id="KbIb-{{ section.id }}-trigger-{{ forloop.index }}"
+                class="kb-ib__trigger"
+                aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-controls="KbIb-{{ section.id }}-panel-{{ forloop.index }}"
+                data-kb-ib-trigger
+              >
+                {%- if section.settings.show_index -%}
+                  <span class="kb-ib__tab-index" aria-hidden="true">{{ idx }}</span>
+                {%- endif -%}
+                <span class="kb-ib__tab-body">
+                  <span class="kb-ib__tab-name">{{ block.settings.name | escape }}</span>
+                  {%- if block.settings.category != blank -%}
+                    <span class="kb-ib__tab-category">{{ block.settings.category | escape }}</span>
+                  {%- endif -%}
+                </span>
+                {%- if block.settings.dose != blank -%}
+                  <span class="kb-ib__tab-dose">{{ block.settings.dose | escape }}</span>
+                {%- endif -%}
+                <span class="kb-ib__chevron" aria-hidden="true"></span>
+              </button>
+
+              <div class="kb-ib__collapse">
+                <div class="kb-ib__collapse-inner">
+                  <article
+                    id="KbIb-{{ section.id }}-panel-{{ forloop.index }}"
+                    class="kb-ib__panel{% if show_visual %} kb-ib__panel--has-visual{% endif %}"
+                    role="tabpanel"
+                    aria-labelledby="KbIb-{{ section.id }}-tab-{{ forloop.index }}"
+                    tabindex="0"
+                    data-kb-ib-panel
+                  >
+                    <span class="kb-ib__panel-glow" aria-hidden="true"></span>
+                    {%- if section.settings.show_index -%}
+                      <span class="kb-ib__watermark" aria-hidden="true">{{ idx }}</span>
+                    {%- endif -%}
+
+                    <div class="kb-ib__content">
+                      {%- if block.settings.category != blank -%}
+                        <p class="kb-ib__category" data-kb-ib-stagger>
+                          <span class="kb-ib__pulse" aria-hidden="true"></span>
+                          {{ block.settings.category | escape }}
+                        </p>
+                      {%- endif -%}
+
+                      <div class="kb-ib__title-row" data-kb-ib-stagger>
+                        {%- if show_icon -%}
+                          <span class="kb-ib__icon">
+                            {{
+                              block.settings.image
+                              | image_url: width: 192
+                              | image_tag: loading: 'lazy', widths: '64, 128, 192', sizes: '64px', alt: ''
+                            }}
+                          </span>
+                        {%- endif -%}
+                        <h3 class="kb-ib__name">
+                          {{- block.settings.name | escape -}}
+                          {%- if block.settings.dose != blank -%}
+                            <span class="kb-ib__dose">{{ block.settings.dose | escape }}</span>
+                          {%- endif -%}
+                        </h3>
+                      </div>
+
+                      {%- if block.settings.latin_name != blank -%}
+                        <p class="kb-ib__latin" data-kb-ib-stagger>{{ block.settings.latin_name | escape }}</p>
+                      {%- endif -%}
+
+                      {%- if block.settings.description != blank -%}
+                        <div class="kb-ib__description rte" data-kb-ib-stagger>{{ block.settings.description }}</div>
+                      {%- endif -%}
+
+                      {%- if block.settings.badges != blank -%}
+                        {%- assign badges = block.settings.badges | split: ',' -%}
+                        <ul class="kb-ib__badges list-unstyled" role="list" data-kb-ib-stagger>
+                          {%- for badge in badges -%}
+                            {%- assign badge_text = badge | strip -%}
+                            {%- if badge_text != blank -%}
+                              <li class="kb-ib__badge-pill">
+                                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                                  <path d="m3.5 8.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                {{ badge_text | escape }}
+                              </li>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+
+                      {%- if block.settings.link != blank and block.settings.link_label != blank -%}
+                        <a
+                          href="{{ block.settings.link }}"
+                          class="kb-ib__link"
+                          data-kb-ib-stagger
+                          {% if block.settings.link_new_tab %}
+                            target="_blank" rel="noopener"
+                          {% endif %}
+                        >
+                          <span>{{ block.settings.link_label | escape }}</span>
+                          <span aria-hidden="true">&rarr;</span>
+                        </a>
+                      {%- endif -%}
+                    </div>
+
+                    {%- if show_visual -%}
+                      <div class="kb-ib__visual{% unless has_image %} kb-ib__visual--default{% endunless %}" aria-hidden="true">
+                        <span class="kb-ib__visual-halo"></span>
+                        {%- if has_image -%}
+                          {{
+                            block.settings.image
+                            | image_url: width: 1000
+                            | image_tag:
+                              loading: 'lazy',
+                              widths: '360, 540, 720, 1000',
+                              sizes: '(min-width: 990px) 34vw, 90vw',
+                              alt: '',
+                              class: 'kb-ib__visual-img'
+                          }}
+                        {%- else -%}
+                          {%- comment -%} Default visual: stylised molecule with orbiting rings {%- endcomment -%}
+                          <svg class="kb-ib__molecule" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g class="kb-ib__ring kb-ib__ring--outer">
+                              <circle cx="100" cy="100" r="86" stroke="currentColor" stroke-opacity=".18" stroke-dasharray="2 6"/>
+                              <circle cx="186" cy="100" r="3" fill="currentColor"/>
+                            </g>
+                            <g class="kb-ib__ring kb-ib__ring--inner">
+                              <circle cx="100" cy="100" r="64" stroke="currentColor" stroke-opacity=".28"/>
+                              <circle cx="36" cy="100" r="2.5" fill="currentColor"/>
+                            </g>
+                            <g stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+                              <path d="M100 66 129 83v34l-29 17-29-17V83l29-17Z" fill="currentColor" fill-opacity=".06"/>
+                              <path d="M129 83 152 70M71 117l-23 13M100 134v24M100 66V42" stroke-opacity=".6"/>
+                            </g>
+                            <g fill="currentColor">
+                              <circle cx="100" cy="66" r="4.5"/><circle cx="129" cy="83" r="4.5"/>
+                              <circle cx="129" cy="117" r="4.5"/><circle cx="100" cy="134" r="4.5"/>
+                              <circle cx="71" cy="117" r="4.5"/><circle cx="71" cy="83" r="4.5"/>
+                              <circle cx="152" cy="70" r="6" fill-opacity=".5"/><circle cx="48" cy="130" r="6" fill-opacity=".5"/>
+                              <circle cx="100" cy="158" r="6" fill-opacity=".5"/><circle cx="100" cy="42" r="6" fill-opacity=".5"/>
+                            </g>
+                          </svg>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                  </article>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="kb-ib__empty">Add “Ingredient” blocks to build the formula breakdown.</p>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ===== Supplement Facts dialog ===== {%- endcomment -%}
+  {%- if facts_mode == 'dialog' -%}
+    <dialog
+      class="kb-ib__dialog"
+      aria-labelledby="KbIb-{{ section.id }}-facts-title"
+      data-kb-ib-facts-dialog
+    >
+      <div class="kb-ib__dialog-inner">
+        <div class="kb-ib__dialog-head">
+          <h3 id="KbIb-{{ section.id }}-facts-title" class="kb-ib__dialog-title">
+            {{- section.settings.facts_modal_title | default: section.settings.facts_label | escape -}}
+          </h3>
+          <button type="button" class="kb-ib__dialog-close" data-kb-ib-facts-close aria-label="{{ 'accessibility.close' | t }}">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+              <path d="m5 5 10 10M15 5 5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="kb-ib__dialog-body">
+          {{
+            section.settings.facts_image
+            | image_url: width: 1600
+            | image_tag:
+              loading: 'lazy',
+              widths: '600, 900, 1200, 1600',
+              sizes: '(min-width: 750px) 64rem, 92vw',
+              alt: facts_alt
+          }}
+        </div>
+      </div>
+    </dialog>
+  {%- endif -%}
+</kanbae-ingredients-breakdown>
+
+{% schema %}
+{
+  "name": "Kanbae ingredients pro",
+  "tag": "section",
+  "class": "section section-kanbae-premium-ingredients",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge",
+      "default": "✦ High-bioavailability formula"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Use italics to highlight words in the accent color.",
+      "default": "Transparency in <em>every gram.</em>"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra large"
+        }
+      ],
+      "default": "h0"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Every active is dosed with one purpose: helping your body process alcohol so you wake up without the hangover. No proprietary blends, no fillers.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Supplement Facts"
+    },
+    {
+      "type": "text",
+      "id": "facts_label",
+      "label": "Button label",
+      "info": "Leave empty to hide the button.",
+      "default": "View Supplement Facts"
+    },
+    {
+      "type": "image_picker",
+      "id": "facts_image",
+      "label": "Supplement Facts image",
+      "info": "When set, the button opens a modal with this image. Takes priority over the link."
+    },
+    {
+      "type": "text",
+      "id": "facts_modal_title",
+      "label": "Modal title",
+      "default": "Supplement Facts"
+    },
+    {
+      "type": "url",
+      "id": "facts_link",
+      "label": "Fallback link",
+      "info": "Used only when no image is set."
+    },
+    {
+      "type": "checkbox",
+      "id": "facts_new_tab",
+      "label": "Open link in a new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout & interaction"
+    },
+    {
+      "type": "select",
+      "id": "tabs_position",
+      "label": "Tabs position (desktop)",
+      "options": [
+        {
+          "value": "left",
+          "label": "Side"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_card",
+      "label": "Sticky ingredient card (desktop)",
+      "info": "With side tabs, the card follows the scroll next to the ingredient list.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "sticky_offset",
+      "label": "Sticky top offset",
+      "info": "Space left for the sticky header.",
+      "min": 0,
+      "max": 240,
+      "step": 8,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "accordion",
+          "label": "Accordion"
+        },
+        {
+          "value": "chips",
+          "label": "Horizontal tab slider"
+        }
+      ],
+      "default": "accordion"
+    },
+    {
+      "type": "text",
+      "id": "tabs_aria_label",
+      "label": "Tabs accessible label",
+      "default": "Key ingredients"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "label": "Show numbering (01, 02…)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_default_visual",
+      "label": "Show molecule visual when no image is set",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate ingredients",
+      "info": "Stops as soon as the visitor interacts. Disabled when the visitor prefers reduced motion.",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Time per ingredient",
+      "min": 4,
+      "max": 14,
+      "step": 1,
+      "unit": "s",
+      "default": 7
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_source",
+      "label": "Background & text source",
+      "options": [
+        {
+          "value": "custom",
+          "label": "Custom colors (below)"
+        },
+        {
+          "value": "scheme",
+          "label": "Theme color scheme"
+        }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "info": "Used when the source is \"Theme color scheme\".",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "info": "Used with custom colors.",
+      "default": "#050D09"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "info": "Used with custom colors.",
+      "default": "#EEF2EC"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading & ingredient name",
+      "info": "Optional. Defaults to the text color."
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Secondary text",
+      "info": "Optional. Descriptions, categories and inactive tabs."
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "info": "Badge, doses, indicators and glows. Each ingredient can override it.",
+      "default": "#A3FF16"
+    },
+    {
+      "type": "color",
+      "id": "on_accent_color",
+      "label": "Text on accent",
+      "info": "Supplement Facts button and close button on hover.",
+      "default": "#050D09"
+    },
+    {
+      "type": "header",
+      "content": "Cards & glass"
+    },
+    {
+      "type": "color",
+      "id": "card_color",
+      "label": "Card base color",
+      "default": "#0E1A14"
+    },
+    {
+      "type": "color",
+      "id": "tab_color",
+      "label": "Tab base color",
+      "info": "Optional. Defaults to the card color."
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "border_opacity",
+      "label": "Border opacity",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Purity badge background",
+      "info": "Optional."
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Purity badge text",
+      "info": "Optional."
+    },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "label": "Glass opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Glass blur",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "show_glow",
+      "label": "Show ambient glow",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "glow_color",
+      "label": "Ambient glow color",
+      "info": "Optional. Defaults to the accent color."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Active ingredient name",
+          "default": "Ingredient name"
+        },
+        {
+          "type": "text",
+          "id": "dose",
+          "label": "Dose",
+          "info": "Optional. E.g. 300mg"
+        },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category / Function",
+          "default": "Function in the formula"
+        },
+        {
+          "type": "text",
+          "id": "latin_name",
+          "label": "Scientific name or source",
+          "info": "Optional. E.g. Hovenia dulcis"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Explain in 2–3 sentences how this ingredient works in the body.</p>"
+        },
+        {
+          "type": "text",
+          "id": "badges",
+          "label": "Purity / source badges",
+          "info": "Separate with commas. E.g. Pharmaceutical Grade, Plant-Based",
+          "default": "Plant-Based"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent color",
+          "info": "Optional. Overrides the section accent for this ingredient."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image or icon (optional)"
+        },
+        {
+          "type": "select",
+          "id": "image_display",
+          "label": "Use image as",
+          "options": [
+            {
+              "value": "visual",
+              "label": "Large visual in the card"
+            },
+            {
+              "value": "icon",
+              "label": "Icon next to the name"
+            }
+          ],
+          "default": "visual"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label (optional)",
+          "info": "E.g. View study"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "link_new_tab",
+          "label": "Open in a new tab",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kanbae ingredients pro",
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Japanese Raisin Tree (DHM)",
+            "category": "Acetaldehyde breakdown & liver defense",
+            "latin_name": "Hovenia dulcis · Dihydromyricetin",
+            "description": "<p>A flavonoid from the Japanese raisin tree that helps your liver process <strong>acetaldehyde</strong>, the toxic byproduct of alcohol behind most hangover symptoms, before it has time to build up.</p>",
+            "badges": "Plant-Based, Standardized Extract"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "S-Acetyl Glutathione",
+            "category": "Master antioxidant & detox support",
+            "latin_name": "Acetylated L-Glutathione",
+            "description": "<p>A stabilized form of <strong>glutathione</strong>, the body's master antioxidant. Its acetyl group protects it through digestion so it reaches your cells and replenishes the reserves a night of drinking depletes.</p>",
+            "badges": "High Bioavailability, Vegan"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Pyroglutamic Acid",
+            "category": "Alcohol clearance & mental clarity",
+            "latin_name": "L-Pyroglutamic Acid",
+            "description": "<p>A naturally occurring amino acid derivative that supports the enzymes your body uses to clear alcohol and its byproducts, helping you stay sharp instead of foggy the next morning.</p>",
+            "badges": "Naturally Occurring"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Succinic Acid",
+            "category": "Cellular energy & acetaldehyde clearance",
+            "latin_name": "Butanedioic Acid",
+            "description": "<p>A key player in the <strong>Krebs cycle</strong>, the process your cells use to make energy. It supports the breakdown of acetaldehyde and helps fight the drained, low-energy feeling of the morning after.</p>",
+            "badges": "Naturally Occurring"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Ginger Extract",
+            "category": "Stomach comfort & nausea relief",
+            "latin_name": "Zingiber officinale",
+            "description": "<p>Used for centuries to settle the stomach, ginger helps ease the <strong>nausea</strong> and digestive discomfort that often come with drinking.</p>",
+            "badges": "Plant-Based, Standardized Extract"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin B1 (Thiamine)",
+            "category": "Replenishes what alcohol depletes",
+            "latin_name": "Thiamine",
+            "description": "<p>Alcohol blocks the absorption of <strong>thiamine</strong>, which your nervous system needs to turn food into energy. Replenishing it supports steady energy and focus after a night out.</p>",
+            "badges": "Alcohol-Depleted Nutrient"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin B6 (Pyridoxal-5'-Phosphate)",
+            "category": "Active B6 for next-day recovery",
+            "latin_name": "Pyridoxal-5'-Phosphate (P5P)",
+            "description": "<p>The <strong>active form</strong> of vitamin B6, ready for your body to use without conversion by the liver. It supports alcohol metabolism and helps reduce next-day symptoms.</p>",
+            "badges": "Active Form"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin C (Ascorbic Acid)",
+            "category": "Antioxidant defense & glutathione recycling",
+            "latin_name": "Ascorbic Acid",
+            "description": "<p>Neutralizes the free radicals produced while your body processes alcohol and helps <strong>recycle glutathione</strong>, so your antioxidant defenses keep working through the night.</p>",
+            "badges": "Antioxidant"
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Black Pepper Extract (Piperine)",
+            "category": "Absorption enhancer",
+            "latin_name": "Piper nigrum · Piperine",
+            "description": "<p>Piperine helps your body <strong>absorb more</strong> of every ingredient in the formula, so each active gets where it needs to go and works harder for you.</p>",
+            "badges": "Plant-Based, Bioavailability Booster"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
