@@ -176,6 +176,206 @@
         "padding_bottom": 96
       }
     },
+    "kanbae_premium_ingredients_breakdown_zqhkEX": {
+      "type": "kanbae-premium-ingredients-breakdown",
+      "blocks": {
+        "ingredient_pUWhfy": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Japanese Raisin Tree (DHM)",
+            "dose": "",
+            "category": "Acetaldehyde breakdown & liver defense",
+            "latin_name": "Hovenia dulcis · Dihydromyricetin",
+            "description": "<p>A flavonoid from the Japanese raisin tree that helps your liver process <strong>acetaldehyde</strong>, the toxic byproduct of alcohol behind most hangover symptoms, before it has time to build up.</p>",
+            "badges": "Plant-Based, Standardized Extract",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_h8eW4n": {
+          "type": "ingredient",
+          "settings": {
+            "name": "S-Acetyl Glutathione",
+            "dose": "",
+            "category": "Master antioxidant & detox support",
+            "latin_name": "Acetylated L-Glutathione",
+            "description": "<p>A stabilized form of <strong>glutathione</strong>, the body's master antioxidant. Its acetyl group protects it through digestion so it reaches your cells and replenishes the reserves a night of drinking depletes.</p>",
+            "badges": "High Bioavailability, Vegan",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_PrNjCt": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Pyroglutamic Acid",
+            "dose": "",
+            "category": "Alcohol clearance & mental clarity",
+            "latin_name": "L-Pyroglutamic Acid",
+            "description": "<p>A naturally occurring amino acid derivative that supports the enzymes your body uses to clear alcohol and its byproducts, helping you stay sharp instead of foggy the next morning.</p>",
+            "badges": "Naturally Occurring",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_LEmjUp": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Succinic Acid",
+            "dose": "",
+            "category": "Cellular energy & acetaldehyde clearance",
+            "latin_name": "Butanedioic Acid",
+            "description": "<p>A key player in the <strong>Krebs cycle</strong>, the process your cells use to make energy. It supports the breakdown of acetaldehyde and helps fight the drained, low-energy feeling of the morning after.</p>",
+            "badges": "Naturally Occurring",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_PmHdkz": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Ginger Extract",
+            "dose": "",
+            "category": "Stomach comfort & nausea relief",
+            "latin_name": "Zingiber officinale",
+            "description": "<p>Used for centuries to settle the stomach, ginger helps ease the <strong>nausea</strong> and digestive discomfort that often come with drinking.</p>",
+            "badges": "Plant-Based, Standardized Extract",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_wegtcB": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin B1 (Thiamine)",
+            "dose": "",
+            "category": "Replenishes what alcohol depletes",
+            "latin_name": "Thiamine",
+            "description": "<p>Alcohol blocks the absorption of <strong>thiamine</strong>, which your nervous system needs to turn food into energy. Replenishing it supports steady energy and focus after a night out.</p>",
+            "badges": "Alcohol-Depleted Nutrient",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_qcc6QU": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin B6 (Pyridoxal-5'-Phosphate)",
+            "dose": "",
+            "category": "Active B6 for next-day recovery",
+            "latin_name": "Pyridoxal-5'-Phosphate (P5P)",
+            "description": "<p>The <strong>active form</strong> of vitamin B6, ready for your body to use without conversion by the liver. It supports alcohol metabolism and helps reduce next-day symptoms.</p>",
+            "badges": "Active Form",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_HMKwbk": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin C (Ascorbic Acid)",
+            "dose": "",
+            "category": "Antioxidant defense & glutathione recycling",
+            "latin_name": "Ascorbic Acid",
+            "description": "<p>Neutralizes the free radicals produced while your body processes alcohol and helps <strong>recycle glutathione</strong>, so your antioxidant defenses keep working through the night.</p>",
+            "badges": "Antioxidant",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        },
+        "ingredient_cbwpHA": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Black Pepper Extract (Piperine)",
+            "dose": "",
+            "category": "Absorption enhancer",
+            "latin_name": "Piper nigrum · Piperine",
+            "description": "<p>Piperine helps your body <strong>absorb more</strong> of every ingredient in the formula, so each active gets where it needs to go and works harder for you.</p>",
+            "badges": "Plant-Based, Bioavailability Booster",
+            "accent_color": "",
+            "image_display": "visual",
+            "link_label": "",
+            "link": "",
+            "link_new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "ingredient_pUWhfy",
+        "ingredient_h8eW4n",
+        "ingredient_PrNjCt",
+        "ingredient_LEmjUp",
+        "ingredient_PmHdkz",
+        "ingredient_wegtcB",
+        "ingredient_qcc6QU",
+        "ingredient_HMKwbk",
+        "ingredient_cbwpHA"
+      ],
+      "name": "Kanbae ingredients pro",
+      "settings": {
+        "badge": "✦ High-Bioavailability Formula",
+        "heading": "Transparency in E<em>very Gram.</em>",
+        "heading_size": "h0",
+        "subheading": "<p>Every active is dosed with one purpose: helping your body process alcohol so you wake up without the hangover. No proprietary blends, no fillers.</p>",
+        "facts_label": "View Supplement Facts",
+        "facts_modal_title": "Supplement Facts",
+        "facts_link": "",
+        "facts_new_tab": false,
+        "tabs_position": "left",
+        "sticky_card": true,
+        "sticky_offset": 120,
+        "mobile_layout": "accordion",
+        "tabs_aria_label": "Key ingredients",
+        "show_index": true,
+        "show_default_visual": true,
+        "autoplay": false,
+        "autoplay_speed": 7,
+        "color_source": "custom",
+        "color_scheme": "",
+        "background_color": "#0F3B2E",
+        "text_color": "#EEF2EC",
+        "heading_color": "",
+        "muted_color": "",
+        "accent_color": "#A3FF16",
+        "on_accent_color": "#050D09",
+        "card_color": "#0E1A14",
+        "tab_color": "",
+        "border_color": "#FFFFFF",
+        "border_opacity": 8,
+        "pill_bg_color": "",
+        "pill_text_color": "",
+        "glass_opacity": 55,
+        "glass_blur": 20,
+        "show_glow": true,
+        "glow_color": "",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
     "kanbae_judgeme_reviews_WzJiG6": {
       "type": "kanbae-judgeme-reviews",
       "blocks": {
@@ -239,6 +439,7 @@
     "main",
     "kanbae_ingredients_explorer_DQagxm",
     "kanbae_faq_KhBEQj",
+    "kanbae_premium_ingredients_breakdown_zqhkEX",
     "kanbae_judgeme_reviews_WzJiG6"
   ]
 }
