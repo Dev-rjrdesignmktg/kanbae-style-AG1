@@ -688,7 +688,7 @@
         "heading_size": "h0",
         "subtitle": "",
         "button_label": "Read More Reviews",
-        "button_link": "",
+        "button_link": "shopify://pages/reviews",
         "cta_hover_background": "#082310",
         "cta_hover_text_color": "#f7f6f2",
         "color_scheme": "",
